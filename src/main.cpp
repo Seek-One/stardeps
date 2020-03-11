@@ -14,10 +14,7 @@
 
 #include <QCoreApplication>
 
-
-QStringList getWSDLFileNames(const char* szPathSrc);
-void copyPath(QString src, QString dst);
-bool removeDir(const QString & dirName);
+static int processVersionCommand();
 
 int main(int argc, char **argv)
 {
@@ -30,9 +27,24 @@ int main(int argc, char **argv)
 
 	if(argc < 2){
 		qDebug("Usage: %s command [args]", argv[0]);
+		qDebug("       createenv []");
+		qDebug("       install package-name");
+		qDebug("       version");
 		return -1;
 	}
+
+    QString szCommand = argv[1];
+
+    if(szCommand == "version"){
+        iRes = processVersionCommand();
+    }
 
 	return iRes;
 }
 
+
+static int processVersionCommand()
+{
+    qDebug("%s", APPLICATION_VERSION);
+    return 0;
+}
