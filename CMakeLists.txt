@@ -151,6 +151,10 @@ include_directories (${PROJECT_SOURCE_DIR}/src)
 
 set(APPLICATION_SOURCES
     src/main.cpp
+    src/Commands/CreateEnvCommand.cpp
+    src/Commands/CreateEnvCommand.h
+    src/Global/QApplicationSettings.cpp
+    src/Global/QApplicationSettings.h
 )
 
 # Creating MOC file for sources file using "slots" or Q_OBJECT macro
