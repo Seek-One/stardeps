@@ -83,8 +83,9 @@ bool FormulaParser::parse(const QString& szFilePath)
 			value = mainObject.value("scm");
 			object = value.toObject();
 
+			// SCM type
 			if(object.contains("type")){
-				value = mainObject.value("type");
+				value = object.value("type");
 				szTmp = value.toString();
 				if(szTmp == "git"){
 					m_pFormula->setTypeSCM(Formula::SCM_Git);
@@ -93,8 +94,9 @@ bool FormulaParser::parse(const QString& szFilePath)
 				}
 			}
 
+			// SCM url
 			if(object.contains("url")){
-				value = mainObject.value("url");
+				value = object.value("url");
 				m_pFormula->setSCMURL(value.toString());
 			}
 		}

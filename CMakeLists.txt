@@ -151,6 +151,8 @@ include_directories (${PROJECT_SOURCE_DIR}/src)
 
 set(APPLICATION_SOURCES
     src/main.cpp
+    src/Commands/AbstractCommand.cpp
+    src/Commands/AbstractCommand.h
     src/Commands/CreateEnvCommand.cpp
     src/Commands/CreateEnvCommand.h
     src/Commands/CommandInstall.cpp
@@ -167,6 +169,7 @@ set(APPLICATION_SOURCES
 
 # Creating MOC file for sources file using "slots" or Q_OBJECT macro
 set(APPLICATION_MOC_HEADERS
+    src/Commands/AbstractCommand.h
 )
 qt_wrap_cpp(
     APPLICATION_MOC_OUTFILES

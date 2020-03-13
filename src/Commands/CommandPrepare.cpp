@@ -5,6 +5,8 @@
  *      Author: ebeuque
  */
 
+#include <QProcess>
+
 #include "Global/QApplicationSettings.h"
 
 #include "Formulas/Formula.h"
@@ -22,12 +24,17 @@ CommandPrepare::~CommandPrepare()
 
 }
 
-bool CommandPrepare::execute(const QString& szVEPath, const QString& szPackage)
+void CommandPrepare::setPackageName(const QString& szPackageName)
+{
+	m_szPackageName = szPackageName;
+}
+
+bool CommandPrepare::execute()
 {
 	bool bRes = true;
 
-	QDir dir = QApplicationSettings::applicationFormulasPath().filePath(szPackage);
-	QString szFilePath = dir.filePath(QString("%0.json").arg(szPackage));
+	QDir dir = QApplicationSettings::applicationFormulasPath().filePath(m_szPackageName);
+	QString szFilePath = dir.filePath(QString("%0.json").arg(m_szPackageName));
 
 	qDebug("[prepare] Loading formula from file %s", qPrintable(szFilePath));
 
@@ -40,8 +47,41 @@ bool CommandPrepare::execute(const QString& szVEPath, const QString& szPackage)
 		pFormula = parser.getFormula();
 	}
 
+	// Get sources
 	if(bRes){
-		qDebug("formula name: %s", qPrintable(pFormula->getName()));
+		bRes = prepareSources(pFormula);
+	}
+
+	return bRes;
+}
+
+bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula)
+{
+	bool bRes = true;
+
+	QStringList listArgs;
+
+	QDir dirSrcDstPath = m_szVEPath + "/src/" + m_szPackageName;
+
+	if(pFormula->getTypeSCM() == Formula::SCM_Git)
+	{
+		QDir dirWorkingDirectory;
+
+		if(dirSrcDstPath.exists()){
+			qDebug("[prepare] Updating sources from git: %s", qPrintable(dirSrcDstPath.path()));
+
+			listArgs.append("pull");
+
+			dirWorkingDirectory = dirSrcDstPath;
+		}else{
+			qDebug("[prepare] Getting sources from git: %s to %s", qPrintable(pFormula->getSCMURL()), qPrintable(dirSrcDstPath.path()));
+
+			listArgs.append("clone");
+			listArgs.append(pFormula->getSCMURL());
+			listArgs.append(dirSrcDstPath.path());
+		}
+
+		bRes = runCommand("git", listArgs, dirWorkingDirectory);
 	}
 
 	return bRes;

@@ -115,7 +115,11 @@ static int processCommandCreateEnv(int argc, char **argv)
 
 static int processCommandPrepare(int argc, char **argv)
 {
-	bool bRes = CommandPrepare::execute(".", argv[2]);
+	CommandPrepare cmd;
+	cmd.setVirtualEnvironmentPath(".");
+	cmd.setPackageName(argv[2]);
+
+	bool bRes = cmd.execute();
 	if(!bRes){
 		return -1;
 	}
