@@ -153,6 +153,14 @@ set(APPLICATION_SOURCES
     src/main.cpp
     src/Commands/CreateEnvCommand.cpp
     src/Commands/CreateEnvCommand.h
+    src/Commands/CommandInstall.cpp
+    src/Commands/CommandInstall.h
+    src/Commands/CommandPrepare.cpp
+    src/Commands/CommandPrepare.h
+    src/Formulas/Formula.cpp
+    src/Formulas/Formula.h
+    src/Formulas/FormulaParser.cpp
+    src/Formulas/FormulaParser.h
     src/Global/QApplicationSettings.cpp
     src/Global/QApplicationSettings.h
 )

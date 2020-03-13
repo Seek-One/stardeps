@@ -18,10 +18,13 @@
 #include "Global/QApplicationSettings.h"
 
 #include "Commands/CreateEnvCommand.h"
+#include "Commands/CommandPrepare.h"
+#include "Commands/CommandInstall.h"
 
-static int processVersionCommand();
-static int processCreateEnvCommand(int argc, char **argv);
-static int processListEnvCommand();
+static int processCommandVersion();
+static int processCommandCreateEnv(int argc, char **argv);
+static int processCommandPrepare(int argc, char **argv);
+static int processCommandInstall(int argc, char **argv);
 
 int main(int argc, char **argv)
 {
@@ -68,13 +71,15 @@ int main(int argc, char **argv)
     if(!bShowUsage){
         QString szCommand = argv[1];
         if(szCommand == "version"){
-            iRes = processVersionCommand();
+            iRes = processCommandVersion();
         }else if(szCommand == "help"){
             bShowUsage = true;
         }else if(szCommand == "createenv"){
-            iRes = processCreateEnvCommand(argc, argv);
-        }else if(szCommand == "listenv"){
-            iRes = processListEnvCommand();
+            iRes = processCommandCreateEnv(argc, argv);
+        }else if(szCommand == "prepare"){
+            iRes = processCommandPrepare(argc, argv);
+        }else if(szCommand == "install"){
+            iRes = processCommandInstall(argc, argv);
         }else{
             bShowUsage = true;
         }
@@ -85,6 +90,7 @@ int main(int argc, char **argv)
 		qDebug("Usage: %s command [args]", argv[0]);
 		qDebug("       createenv");
 		qDebug("       listenv");
+		qDebug("       prepare package-name [--version=[VERSION]]");
 		qDebug("       install package-name");
 		qDebug("       version");
     }
@@ -92,13 +98,13 @@ int main(int argc, char **argv)
 	return iRes;
 }
 
-static int processVersionCommand()
+static int processCommandVersion()
 {
     qDebug("%s", APPLICATION_VERSION);
     return 0;
 }
 
-static int processCreateEnvCommand(int argc, char **argv)
+static int processCommandCreateEnv(int argc, char **argv)
 {
 	bool bRes = CreateEnvCommand::execute(".", argv[2]);
 	if(!bRes){
@@ -107,9 +113,20 @@ static int processCreateEnvCommand(int argc, char **argv)
 	return 0;
 }
 
-static int processListEnvCommand()
+static int processCommandPrepare(int argc, char **argv)
 {
-	qDebug("linux-gcc-x86");
-	qDebug("linux-gcc-x64");
+	bool bRes = CommandPrepare::execute(".", argv[2]);
+	if(!bRes){
+		return -1;
+	}
+	return 0;
+}
+
+static int processCommandInstall(int argc, char **argv)
+{
+	bool bRes = CommandInstall::execute(".", argv[2]);
+	if(!bRes){
+		return -1;
+	}
 	return 0;
 }

@@ -41,7 +41,7 @@ void QApplicationSettings::setApplicationDataDir(const QDir& dir)
 }
 
 
-QDir QApplicationSettings::applicationEnvPath()
+QDir QApplicationSettings::applicationFormulasPath()
 {
-	return QDir(g_applicationDataDir.filePath("env"));
+	return QDir(g_applicationDataDir.filePath("formulas"));
 }

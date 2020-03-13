@@ -27,7 +27,7 @@ public:
 	static const QDir& applicationDataDir();
 	static void setApplicationDataDir(const QDir& dir);
 
-	static QDir applicationEnvPath();
+	static QDir applicationFormulasPath();
 };
 
 #endif /* SRC_GLOBAL_QAPPLICATIONSETTINGS_H_ */
