@@ -212,11 +212,7 @@ if(WITH_QT)
         endif()
 
         if (WIN32)
-            if(HOST_WIN32)
-                set(QT_DLL_DIR ${QT_BINARY_DIR})
-            else()
-                set(QT_DLL_DIR ${QT_LIBRARY_DIR}) # When cross compiling DLL are here
-            endif()
+            set(QT_DLL_DIR ${QT_BINARY_DIR})
 
             # Common library
             if(CMAKE_COMPILER_IS_GNUCXX)
