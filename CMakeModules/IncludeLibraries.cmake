@@ -228,13 +228,13 @@ if(WITH_QT)
                         "${QT_DLL_DIR}/libwinpthread-1.dll"
                         DESTINATION ${INSTALL_PATH_BIN}
                     )
-                else()
+                endif
+                if(EXISTS "${QT_DLL_DIR}/mingwm10.dll")
                     INSTALL(FILES
                         "${QT_DLL_DIR}/mingwm10.dll"
                         DESTINATION ${INSTALL_PATH_BIN}
                     )
                 endif()
-
             endif(CMAKE_COMPILER_IS_GNUCXX)
         endif(WIN32)
 
