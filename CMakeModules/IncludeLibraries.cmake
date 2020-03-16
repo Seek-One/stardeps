@@ -228,7 +228,7 @@ if(WITH_QT)
                         "${QT_DLL_DIR}/libwinpthread-1.dll"
                         DESTINATION ${INSTALL_PATH_BIN}
                     )
-                endif
+                endif()
                 if(EXISTS "${QT_DLL_DIR}/mingwm10.dll")
                     INSTALL(FILES
                         "${QT_DLL_DIR}/mingwm10.dll"
