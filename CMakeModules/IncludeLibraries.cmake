@@ -216,10 +216,12 @@ if(WITH_QT)
 
             # Common library
             if(CMAKE_COMPILER_IS_GNUCXX)
-                INSTALL(FILES
-                    "${QT_DLL_DIR}/libgcc_s_dw2-1.dll"
-                    DESTINATION ${INSTALL_PATH_BIN}
-                )
+                if(EXISTS "${QT_DLL_DIR}/libgcc_s_dw2-1.dll")
+                    INSTALL(FILES
+                        "${QT_DLL_DIR}/libgcc_s_dw2-1.dll"
+                        DESTINATION ${INSTALL_PATH_BIN}
+                    )
+                endif()
                 # Since 4.8.6 use libwinpthread
                 if(EXISTS "${QT_DLL_DIR}/libwinpthread-1.dll")
                     INSTALL(FILES
