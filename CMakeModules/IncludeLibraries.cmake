@@ -202,6 +202,14 @@ if(WITH_QT)
                 set(QT_LIBRARY_DIR ${QT_INCLUDE_DIR}/../../lib)
             endif()
         endif()
+        if(NOT QT_TRANSLATIONS_DIR)
+            # If Qt5, we get QT_TRANSLATIONS_DIR from the executable path
+            get_target_property(QT5_QMAKE_EXECUTABLE Qt5::qmake IMPORTED_LOCATION)
+            execute_process( COMMAND ${QT5_QMAKE_EXECUTABLE} -query QT_INSTALL_TRANSLATIONS
+            OUTPUT_VARIABLE qt_translations_dir OUTPUT_STRIP_TRAILING_WHITESPACE )
+            file( TO_CMAKE_PATH "${qt_translations_dir}" qt_translations_dir)
+            set(QT_TRANSLATIONS_DIR ${qt_translations_dir} CACHE PATH "The location of the Qt translations" FORCE)
+        endif()
 
         if (WIN32)
             if(HOST_WIN32)
