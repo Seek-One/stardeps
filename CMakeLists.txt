@@ -153,8 +153,8 @@ set(APPLICATION_SOURCES
     src/main.cpp
     src/Commands/AbstractCommand.cpp
     src/Commands/AbstractCommand.h
-    src/Commands/CreateEnvCommand.cpp
-    src/Commands/CreateEnvCommand.h
+    src/Commands/CommandCreateEnv.cpp
+    src/Commands/CommandCreateEnv.h
     src/Commands/CommandInstall.cpp
     src/Commands/CommandInstall.h
     src/Commands/CommandPrepare.cpp

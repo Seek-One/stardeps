@@ -17,7 +17,7 @@
 
 #include "Global/QApplicationSettings.h"
 
-#include "Commands/CreateEnvCommand.h"
+#include <Commands/CommandCreateEnv.h>
 #include "Commands/CommandPrepare.h"
 #include "Commands/CommandInstall.h"
 
@@ -106,7 +106,7 @@ static int processCommandVersion()
 
 static int processCommandCreateEnv(int argc, char **argv)
 {
-	bool bRes = CreateEnvCommand::execute(".", argv[2]);
+	bool bRes = CommandCreateEnv::execute(".", argv[2]);
 	if(!bRes){
 		return -1;
 	}

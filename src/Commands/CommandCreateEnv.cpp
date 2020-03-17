@@ -1,5 +1,5 @@
 /*
- * CreateEnvCommand.cpp
+ * CommandCreateEnv.cpp
  *
  *  Created on: 11 mars 2020
  *      Author: ebeuque
@@ -13,19 +13,19 @@
 
 #include "Global/QApplicationSettings.h"
 
-#include "CreateEnvCommand.h"
+#include <Commands/CommandCreateEnv.h>
 
-CreateEnvCommand::CreateEnvCommand()
+CommandCreateEnv::CommandCreateEnv()
 {
 
 }
 
-CreateEnvCommand::~CreateEnvCommand()
+CommandCreateEnv::~CommandCreateEnv()
 {
 
 }
 
-bool CreateEnvCommand::execute(const QString& szVEPath, const QString& szPlatform)
+bool CommandCreateEnv::execute(const QString& szVEPath, const QString& szPlatform)
 {
 	bool bRes = true;
 
