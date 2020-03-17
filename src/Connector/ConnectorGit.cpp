@@ -24,7 +24,7 @@ bool ConnectorGit::git_clone(const QString& szURL, const QDir& dirWorkingDirecto
 	listArgs.append("clone");
 	listArgs.append(szURL);
 	listArgs.append(dirWorkingDirectory.path());
-	return m_shell.runCommand("git", listArgs, dirWorkingDirectory);
+	return m_shell.runCommand("git", listArgs);
 }
 
 bool ConnectorGit::git_pull(const QDir& dirWorkingDirectory)

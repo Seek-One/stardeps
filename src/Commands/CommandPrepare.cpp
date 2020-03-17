@@ -67,9 +67,9 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula)
 	{
 		ConnectorGit connector;
 		if(dirSrcDstPath.exists()){
-			connector.git_pull(dirSrcDstPath);
+			bRes = connector.git_pull(dirSrcDstPath);
 		}else{
-			connector.git_clone(pFormula->getSCMURL(), dirSrcDstPath);
+			bRes = connector.git_clone(pFormula->getSCMURL(), dirSrcDstPath);
 		}
 	}
 

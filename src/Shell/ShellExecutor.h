@@ -10,6 +10,8 @@
 
 #include <QObject>
 #include <QDir>
+#include <QEventLoop>
+#include <QProcess>
 
 class ShellExecutor : public QObject
 {
@@ -21,11 +23,15 @@ public:
 	bool runCommand(const QString& szCommand, const QStringList& listArgs, const QDir& dirWorkingDirectory = QDir());
 
 private slots:
+	void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+	void processErrorOccurred(QProcess::ProcessError error);
 	void readCommandAllStandardOutput();
 	void readCommandAllStandardError();
 
 private:
 	void printCommandLines(const QString& szDomain, const QString& szMsg);
+
+	QEventLoop m_eventLoop;
 };
 
 #endif /* SRC_SHELL_SHELLEXECUTOR_H_ */

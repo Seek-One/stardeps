@@ -24,8 +24,6 @@ bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& list
 {
 	bool bRes = false;
 
-	QEventLoop eventLoop;
-
 	QProcess process;
 
 	if(dirWorkingDirectory != QDir()){
@@ -34,17 +32,29 @@ bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& list
 
 	connect(&process, SIGNAL(readyReadStandardOutput()), this, SLOT(readCommandAllStandardOutput()));
 	connect(&process, SIGNAL(readyReadStandardError()), this, SLOT(readCommandAllStandardError()));
-	connect(&process, SIGNAL(finished(int, QProcess::ExitStatus)), &eventLoop, SLOT(quit()));
+	connect(&process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
+	connect(&process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(processErrorOccurred(QProcess::ProcessError)));
 
 	process.start(szCommand, listArgs);
 
-	eventLoop.exec();
+	m_eventLoop.exec();
 
 	if(process.exitCode() == 0){
 		bRes = true;
 	}
 
 	return bRes;
+}
+
+void ShellExecutor::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+{
+	m_eventLoop.quit();
+}
+
+void ShellExecutor::processErrorOccurred(QProcess::ProcessError error)
+{
+	qDebug("[shell] Error to execute process: %d", error);
+	m_eventLoop.quit();
 }
 
 void ShellExecutor::readCommandAllStandardOutput()
