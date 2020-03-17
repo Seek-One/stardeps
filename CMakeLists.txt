@@ -159,17 +159,24 @@ set(APPLICATION_SOURCES
     src/Commands/CommandInstall.h
     src/Commands/CommandPrepare.cpp
     src/Commands/CommandPrepare.h
+    src/Connector/AbstractConnector.cpp
+    src/Connector/AbstractConnector.h
+    src/Connector/ConnectorGit.cpp
+    src/Connector/ConnectorGit.h
     src/Formulas/Formula.cpp
     src/Formulas/Formula.h
     src/Formulas/FormulaParser.cpp
     src/Formulas/FormulaParser.h
     src/Global/QApplicationSettings.cpp
     src/Global/QApplicationSettings.h
+    src/Shell/ShellExecutor.cpp
+    src/Shell/ShellExecutor.h
 )
 
 # Creating MOC file for sources file using "slots" or Q_OBJECT macro
 set(APPLICATION_MOC_HEADERS
     src/Commands/AbstractCommand.h
+    src/Shell/ShellExecutor.h
 )
 qt_wrap_cpp(
     APPLICATION_MOC_OUTFILES

@@ -9,6 +9,8 @@
 
 #include "Global/QApplicationSettings.h"
 
+#include "Connector/ConnectorGit.h"
+
 #include "Formulas/Formula.h"
 #include "Formulas/FormulaParser.h"
 
@@ -59,29 +61,16 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula)
 {
 	bool bRes = true;
 
-	QStringList listArgs;
-
 	QDir dirSrcDstPath = m_szVEPath + "/src/" + m_szPackageName;
 
 	if(pFormula->getTypeSCM() == Formula::SCM_Git)
 	{
-		QDir dirWorkingDirectory;
-
+		ConnectorGit connector;
 		if(dirSrcDstPath.exists()){
-			qDebug("[prepare] Updating sources from git: %s", qPrintable(dirSrcDstPath.path()));
-
-			listArgs.append("pull");
-
-			dirWorkingDirectory = dirSrcDstPath;
+			connector.git_pull(dirSrcDstPath);
 		}else{
-			qDebug("[prepare] Getting sources from git: %s to %s", qPrintable(pFormula->getSCMURL()), qPrintable(dirSrcDstPath.path()));
-
-			listArgs.append("clone");
-			listArgs.append(pFormula->getSCMURL());
-			listArgs.append(dirSrcDstPath.path());
+			connector.git_clone(pFormula->getSCMURL(), dirSrcDstPath);
 		}
-
-		bRes = runCommand("git", listArgs, dirWorkingDirectory);
 	}
 
 	return bRes;
