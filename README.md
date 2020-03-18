@@ -8,9 +8,9 @@ StarDeps allow you to build libraries from sources.
 ```
 stardeps COMMAND [OPTIONS]
 ```
+You can use the following COMMAND:
 
 ```
-COMMAND:
   createenv
     Initialize an environment in the selected.
   prepare PACKAGE_NAME
@@ -43,12 +43,15 @@ Directory structure will have the following scheme :
 
 ## Prepare package sources
 
+This command downloads the sources of the selected package and configure the version to use.
+
 ```
 stardeps prepare PACKAGE_NAME [OPTIONS]
 ```
 
+You can use the following OPTIONS:
+
 ```
-OPTIONS:
   --version=[VERSION]
       Set the target version name. This defines the target source directory name as src/PACKAGE_NAME[-VERSION]. If no version is set it will use the current developpement version.
   --scm-branch-version=[VERSION]
