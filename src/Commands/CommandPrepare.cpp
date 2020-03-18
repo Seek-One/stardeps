@@ -31,6 +31,21 @@ void CommandPrepare::setPackageName(const QString& szPackageName)
 	m_szPackageName = szPackageName;
 }
 
+void CommandPrepare::setVersion(const QString& szVersion)
+{
+	m_szVersion = szVersion;
+}
+
+void CommandPrepare::setScmBranchVersion(const QString& szVersion)
+{
+	m_szScmBranchVersion = szVersion;
+}
+
+void CommandPrepare::setScmTagVersion(const QString& szVersion)
+{
+	m_szScmBranchVersion = szVersion;
+}
+
 bool CommandPrepare::execute()
 {
 	bool bRes = true;
@@ -42,6 +57,12 @@ bool CommandPrepare::execute()
 
 	QSharedPointer<Formula> pFormula;
 
+	QString szDirName = m_szPackageName;
+	if(!m_szVersion.isEmpty()){
+		szDirName += "-" + m_szVersion;
+	}
+	QDir dirSrcDstPath = m_szVEPath + "/src/" + szDirName;
+
 	// Load formula
 	FormulaParser parser;
 	bRes = parser.parse(szFilePath);
@@ -51,27 +72,54 @@ bool CommandPrepare::execute()
 
 	// Get sources
 	if(bRes){
-		bRes = prepareSources(pFormula);
+		bRes = prepareSources(pFormula, dirSrcDstPath);
+	}
+
+	if(bRes && !getConfigureVersion().isEmpty()){
+		bRes = configureVersion(pFormula, dirSrcDstPath);
 	}
 
 	return bRes;
 }
 
-bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula)
+bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy)
 {
 	bool bRes = true;
-
-	QDir dirSrcDstPath = m_szVEPath + "/src/" + m_szPackageName;
 
 	if(pFormula->getTypeSCM() == Formula::SCM_Git)
 	{
 		ConnectorGit connector;
-		if(dirSrcDstPath.exists()){
-			bRes = connector.git_pull(dirSrcDstPath);
+		if(dirWorkingCopy.exists()){
+			bRes = connector.git_checkout("master", dirWorkingCopy);
+			bRes = connector.git_pull(dirWorkingCopy);
 		}else{
-			bRes = connector.git_clone(pFormula->getSCMURL(), dirSrcDstPath);
+			bRes = connector.git_clone(pFormula->getSCMURL(), dirWorkingCopy);
 		}
 	}
 
 	return bRes;
+}
+
+bool CommandPrepare::configureVersion(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy)
+{
+	bool bRes = true;
+
+	if(pFormula->getTypeSCM() == Formula::SCM_Git)
+	{
+		ConnectorGit connector;
+		bRes = connector.git_checkout(getConfigureVersion(), dirWorkingCopy);
+	}
+
+	return bRes;
+}
+
+const QString& CommandPrepare::getConfigureVersion() const
+{
+	if(!m_szScmTagVersion.isEmpty()){
+		return m_szScmTagVersion;
+	}
+	if(!m_szScmBranchVersion.isEmpty()){
+		return m_szScmBranchVersion;
+	}
+	return m_szVersion;
 }

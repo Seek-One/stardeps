@@ -17,6 +17,7 @@ public:
 
 	bool git_clone(const QString& szURL, const QDir& dirWorkingDirectory);
 	bool git_pull(const QDir& dirWorkingDirectory);
+	bool git_checkout(const QString& szVersion, const QDir& dirWorkingDirectory);
 };
 
 #endif /* SRC_CONNECTOR_CONNECTORGIT_H_ */

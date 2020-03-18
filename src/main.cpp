@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     }
 
     // Show help
-    if(bShowUsage || (iRes == -1)){
+    if(bShowUsage){
 		qDebug("Usage: %s command [args]", argv[0]);
 		qDebug("       createenv");
 		qDebug("       listenv");
@@ -118,6 +118,18 @@ static int processCommandPrepare(int argc, char **argv)
 	CommandPrepare cmd;
 	cmd.setVirtualEnvironmentPath(".");
 	cmd.setPackageName(argv[2]);
+
+	for(int i=3; i<argc; i++)
+	{
+		QString szArg = argv[i];
+		if(szArg.startsWith("--version=")){
+			cmd.setVersion(szArg.mid(10));
+		}else if(szArg.startsWith("--scm-branch-version=")){
+			cmd.setScmBranchVersion(szArg.mid(21));
+		}else if(szArg.startsWith("--scm-tag-version=")){
+			cmd.setScmTagVersion(szArg.mid(18));
+		}
+	}
 
 	bool bRes = cmd.execute();
 	if(!bRes){
