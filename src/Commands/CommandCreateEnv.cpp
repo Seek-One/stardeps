@@ -17,7 +17,7 @@
 
 CommandCreateEnv::CommandCreateEnv()
 {
-
+	m_bNeedEnvVars = false;
 }
 
 CommandCreateEnv::~CommandCreateEnv()
@@ -25,13 +25,59 @@ CommandCreateEnv::~CommandCreateEnv()
 
 }
 
-bool CommandCreateEnv::execute(const QString& szVEPath, const QString& szPlatform)
+bool CommandCreateEnv::doExecute()
 {
 	bool bRes = true;
 
 	QString szHost;
-	QString szCompiler;
 	QString szArch;
+
+	Environment env;
+
+	if(bRes){
+		bRes = findGit(env);
+	}
+
+	if(bRes){
+		bRes = findCompiler(env);
+	}
+
+	QDir dirVE = getVirtualEnvironmentPath();
+	QString szFilePath = dirVE.filePath("ve.env");
+
+	QDir dstPath = getVirtualEnvironmentPath();
+
+	QString szLine;
+	QFile file(szFilePath);
+	if(!file.exists()){
+		bRes = file.open(QIODevice::WriteOnly);
+		if(bRes){
+			const EnvironmentVars& listVars = env.getVars();
+			EnvironmentVars::const_iterator iter;
+			for(iter = listVars.constBegin(); iter != listVars.constEnd(); ++iter){
+				szLine = QString("%0=%1\n").arg(iter.key()).arg(iter.value());
+				file.write(szLine.toUtf8());
+			}
+			file.close();
+		}else{
+			qCritical("[createenv] Unable to create environment file");
+		}
+	}else{
+		qCritical("[createenv] Environment file already exists");
+	}
+
+	return bRes;
+}
+
+bool CommandCreateEnv::findGit(Environment& env)
+{
+	env.setEnvVar("GIT", "git");
+	return true;
+}
+
+bool CommandCreateEnv::findCompiler(Environment& env)
+{
+	QString szCompiler;
 
 	// Detect compiler
 #ifdef WIN32
@@ -42,24 +88,6 @@ bool CommandCreateEnv::execute(const QString& szVEPath, const QString& szPlatfor
 	szCompiler = "gcc";
 #endif
 
-
-	QDir dirVE = szVEPath;
-	QString szFilePath = dirVE.filePath("ve.env");
-
-	QDir dstPath = szVEPath;
-
-	QFile file(szFilePath);
-	if(!file.exists()){
-		bRes = file.open(QIODevice::WriteOnly);
-		if(bRes){
-			file.write(QString("COMPILER=%0\n").arg(szCompiler).toUtf8());
-			file.close();
-		}else{
-			qCritical("[createenv] Unable to create environment file");
-		}
-	}else{
-		qCritical("[createenv] Environment file already exists");
-	}
-
-	return bRes;
+	env.setEnvVar("COMPILER", szCompiler);
+	return true;
 }

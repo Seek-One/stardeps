@@ -106,7 +106,9 @@ static int processCommandVersion()
 
 static int processCommandCreateEnv(int argc, char **argv)
 {
-	bool bRes = CommandCreateEnv::execute(".", argv[2]);
+	CommandCreateEnv cmd;
+	cmd.setVirtualEnvironmentPath(QDir("."));
+	bool bRes = cmd.execute();
 	if(!bRes){
 		return -1;
 	}
@@ -116,7 +118,7 @@ static int processCommandCreateEnv(int argc, char **argv)
 static int processCommandPrepare(int argc, char **argv)
 {
 	CommandPrepare cmd;
-	cmd.setVirtualEnvironmentPath(".");
+	cmd.setVirtualEnvironmentPath(QDir("."));
 	cmd.setPackageName(argv[2]);
 
 	for(int i=3; i<argc; i++)

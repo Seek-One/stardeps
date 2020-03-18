@@ -163,6 +163,10 @@ set(APPLICATION_SOURCES
     src/Connector/AbstractConnector.h
     src/Connector/ConnectorGit.cpp
     src/Connector/ConnectorGit.h
+    src/Environment/Environment.cpp
+    src/Environment/Environment.h
+    src/Environment/EnvironmentLoader.cpp
+    src/Environment/EnvironmentLoader.h
     src/Formulas/Formula.cpp
     src/Formulas/Formula.h
     src/Formulas/FormulaParser.cpp

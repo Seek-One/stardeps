@@ -5,14 +5,15 @@
  *      Author: ebeuque
  */
 
-#include <Connector/AbstractConnector.h>
+#include "AbstractConnector.h"
 
-AbstractConnector::AbstractConnector() {
-	// TODO Auto-generated constructor stub
+AbstractConnector::AbstractConnector(const Environment& env) : m_env(env)
+{
 
 }
 
-AbstractConnector::~AbstractConnector() {
-	// TODO Auto-generated destructor stub
+AbstractConnector::~AbstractConnector()
+{
+
 }
 

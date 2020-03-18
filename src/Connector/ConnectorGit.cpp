@@ -7,7 +7,7 @@
 
 #include "ConnectorGit.h"
 
-ConnectorGit::ConnectorGit()
+ConnectorGit::ConnectorGit(const Environment& env) : AbstractConnector(env)
 {
 
 }
@@ -24,7 +24,7 @@ bool ConnectorGit::git_clone(const QString& szURL, const QDir& dirWorkingDirecto
 	listArgs.append("clone");
 	listArgs.append(szURL);
 	listArgs.append(dirWorkingDirectory.path());
-	return m_shell.runCommand("git", listArgs);
+	return m_shell.runCommand(m_env.getGitExe(), listArgs);
 }
 
 bool ConnectorGit::git_pull(const QDir& dirWorkingDirectory)
@@ -32,7 +32,7 @@ bool ConnectorGit::git_pull(const QDir& dirWorkingDirectory)
 	QStringList listArgs;
 	qDebug("[git] Updating sources: %s", qPrintable(dirWorkingDirectory.path()));
 	listArgs.append("pull");
-	return m_shell.runCommand("git", listArgs, dirWorkingDirectory);
+	return m_shell.runCommand(m_env.getGitExe(), listArgs, dirWorkingDirectory);
 }
 
 bool ConnectorGit::git_checkout(const QString& szVersion, const QDir& dirWorkingDirectory)
@@ -41,5 +41,5 @@ bool ConnectorGit::git_checkout(const QString& szVersion, const QDir& dirWorking
 	qDebug("[git] Checkout sources to version %s", qPrintable(szVersion));
 	listArgs.append("checkout");
 	listArgs.append(szVersion);
-	return m_shell.runCommand("git", listArgs, dirWorkingDirectory);
+	return m_shell.runCommand(m_env.getGitExe(), listArgs, dirWorkingDirectory);
 }

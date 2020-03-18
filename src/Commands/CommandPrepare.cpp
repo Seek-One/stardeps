@@ -46,7 +46,7 @@ void CommandPrepare::setScmTagVersion(const QString& szVersion)
 	m_szScmBranchVersion = szVersion;
 }
 
-bool CommandPrepare::execute()
+bool CommandPrepare::doExecute()
 {
 	bool bRes = true;
 
@@ -61,7 +61,7 @@ bool CommandPrepare::execute()
 	if(!m_szVersion.isEmpty()){
 		szDirName += "-" + m_szVersion;
 	}
-	QDir dirSrcDstPath = m_szVEPath + "/src/" + szDirName;
+	QDir dirSrcDstPath = getVirtualEnvironmentPath().path() + "/src/" + szDirName;
 
 	// Load formula
 	FormulaParser parser;
@@ -88,7 +88,7 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
 
 	if(pFormula->getTypeSCM() == Formula::SCM_Git)
 	{
-		ConnectorGit connector;
+		ConnectorGit connector(m_env);
 		if(dirWorkingCopy.exists()){
 			bRes = connector.git_checkout("master", dirWorkingCopy);
 			bRes = connector.git_pull(dirWorkingCopy);
@@ -106,7 +106,7 @@ bool CommandPrepare::configureVersion(const QSharedPointer<Formula>& pFormula, c
 
 	if(pFormula->getTypeSCM() == Formula::SCM_Git)
 	{
-		ConnectorGit connector;
+		ConnectorGit connector(m_env);
 		bRes = connector.git_checkout(getConfigureVersion(), dirWorkingCopy);
 	}
 

@@ -8,14 +8,22 @@
 #ifndef SRC_COMMANDS_COMMANDCREATEENV_H_
 #define SRC_COMMANDS_COMMANDCREATEENV_H_
 
-#include <QString>
+#include "Environment/Environment.h"
 
-class CommandCreateEnv {
+#include "AbstractCommand.h"
+
+class CommandCreateEnv : public AbstractCommand
+{
 public:
 	CommandCreateEnv();
 	virtual ~CommandCreateEnv();
 
-	static bool execute(const QString& szVEPath, const QString& szPlatform);
+protected:
+	bool doExecute();
+
+private:
+	bool findGit(Environment& env);
+	bool findCompiler(Environment& env);
 };
 
 #endif /* SRC_COMMANDS_COMMANDCREATEENV_H_ */

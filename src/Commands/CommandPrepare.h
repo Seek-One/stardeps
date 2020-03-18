@@ -25,7 +25,8 @@ public:
 	void setScmBranchVersion(const QString& szVersion);
 	void setScmTagVersion(const QString& szVersion);
 
-	bool execute();
+protected:
+	bool doExecute();
 
 private:
 	bool prepareSources(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy);
