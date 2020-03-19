@@ -83,4 +83,13 @@ You can use the following OPTIONS:
   --version=[VERSION]
       Set the target version name to build.
 ```
+
+## Supported package
+
+startdeps support build of the folowwing package :
+
+* openssl : https://www.openssl.org/
+* curl : https://curl.haxx.se/
+
+
      
