@@ -5,14 +5,26 @@
  *      Author: ebeuque
  */
 
-#include <Commands/CommandConfigure.h>
+#include "CommandConfigure.h"
 
-CommandConfigure::CommandConfigure() {
-	// TODO Auto-generated constructor stub
+CommandConfigure::CommandConfigure() : AbstractPackageCommand("configure")
+{
 
 }
 
-CommandConfigure::~CommandConfigure() {
-	// TODO Auto-generated destructor stub
+CommandConfigure::~CommandConfigure()
+{
+
 }
 
+
+bool CommandConfigure::doExecute()
+{
+	bool bRes;
+
+	// Load formula
+	QSharedPointer<Formula> pFormula;
+	bRes = loadFormula(m_szPackageName, pFormula);
+
+	return bRes;
+}

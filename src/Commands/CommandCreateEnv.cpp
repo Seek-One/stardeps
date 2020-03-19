@@ -11,11 +11,12 @@
 
 #include <QFile>
 
-#include "Global/QApplicationSettings.h"
+#include "Platform/Platform.h"
+#include "Environment/EnvironmentDefs.h"
 
-#include <Commands/CommandCreateEnv.h>
+#include "CommandCreateEnv.h"
 
-CommandCreateEnv::CommandCreateEnv()
+CommandCreateEnv::CommandCreateEnv() : AbstractCommand("createenv")
 {
 	m_bNeedEnvVars = false;
 }
@@ -23,6 +24,11 @@ CommandCreateEnv::CommandCreateEnv()
 CommandCreateEnv::~CommandCreateEnv()
 {
 
+}
+
+void CommandCreateEnv::setTargetPlatform(const QString& szTargetPlatform)
+{
+	m_szTargetPlatform = szTargetPlatform;
 }
 
 bool CommandCreateEnv::doExecute()
@@ -33,6 +39,9 @@ bool CommandCreateEnv::doExecute()
 	QString szArch;
 
 	Environment env;
+	env.setEnvVar(VE_VAR_TARGET_PLATFORM, m_szTargetPlatform);
+	Platform::Type iPlateformType = Platform::fromString(m_szTargetPlatform);
+	env.setPlatformType(iPlateformType);
 
 	if(bRes){
 		bRes = findGit(env);
@@ -71,7 +80,19 @@ bool CommandCreateEnv::doExecute()
 
 bool CommandCreateEnv::findGit(Environment& env)
 {
-	env.setEnvVar("GIT", "git");
+#ifdef WIN32
+	if(QFile::exists("/usr/bin/git")){
+		env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
+	}else{
+		qWarning("[env] git is not found");
+	}
+#else
+	if(QFile::exists("/usr/bin/git")){
+		env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
+	}else{
+		env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
+	}
+#endif
 	return true;
 }
 
@@ -86,8 +107,13 @@ bool CommandCreateEnv::findCompiler(Environment& env)
 	szCompiler = "xcodebuild";
 #else
 	szCompiler = "gcc";
+	if(QFile::exists("/usr/bin/gcc")){
+		env.setEnvVar(VE_VAR_GIT, "/usr/bin/gcc");
+	}else{
+		env.setEnvVar(VE_VAR_GIT, "git");
+	}
 #endif
 
-	env.setEnvVar("COMPILER", szCompiler);
+	env.setEnvVar(VE_VAR_COMPILER, szCompiler);
 	return true;
 }

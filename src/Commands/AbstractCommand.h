@@ -8,15 +8,18 @@
 #ifndef SRC_COMMANDS_ABSTRACTCOMMAND_H_
 #define SRC_COMMANDS_ABSTRACTCOMMAND_H_
 
+#include <QString>
 #include <QDir>
+#include <QSharedPointer>
 
 #include "Environment/Environment.h"
 #include "Shell/ShellExecutor.h"
+#include "Formulas/Formula.h"
 
 class AbstractCommand
 {
 public:
-	AbstractCommand();
+	AbstractCommand(const QString& szLabel);
 	virtual ~AbstractCommand();
 
 	void setVirtualEnvironmentPath(const QDir& dir);
@@ -28,9 +31,14 @@ protected:
 	virtual bool doInitEnv();
 	virtual bool doExecute() = 0;
 
+	bool loadFormula(const QString& szPackageName, QSharedPointer<Formula>& pFormula);
+
 protected:
+	QString m_szLabel;
+
 	Environment m_env;
 	bool m_bNeedEnvVars;
+
 	ShellExecutor m_shell;
 };
 

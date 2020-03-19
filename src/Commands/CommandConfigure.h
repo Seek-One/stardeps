@@ -8,16 +8,15 @@
 #ifndef SRC_COMMANDS_COMMANDCONFIGURE_H_
 #define SRC_COMMANDS_COMMANDCONFIGURE_H_
 
-#include "AbstractCommand.h"
+#include "AbstractPackageCommand.h"
 
-class CommandConfigure : public AbstractCommand {
+class CommandConfigure : public AbstractPackageCommand {
 public:
 	CommandConfigure();
 	virtual ~CommandConfigure();
 
-
-
-	static bool execute(const QString& szVEPath, const QString& szPlatform);
+protected:
+	bool doExecute();
 };
 
 #endif /* SRC_COMMANDS_COMMANDCONFIGURE_H_ */

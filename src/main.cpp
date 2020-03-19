@@ -19,11 +19,13 @@
 
 #include <Commands/CommandCreateEnv.h>
 #include "Commands/CommandPrepare.h"
+#include "Commands/CommandConfigure.h"
 #include "Commands/CommandInstall.h"
 
 static int processCommandVersion();
 static int processCommandCreateEnv(int argc, char **argv);
 static int processCommandPrepare(int argc, char **argv);
+static int processCommandConfigure(int argc, char **argv);
 static int processCommandInstall(int argc, char **argv);
 
 int main(int argc, char **argv)
@@ -78,6 +80,8 @@ int main(int argc, char **argv)
             iRes = processCommandCreateEnv(argc, argv);
         }else if(szCommand == "prepare"){
             iRes = processCommandPrepare(argc, argv);
+        }else if(szCommand == "configure"){
+            iRes = processCommandConfigure(argc, argv);
         }else if(szCommand == "install"){
             iRes = processCommandInstall(argc, argv);
         }else{
@@ -88,10 +92,11 @@ int main(int argc, char **argv)
     // Show help
     if(bShowUsage){
 		qDebug("Usage: %s command [args]", argv[0]);
-		qDebug("       createenv");
+		qDebug("       createenv TARGET_PLATFORM");
 		qDebug("       listenv");
-		qDebug("       prepare package-name [--version=[VERSION]]");
-		qDebug("       install package-name");
+		qDebug("       prepare PACKAGE_NAME [--version=[VERSION]]");
+		qDebug("       configure PACKAGE_NAME [--version=[VERSION]]");
+		qDebug("       install PACKAGE_NAME");
 		qDebug("       version");
     }
 
@@ -106,6 +111,11 @@ static int processCommandVersion()
 
 static int processCommandCreateEnv(int argc, char **argv)
 {
+	if(argc < 3){
+		qCritical("[main] Missing TARGET_PLATFORM argument");
+		return -1;
+	}
+
 	CommandCreateEnv cmd;
 	cmd.setVirtualEnvironmentPath(QDir("."));
 	bool bRes = cmd.execute();
@@ -117,6 +127,11 @@ static int processCommandCreateEnv(int argc, char **argv)
 
 static int processCommandPrepare(int argc, char **argv)
 {
+	if(argc < 3){
+		qCritical("[main] Missing PACKAGE_NAME argument");
+		return -1;
+	}
+
 	CommandPrepare cmd;
 	cmd.setVirtualEnvironmentPath(QDir("."));
 	cmd.setPackageName(argv[2]);
@@ -130,6 +145,32 @@ static int processCommandPrepare(int argc, char **argv)
 			cmd.setScmBranchVersion(szArg.mid(21));
 		}else if(szArg.startsWith("--scm-tag-version=")){
 			cmd.setScmTagVersion(szArg.mid(18));
+		}
+	}
+
+	bool bRes = cmd.execute();
+	if(!bRes){
+		return -1;
+	}
+	return 0;
+}
+
+static int processCommandConfigure(int argc, char **argv)
+{
+	if(argc < 3){
+		qCritical("[main] Missing PACKAGE_NAME argument");
+		return -1;
+	}
+
+	CommandConfigure cmd;
+	cmd.setVirtualEnvironmentPath(QDir("."));
+	cmd.setPackageName(argv[2]);
+
+	for(int i=3; i<argc; i++)
+	{
+		QString szArg = argv[i];
+		if(szArg.startsWith("--version=")){
+			cmd.setVersion(szArg.mid(10));
 		}
 	}
 

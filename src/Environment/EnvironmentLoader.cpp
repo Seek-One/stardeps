@@ -7,6 +7,8 @@
 
 #include <QDir>
 
+#include "EnvironmentDefs.h"
+
 #include "EnvironmentLoader.h"
 
 EnvironmentLoader::EnvironmentLoader()

@@ -153,6 +153,10 @@ set(APPLICATION_SOURCES
     src/main.cpp
     src/Commands/AbstractCommand.cpp
     src/Commands/AbstractCommand.h
+    src/Commands/AbstractPackageCommand.cpp
+    src/Commands/AbstractPackageCommand.h
+    src/Commands/CommandConfigure.cpp
+    src/Commands/CommandConfigure.h
     src/Commands/CommandCreateEnv.cpp
     src/Commands/CommandCreateEnv.h
     src/Commands/CommandInstall.cpp
@@ -173,6 +177,8 @@ set(APPLICATION_SOURCES
     src/Formulas/FormulaParser.h
     src/Global/QApplicationSettings.cpp
     src/Global/QApplicationSettings.h
+    src/Platform/Platform.cpp
+    src/Platform/Platform.h
     src/Shell/ShellExecutor.cpp
     src/Shell/ShellExecutor.h
 )

@@ -23,7 +23,7 @@ FormulaParser::~FormulaParser()
 
 }
 
-QSharedPointer<Formula> FormulaParser::getFormula() const
+const QSharedPointer<Formula>& FormulaParser::getFormula() const
 {
 	return m_pFormula;
 }

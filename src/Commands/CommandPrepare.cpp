@@ -5,18 +5,11 @@
  *      Author: ebeuque
  */
 
-#include <QProcess>
-
-#include "Global/QApplicationSettings.h"
-
 #include "Connector/ConnectorGit.h"
-
-#include "Formulas/Formula.h"
-#include "Formulas/FormulaParser.h"
 
 #include "CommandPrepare.h"
 
-CommandPrepare::CommandPrepare()
+CommandPrepare::CommandPrepare() : AbstractPackageCommand("prepare")
 {
 
 }
@@ -24,16 +17,6 @@ CommandPrepare::CommandPrepare()
 CommandPrepare::~CommandPrepare()
 {
 
-}
-
-void CommandPrepare::setPackageName(const QString& szPackageName)
-{
-	m_szPackageName = szPackageName;
-}
-
-void CommandPrepare::setVersion(const QString& szVersion)
-{
-	m_szVersion = szVersion;
 }
 
 void CommandPrepare::setScmBranchVersion(const QString& szVersion)
@@ -50,13 +33,6 @@ bool CommandPrepare::doExecute()
 {
 	bool bRes = true;
 
-	QDir dir = QApplicationSettings::applicationFormulasPath().filePath(m_szPackageName);
-	QString szFilePath = dir.filePath(QString("%0.json").arg(m_szPackageName));
-
-	qDebug("[prepare] Loading formula from file %s", qPrintable(szFilePath));
-
-	QSharedPointer<Formula> pFormula;
-
 	QString szDirName = m_szPackageName;
 	if(!m_szVersion.isEmpty()){
 		szDirName += "-" + m_szVersion;
@@ -64,11 +40,8 @@ bool CommandPrepare::doExecute()
 	QDir dirSrcDstPath = getVirtualEnvironmentPath().path() + "/src/" + szDirName;
 
 	// Load formula
-	FormulaParser parser;
-	bRes = parser.parse(szFilePath);
-	if(bRes){
-		pFormula = parser.getFormula();
-	}
+	QSharedPointer<Formula> pFormula;
+	bRes = loadFormula(m_szPackageName, pFormula);
 
 	// Get sources
 	if(bRes){

@@ -12,7 +12,7 @@
 #include <QDir>
 #include <QMap>
 
-#define VE_FILE "ve.env"
+#include "Platform/Platform.h"
 
 typedef	QMap<QString, QString> EnvironmentVars;
 
@@ -24,6 +24,10 @@ public:
 	// Virtual environment path
 	void setVirtualEnvironmentPath(const QDir& dir);
 	const QDir& getVirtualEnvironmentPath() const;
+
+	// Platform type
+	void setPlatformType(Platform::Type iPlatformType);
+	Platform::Type getPlatformType() const;
 
 	// Env vars
 	void setEnvVar(const QString& szName, const QString& szValue);
@@ -37,6 +41,8 @@ public:
 
 private:
 	QDir m_dirVE;
+
+	Platform::Type m_iPlatformType;
 
 	EnvironmentVars m_listVars;
 };

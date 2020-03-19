@@ -13,15 +13,13 @@
 
 #include "Formulas/Formula.h"
 
-#include "AbstractCommand.h"
+#include "AbstractPackageCommand.h"
 
-class CommandPrepare : public AbstractCommand {
+class CommandPrepare : public AbstractPackageCommand {
 public:
 	CommandPrepare();
 	virtual ~CommandPrepare();
 
-	void setPackageName(const QString& szPackageName);
-	void setVersion(const QString& szVersion);
 	void setScmBranchVersion(const QString& szVersion);
 	void setScmTagVersion(const QString& szVersion);
 
@@ -34,8 +32,6 @@ private:
 	const QString& getConfigureVersion() const;
 
 private:
-	QString m_szPackageName;
-	QString m_szVersion;
 	QString m_szScmBranchVersion;
 	QString m_szScmTagVersion;
 };

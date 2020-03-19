@@ -5,11 +5,13 @@
  *      Author: ebeuque
  */
 
+#include "EnvironmentDefs.h"
+
 #include "Environment.h"
 
 Environment::Environment()
 {
-
+	m_iPlatformType = Platform::Unknown;
 }
 
 Environment::~Environment()
@@ -25,6 +27,16 @@ void Environment::setVirtualEnvironmentPath(const QDir& dir)
 const QDir& Environment::getVirtualEnvironmentPath() const
 {
 	return m_dirVE;
+}
+
+void Environment::setPlatformType(Platform::Type iPlatformType)
+{
+	m_iPlatformType = iPlatformType;
+}
+
+Platform::Type Environment::getPlatformType() const
+{
+	return m_iPlatformType;
 }
 
 void Environment::setEnvVar(const QString& szName, const QString& szValue)
@@ -45,7 +57,7 @@ const EnvironmentVars& Environment::getVars() const
 
 QString Environment::getGitExe() const
 {
-	return getEnvVar("GIT", "git");
+	return getEnvVar(VE_VAR_GIT, "git");
 }
 
 void Environment::print()

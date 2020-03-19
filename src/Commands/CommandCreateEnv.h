@@ -18,12 +18,16 @@ public:
 	CommandCreateEnv();
 	virtual ~CommandCreateEnv();
 
+	void setTargetPlatform(const QString& szTargetPlatform);
+
 protected:
 	bool doExecute();
 
 private:
 	bool findGit(Environment& env);
 	bool findCompiler(Environment& env);
+
+	QString m_szTargetPlatform;
 };
 
 #endif /* SRC_COMMANDS_COMMANDCREATEENV_H_ */

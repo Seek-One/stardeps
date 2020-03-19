@@ -19,7 +19,7 @@ public:
 	FormulaParser();
 	virtual ~FormulaParser();
 
-	QSharedPointer<Formula> getFormula() const;
+	const QSharedPointer<Formula>& getFormula() const;
 
 	bool parse(const QString& szFilePath);
 
