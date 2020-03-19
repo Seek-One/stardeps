@@ -118,6 +118,7 @@ static int processCommandCreateEnv(int argc, char **argv)
 
 	CommandCreateEnv cmd;
 	cmd.setVirtualEnvironmentPath(QDir("."));
+	cmd.setTargetPlatform(argv[2]);
 	bool bRes = cmd.execute();
 	if(!bRes){
 		return -1;

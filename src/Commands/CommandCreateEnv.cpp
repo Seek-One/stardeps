@@ -108,12 +108,10 @@ bool CommandCreateEnv::findCompiler(Environment& env)
 #else
 	szCompiler = "gcc";
 	if(QFile::exists("/usr/bin/gcc")){
-		env.setEnvVar(VE_VAR_GIT, "/usr/bin/gcc");
+		env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/gcc");
 	}else{
-		env.setEnvVar(VE_VAR_GIT, "git");
+		env.setEnvVar(VE_VAR_COMPILER, "gcc");
 	}
 #endif
-
-	env.setEnvVar(VE_VAR_COMPILER, szCompiler);
 	return true;
 }

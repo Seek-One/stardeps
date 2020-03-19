@@ -60,5 +60,12 @@ bool EnvironmentLoader::loadEnvironmentVars(Environment& env)
 		qCritical("[env] No environment file found");
 	}
 
+	// Initialize platform type
+	if(bRes){
+		QString szTmp = env.getEnvVar(VE_VAR_TARGET_PLATFORM);
+		Platform::Type iType = Platform::fromString(szTmp);
+		env.setPlatformType(iType);
+	}
+
 	return bRes;
 }
