@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 
 #include "Formula.h"
 
@@ -63,7 +64,6 @@ bool FormulaParser::parse(const QString& szFilePath)
 		QJsonObject mainObject = document.object();
 
 		QJsonValue value;
-		QJsonObject object;
 		QString szTmp;
 
 		// Name
@@ -79,39 +79,64 @@ bool FormulaParser::parse(const QString& szFilePath)
 		}
 
 		// SCM
-		if(mainObject.contains("scm")){
-			value = mainObject.value("scm");
-			object = value.toObject();
-
-			// SCM type
-			if(object.contains("type")){
-				value = object.value("type");
-				szTmp = value.toString();
-				if(szTmp == "git"){
-					m_pFormula->setTypeSCM(Formula::SCM_Git);
-				}else if(szTmp == "svn"){
-					m_pFormula->setTypeSCM(Formula::SCM_Svn);
-				}
-			}
-
-			// SCM url
-			if(object.contains("url")){
-				value = object.value("url");
-				m_pFormula->setSCMURL(value.toString());
-			}
+		if(bRes && mainObject.contains("scm")){
+			bRes = parseSCM(mainObject.value("scm").toObject());
 		}
 
-		/*
-		QJsonValue value = sett2.value(QString("name"));
-		qWarning() << value;
-		QJsonObject item = value.toObject();
-		qWarning() << tr("QJsonObject of description: ") << item;
-
-		 in case of string value get value and convert into string
-		qWarning() << tr("QJsonObject[appName] of description: ") << item["description"];
-		QJsonValue subobj = item["description"];
-		*/
+		// Configure
+		if(bRes && mainObject.contains("configure")){
+			bRes = parseConfigure(mainObject.value("configure").toObject());
+		}
 	}
 
 	return bRes;
+}
+
+
+bool FormulaParser::parseSCM(const QJsonObject& objectRoot)
+{
+	QJsonValue value;
+	QString szTmp;
+
+	// SCM type
+	if(objectRoot.contains("type")){
+		value = objectRoot.value("type");
+		szTmp = value.toString();
+		if(szTmp == "git"){
+			m_pFormula->setTypeSCM(Formula::SCM_Git);
+		}else if(szTmp == "svn"){
+			m_pFormula->setTypeSCM(Formula::SCM_Svn);
+		}
+	}
+
+	// SCM url
+	if(objectRoot.contains("url")){
+		value = objectRoot.value("url");
+		m_pFormula->setSCMURL(value.toString());
+	}
+
+	return true;
+}
+
+bool FormulaParser::parseConfigure(const QJsonObject& objectRoot)
+{
+	QJsonObject::const_iterator iter_prop;
+
+	for(iter_prop = objectRoot.constBegin(); iter_prop != objectRoot.constEnd(); ++iter_prop)
+	{
+		QString szTargetPlatform = iter_prop.key();
+		FormulaCommands listCommands;
+
+		QJsonValue value = iter_prop.value();
+
+		QJsonArray arrayCommands = value.toArray();
+		QJsonArray::const_iterator iter_item;
+		for(iter_item = arrayCommands.constBegin(); iter_item != arrayCommands.constEnd(); ++iter_item)
+		{
+			listCommands.append((*iter_item).toString());
+		}
+		m_pFormula->addConfigureRule(szTargetPlatform, listCommands);
+	}
+
+	return true;
 }

@@ -8,6 +8,8 @@
 #ifndef SRC_COMMANDS_ABSTRACTPACKAGECOMMAND_H_
 #define SRC_COMMANDS_ABSTRACTPACKAGECOMMAND_H_
 
+#include <QDir>
+
 #include "AbstractCommand.h"
 
 class AbstractPackageCommand : public AbstractCommand
@@ -18,6 +20,10 @@ public:
 
 	void setPackageName(const QString& szPackageName);
 	void setVersion(const QString& szVersion);
+
+	QDir getSourcePackageDir() const;
+	QDir getBuildPackageDir() const;
+	QDir getReleasePackageDir() const;
 
 protected:
 	QString m_szPackageName;

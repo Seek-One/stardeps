@@ -21,6 +21,7 @@ public:
 
 public:
 	static Platform::Type fromString(const QString& szPlatform);
+	static const char* toString(Platform::Type iType);
 };
 
 #endif /* SRC_PLATFORM_PLATFORM_H_ */

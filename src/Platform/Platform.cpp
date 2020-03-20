@@ -20,3 +20,13 @@ Platform::Type Platform::fromString(const QString& szPlatform)
 	}
 	return Unknown;
 }
+
+const char* Platform::toString(Platform::Type iType)
+{
+	switch(iType){
+	case Linux_GCC_32: return "linux-gcc-32";
+	case Linux_GCC_64: return "linux-gcc-64";
+	case Win32_GCC: return "win32-gcc";
+	}
+	return "";
+}

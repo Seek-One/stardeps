@@ -56,3 +56,13 @@ QString Formula::getSCMURL() const
 {
 	return m_szSCMURL;
 }
+
+void Formula::addConfigureRule(const QString& szTargetPlateform, const FormulaCommands& listCommands)
+{
+	m_listConfigureRules.insert(szTargetPlateform, listCommands);
+}
+
+const FormulaConfigureRulesList& Formula::getConfigureRules() const
+{
+	return m_listConfigureRules;
+}

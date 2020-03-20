@@ -24,6 +24,10 @@ public:
 	bool parse(const QString& szFilePath);
 
 private:
+	bool parseSCM(const QJsonObject& objectRoot);
+	bool parseConfigure(const QJsonObject& objectRoot);
+
+private:
 	QSharedPointer<Formula> m_pFormula;
 };
 

@@ -25,9 +25,14 @@ public:
 	void setVirtualEnvironmentPath(const QDir& dir);
 	const QDir& getVirtualEnvironmentPath() const;
 
+	QDir getVirtualEnvironmentSourceDir() const;
+	QDir getVirtualEnvironmentBuildDir() const;
+	QDir getVirtualEnvironmentReleaseDir() const;
+
 	// Platform type
 	void setPlatformType(Platform::Type iPlatformType);
 	Platform::Type getPlatformType() const;
+	QString getPlatformTypeName() const;
 
 	// Env vars
 	void setEnvVar(const QString& szName, const QString& szValue);

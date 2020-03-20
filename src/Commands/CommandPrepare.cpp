@@ -33,11 +33,7 @@ bool CommandPrepare::doExecute()
 {
 	bool bRes = true;
 
-	QString szDirName = m_szPackageName;
-	if(!m_szVersion.isEmpty()){
-		szDirName += "-" + m_szVersion;
-	}
-	QDir dirSrcDstPath = getVirtualEnvironmentPath().path() + "/src/" + szDirName;
+	QDir dirSrcPackage = getSourcePackageDir();
 
 	// Load formula
 	QSharedPointer<Formula> pFormula;
@@ -45,11 +41,11 @@ bool CommandPrepare::doExecute()
 
 	// Get sources
 	if(bRes){
-		bRes = prepareSources(pFormula, dirSrcDstPath);
+		bRes = prepareSources(pFormula, dirSrcPackage);
 	}
 
 	if(bRes && !getConfigureVersion().isEmpty()){
-		bRes = configureVersion(pFormula, dirSrcDstPath);
+		bRes = configureVersion(pFormula, dirSrcPackage);
 	}
 
 	return bRes;

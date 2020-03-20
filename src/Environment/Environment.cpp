@@ -29,6 +29,21 @@ const QDir& Environment::getVirtualEnvironmentPath() const
 	return m_dirVE;
 }
 
+QDir Environment::getVirtualEnvironmentSourceDir() const
+{
+	return m_dirVE.filePath("src");
+}
+
+QDir Environment::getVirtualEnvironmentBuildDir() const
+{
+	return m_dirVE.filePath("build");
+}
+
+QDir Environment::getVirtualEnvironmentReleaseDir() const
+{
+	return m_dirVE.filePath("release");
+}
+
 void Environment::setPlatformType(Platform::Type iPlatformType)
 {
 	m_iPlatformType = iPlatformType;
@@ -37,6 +52,11 @@ void Environment::setPlatformType(Platform::Type iPlatformType)
 Platform::Type Environment::getPlatformType() const
 {
 	return m_iPlatformType;
+}
+
+QString Environment::getPlatformTypeName() const
+{
+	return Platform::toString(m_iPlatformType);
 }
 
 void Environment::setEnvVar(const QString& szName, const QString& szValue)
