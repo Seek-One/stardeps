@@ -5,6 +5,8 @@
  *      Author: ebeuque
  */
 
+#include "Environment/EnvironmentDefs.h"
+
 #include "AbstractPackageCommand.h"
 
 AbstractPackageCommand::AbstractPackageCommand(const QString& szLabel) : AbstractCommand(szLabel)
@@ -27,31 +29,28 @@ void AbstractPackageCommand::setVersion(const QString& szVersion)
 	m_szVersion = szVersion;
 }
 
+QString AbstractPackageCommand::getPackageNameVersion() const
+{
+	QString szVersionName = m_szPackageName;
+	if(!m_szVersion.isEmpty()){
+		szVersionName += "-" + m_szVersion;
+	}
+	return szVersionName;
+}
+
 QDir AbstractPackageCommand::getSourcePackageDir() const
 {
-	QString szDirName = m_szPackageName;
-	if(!m_szVersion.isEmpty()){
-		szDirName += "-" + m_szVersion;
-	}
-	return m_env.getVirtualEnvironmentSourceDir().filePath(szDirName);
+	return m_env.getVirtualEnvironmentSourceDir().filePath(getPackageNameVersion());
 }
 
 QDir AbstractPackageCommand::getBuildPackageDir() const
 {
-	QString szDirName = m_szPackageName;
-	if(!m_szVersion.isEmpty()){
-		szDirName += "-" + m_szVersion;
-	}
-	return m_env.getVirtualEnvironmentBuildDir().filePath(szDirName);
+	return m_env.getVirtualEnvironmentBuildDir().filePath(getPackageNameVersion());
 }
 
 QDir AbstractPackageCommand::getReleasePackageDir() const
 {
-	QString szDirName = m_szPackageName;
-	if(!m_szVersion.isEmpty()){
-		szDirName += "-" + m_szVersion;
-	}
-	return m_env.getVirtualEnvironmentReleaseDir().filePath(szDirName);
+	return m_env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion());
 }
 
 bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory)
@@ -93,13 +92,28 @@ bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szC
 {
 	szCmdOut = szCmd;
 
-	QDir dirSrcPackage = getSourcePackageDir();
-	szCmdOut = szCmdOut.replace("${PACKAGE_SRC_PATH}", dirSrcPackage.absolutePath());
+	QMap<QString, QString> dictVars;
 
-	QDir dirReleasePackage = getReleasePackageDir();
-	szCmdOut = szCmdOut.replace("${PACKAGE_PREFIX_PATH}", dirReleasePackage.absolutePath());
+	// Tools
+	dictVars.insert("${TOOL::GIT}", m_env.getEnvVar(VE_VAR_GIT));
+	dictVars.insert("${TOOL::MAKE}", m_env.getEnvVar(VE_VAR_MAKE));
+	dictVars.insert("${TOOL::RSYNC}", m_env.getEnvVar(VE_VAR_RSYNC));
+	dictVars.insert("${TOOL::COMPILER}", m_env.getEnvVar(VE_VAR_COMPILER));
 
-	szCmdOut = szCmdOut.replace("${CONFIGURE_OPTIONS}", QString());
+	// Package infos
+	dictVars.insert("${PACKAGE_VERSION}", getPackageNameVersion());
+	dictVars.insert("${PACKAGE_SRC_PATH}", getSourcePackageDir().absolutePath());
+	dictVars.insert("${PACKAGE_BUILD_PATH}", getBuildPackageDir().absolutePath());
+	dictVars.insert("${PACKAGE_PREFIX_PATH}", getReleasePackageDir().absolutePath());
+
+	// Configure
+	dictVars.insert("${CONFIGURE_OPTIONS}", QString());
+
+	QMap<QString, QString>::const_iterator iter;
+	for(iter = dictVars.constBegin(); iter != dictVars.constEnd(); ++iter)
+	{
+		szCmdOut = szCmdOut.replace(iter.key(), iter.value());
+	}
 
 	return true;
 }

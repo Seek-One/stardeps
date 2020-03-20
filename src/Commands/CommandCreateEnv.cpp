@@ -46,7 +46,12 @@ bool CommandCreateEnv::doExecute()
 	if(bRes){
 		bRes = findGit(env);
 	}
-
+	if(bRes){
+		bRes = findMake(env);
+	}
+	if(bRes){
+		bRes = findRSync(env);
+	}
 	if(bRes){
 		bRes = findCompiler(env);
 	}
@@ -106,12 +111,31 @@ bool CommandCreateEnv::findCompiler(Environment& env)
 #elif defined(APPLE)
 	szCompiler = "xcodebuild";
 #else
-	szCompiler = "gcc";
 	if(QFile::exists("/usr/bin/gcc")){
 		env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/gcc");
 	}else{
 		env.setEnvVar(VE_VAR_COMPILER, "gcc");
 	}
 #endif
+	return true;
+}
+
+bool CommandCreateEnv::findMake(Environment& env)
+{
+	if(QFile::exists("/usr/bin/make")){
+		env.setEnvVar(VE_VAR_MAKE, "/usr/bin/make");
+	}else{
+		env.setEnvVar(VE_VAR_MAKE, "make");
+	}
+	return true;
+}
+
+bool CommandCreateEnv::findRSync(Environment& env)
+{
+	if(QFile::exists("/usr/bin/rsync")){
+		env.setEnvVar(VE_VAR_RSYNC, "/usr/bin/rsync");
+	}else{
+		env.setEnvVar(VE_VAR_RSYNC, "rsync");
+	}
 	return true;
 }

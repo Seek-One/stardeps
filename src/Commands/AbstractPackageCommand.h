@@ -21,6 +21,7 @@ public:
 	void setPackageName(const QString& szPackageName);
 	void setVersion(const QString& szVersion);
 
+	QString getPackageNameVersion() const;
 	QDir getSourcePackageDir() const;
 	QDir getBuildPackageDir() const;
 	QDir getReleasePackageDir() const;

@@ -11,10 +11,10 @@
                 "${PACKAGE_SRC_PATH}/config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
-                "make"
+                "${TOOL::MAKE}"
             ],
             "install": [
-                "make install"
+                "${TOOL::MAKE} install"
             ]
         }
     }

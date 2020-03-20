@@ -26,6 +26,8 @@ protected:
 private:
 	bool findGit(Environment& env);
 	bool findCompiler(Environment& env);
+	bool findMake(Environment& env);
+	bool findRSync(Environment& env);
 
 	QString m_szTargetPlatform;
 };

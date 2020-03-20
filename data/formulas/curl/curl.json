@@ -12,5 +12,20 @@
         "7.41": {
             "openssl" : {"min":"1.0", "max":"1.1"}
         }
+    },
+    "recipes": {
+        "linux-gcc-64": {
+            "configure": [
+                "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
+                "${PACKAGE_BUILD_PATH}/buildconf",
+                "${PACKAGE_BUILD_PATH}/configure --prefix=${PACKAGE_PREFIX_PATH} --enable-debug"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install"
+            ]
+        }
     }
 }
