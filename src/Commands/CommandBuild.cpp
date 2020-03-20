@@ -1,23 +1,23 @@
 /*
- * CommandConfigure.cpp
+ * CommandBuild.cpp
  *
- *  Created on: 18 mars 2020
+ *  Created on: 20 mars 2020
  *      Author: ebeuque
  */
 
-#include "CommandConfigure.h"
+#include "CommandBuild.h"
 
-CommandConfigure::CommandConfigure() : AbstractPackageCommand("configure")
+CommandBuild::CommandBuild() : AbstractPackageCommand("build")
 {
 
 }
 
-CommandConfigure::~CommandConfigure()
+CommandBuild::~CommandBuild()
 {
 
 }
 
-bool CommandConfigure::doExecute()
+bool CommandBuild::doExecute()
 {
 	bool bRes;
 
@@ -31,14 +31,14 @@ bool CommandConfigure::doExecute()
 		QString szTargetPlateform = m_env.getPlatformTypeName();
 		if(listRecipes.contains(szTargetPlateform)){
 			const FormulaRecipe& recipe = listRecipes.value(szTargetPlateform);
-			const FormulaCommands& listCommands = recipe.getConfigureCommands();
+			const FormulaCommands& listCommands = recipe.getBuildCommands();
 
 			FormulaCommands::const_iterator iter_cmd;
 			for(iter_cmd = listCommands.constBegin(); iter_cmd != listCommands.constEnd(); ++iter_cmd)
 			{
 				bRes = doRunCommand((*iter_cmd), getBuildPackageDir());
 				if(!bRes){
-					qCritical("[configure] aborting configure due to error");
+					qCritical("[build] aborting configure due to error");
 					break;
 				}
 			}

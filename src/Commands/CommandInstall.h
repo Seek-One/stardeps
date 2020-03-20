@@ -8,14 +8,15 @@
 #ifndef SRC_COMMANDS_COMMANDINSTALL_H_
 #define SRC_COMMANDS_COMMANDINSTALL_H_
 
-#include <QString>
+#include "AbstractPackageCommand.h"
 
-class CommandInstall {
+class CommandInstall : public AbstractPackageCommand {
 public:
 	CommandInstall();
 	virtual ~CommandInstall();
 
-	static bool execute(const QString& szVEPath, const QString& szPackage);
+protected:
+	bool doExecute();
 };
 
 #endif /* SRC_COMMANDS_COMMANDINSTALL_H_ */

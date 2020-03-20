@@ -5,14 +5,17 @@
         "type": "git",
         "url": "https://github.com/openssl/openssl"
     },
-    "configure": {
-        "linux-gcc-64": [
-            "${PACKAGE_SRC_PATH}/config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
-        ]
-    },
-    "build": {
-        "linux-gcc-64": [
-            "make"
-        ]
+    "recipes": {
+        "linux-gcc-64": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "make"
+            ],
+            "install": [
+                "make install"
+            ]
+        }
     }
 }

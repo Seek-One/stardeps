@@ -57,12 +57,12 @@ QString Formula::getSCMURL() const
 	return m_szSCMURL;
 }
 
-void Formula::addConfigureRule(const QString& szTargetPlateform, const FormulaCommands& listCommands)
+void Formula::addRecipe(const QString& szTargetPlateform, const FormulaRecipe& recipe)
 {
-	m_listConfigureRules.insert(szTargetPlateform, listCommands);
+	m_listRecipes.insert(szTargetPlateform, recipe);
 }
 
-const FormulaConfigureRulesList& Formula::getConfigureRules() const
+const FormulaRecipeList& Formula::getRecipeList() const
 {
-	return m_listConfigureRules;
+	return m_listRecipes;
 }

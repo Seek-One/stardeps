@@ -12,8 +12,7 @@
 #include <QMap>
 #include <QList>
 
-typedef QList<QString> FormulaCommands;
-typedef QMap<QString, FormulaCommands> FormulaConfigureRulesList;
+#include "FormulaRecipe.h"
 
 class Formula
 {
@@ -40,8 +39,8 @@ public:
 	void setSCMURL(const QString& szSCMURL);
 	QString getSCMURL() const;
 
-	void addConfigureRule(const QString& szTargetPlateform, const FormulaCommands& listCommands);
-	const FormulaConfigureRulesList& getConfigureRules() const;
+	void addRecipe(const QString& szTargetPlateform, const FormulaRecipe& recipe);
+	const FormulaRecipeList& getRecipeList() const;
 
 private:
 	QString m_szName;
@@ -50,7 +49,7 @@ private:
 	TypeSCM m_iTypeSCM;
 	QString m_szSCMURL;
 
-	FormulaConfigureRulesList m_listConfigureRules;
+	FormulaRecipeList m_listRecipes;
 
 };
 

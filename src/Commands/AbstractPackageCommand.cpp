@@ -53,3 +53,53 @@ QDir AbstractPackageCommand::getReleasePackageDir() const
 	}
 	return m_env.getVirtualEnvironmentReleaseDir().filePath(szDirName);
 }
+
+bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory)
+{
+	bool bRes;
+
+	QString szCmdBind;
+	bRes = doPrepareCommand(szCmd, szCmdBind);
+
+	if(bRes){
+		qDebug("[%s] %s", qPrintable(m_szLabel), qPrintable(szCmdBind));
+		QStringList tokens = szCmdBind.split(' ');
+		QString szCommand = tokens[0];
+
+		// Rebuild cmd
+		int i = 0;
+		QStringList listArgs;
+		QStringList::const_iterator iter;
+		for(iter = tokens.constBegin(); iter != tokens.constEnd(); ++iter)
+		{
+			const QString& szArg = (*iter);
+			if(i > 0 && !szArg.isEmpty()){
+				listArgs.append(szArg);
+			}
+			i++;
+		}
+
+		if(!dirWorkingDirectory.exists()){
+			qDebug("[%s] create directory: %s", qPrintable(m_szLabel), qPrintable(dirWorkingDirectory.path()));
+			bRes = dirWorkingDirectory.mkpath(".");
+		}
+		bRes = m_shell.runCommand(tokens[0], listArgs, dirWorkingDirectory);
+	}
+
+	return bRes;
+}
+
+bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szCmdOut)
+{
+	szCmdOut = szCmd;
+
+	QDir dirSrcPackage = getSourcePackageDir();
+	szCmdOut = szCmdOut.replace("${PACKAGE_SRC_PATH}", dirSrcPackage.absolutePath());
+
+	QDir dirReleasePackage = getReleasePackageDir();
+	szCmdOut = szCmdOut.replace("${PACKAGE_PREFIX_PATH}", dirReleasePackage.absolutePath());
+
+	szCmdOut = szCmdOut.replace("${CONFIGURE_OPTIONS}", QString());
+
+	return true;
+}

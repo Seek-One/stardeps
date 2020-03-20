@@ -83,9 +83,9 @@ bool FormulaParser::parse(const QString& szFilePath)
 			bRes = parseSCM(mainObject.value("scm").toObject());
 		}
 
-		// Configure
-		if(bRes && mainObject.contains("configure")){
-			bRes = parseConfigure(mainObject.value("configure").toObject());
+		// Recipes
+		if(bRes && mainObject.contains("recipes")){
+			bRes = parseRecipe(mainObject.value("recipes").toObject());
 		}
 	}
 
@@ -118,25 +118,51 @@ bool FormulaParser::parseSCM(const QJsonObject& objectRoot)
 	return true;
 }
 
-bool FormulaParser::parseConfigure(const QJsonObject& objectRoot)
+bool FormulaParser::parseRecipe(const QJsonObject& objectRoot)
 {
+	bool bRes = true;
+
 	QJsonObject::const_iterator iter_prop;
 
 	for(iter_prop = objectRoot.constBegin(); iter_prop != objectRoot.constEnd(); ++iter_prop)
 	{
+		// Target platform
 		QString szTargetPlatform = iter_prop.key();
-		FormulaCommands listCommands;
 
+		// Recipe
 		QJsonValue value = iter_prop.value();
+		QJsonObject objectPlatform = value.toObject();
 
-		QJsonArray arrayCommands = value.toArray();
-		QJsonArray::const_iterator iter_item;
-		for(iter_item = arrayCommands.constBegin(); iter_item != arrayCommands.constEnd(); ++iter_item)
-		{
-			listCommands.append((*iter_item).toString());
+		FormulaRecipe formulaRecipe;
+
+		// Recipes
+		if(bRes && objectPlatform.contains("configure")){
+			FormulaCommands listCommands;
+			bRes = parseCommands(objectPlatform.value("configure").toArray(), listCommands);
+			formulaRecipe.setConfigureCommands(listCommands);
 		}
-		m_pFormula->addConfigureRule(szTargetPlatform, listCommands);
+		if(bRes && objectPlatform.contains("build")){
+			FormulaCommands listCommands;
+			bRes = parseCommands(objectPlatform.value("build").toArray(), listCommands);
+			formulaRecipe.setBuildCommands(listCommands);
+		}
+		if(bRes && objectPlatform.contains("install")){
+			FormulaCommands listCommands;
+			bRes = parseCommands(objectPlatform.value("install").toArray(), listCommands);
+			formulaRecipe.setInstallCommands(listCommands);
+		}
+		m_pFormula->addRecipe(szTargetPlatform, formulaRecipe);
 	}
 
+	return true;
+}
+
+bool FormulaParser::parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands)
+{
+	QJsonArray::const_iterator iter_item;
+	for(iter_item = arrayCommands.constBegin(); iter_item != arrayCommands.constEnd(); ++iter_item)
+	{
+		listCommands.append((*iter_item).toString());
+	}
 	return true;
 }

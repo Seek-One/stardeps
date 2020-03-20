@@ -20,12 +20,14 @@
 #include <Commands/CommandCreateEnv.h>
 #include "Commands/CommandPrepare.h"
 #include "Commands/CommandConfigure.h"
+#include "Commands/CommandBuild.h"
 #include "Commands/CommandInstall.h"
 
 static int processCommandVersion();
 static int processCommandCreateEnv(int argc, char **argv);
 static int processCommandPrepare(int argc, char **argv);
 static int processCommandConfigure(int argc, char **argv);
+static int processCommandBuild(int argc, char **argv);
 static int processCommandInstall(int argc, char **argv);
 
 int main(int argc, char **argv)
@@ -82,6 +84,8 @@ int main(int argc, char **argv)
             iRes = processCommandPrepare(argc, argv);
         }else if(szCommand == "configure"){
             iRes = processCommandConfigure(argc, argv);
+        }else if(szCommand == "build"){
+            iRes = processCommandBuild(argc, argv);
         }else if(szCommand == "install"){
             iRes = processCommandInstall(argc, argv);
         }else{
@@ -182,9 +186,52 @@ static int processCommandConfigure(int argc, char **argv)
 	return 0;
 }
 
+static int processCommandBuild(int argc, char **argv)
+{
+	if(argc < 3){
+		qCritical("[main] Missing PACKAGE_NAME argument");
+		return -1;
+	}
+
+	CommandBuild cmd;
+	cmd.setVirtualEnvironmentPath(QDir("."));
+	cmd.setPackageName(argv[2]);
+
+	for(int i=3; i<argc; i++)
+	{
+		QString szArg = argv[i];
+		if(szArg.startsWith("--version=")){
+			cmd.setVersion(szArg.mid(10));
+		}
+	}
+
+	bool bRes = cmd.execute();
+	if(!bRes){
+		return -1;
+	}
+	return 0;
+}
+
 static int processCommandInstall(int argc, char **argv)
 {
-	bool bRes = CommandInstall::execute(".", argv[2]);
+	if(argc < 3){
+		qCritical("[main] Missing PACKAGE_NAME argument");
+		return -1;
+	}
+
+	CommandInstall cmd;
+	cmd.setVirtualEnvironmentPath(QDir("."));
+	cmd.setPackageName(argv[2]);
+
+	for(int i=3; i<argc; i++)
+	{
+		QString szArg = argv[i];
+		if(szArg.startsWith("--version=")){
+			cmd.setVersion(szArg.mid(10));
+		}
+	}
+
+	bool bRes = cmd.execute();
 	if(!bRes){
 		return -1;
 	}

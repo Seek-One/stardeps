@@ -26,6 +26,10 @@ public:
 	QDir getReleasePackageDir() const;
 
 protected:
+	bool doPrepareCommand(const QString& szCmd, QString& szCmdOut);
+	bool doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory);
+
+protected:
 	QString m_szPackageName;
 	QString m_szVersion;
 };

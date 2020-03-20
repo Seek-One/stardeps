@@ -17,11 +17,6 @@ public:
 
 protected:
 	bool doExecute();
-
-private:
-	bool runCommand(const QString& szCmd);
-
-	bool doPrepareCommand(const QString& szCmd, QString& szCmdOut);
 };
 
 #endif /* SRC_COMMANDS_COMMANDCONFIGURE_H_ */
