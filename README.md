@@ -71,10 +71,40 @@ You can use the following OPTIONS:
 
 ## Configure package sources
 
-This command allow you to configure th build.
+This command allow you to configure the build.
 
 ```
 stardeps configure PACKAGE_NAME [OPTIONS]
+```
+
+You can use the following OPTIONS:
+
+```
+  --version=[VERSION]
+      Set the target version name to build.
+```
+
+## Build package sources
+
+This command allow you to build the package from the configure commands.
+
+```
+stardeps build PACKAGE_NAME [OPTIONS]
+```
+
+You can use the following OPTIONS:
+
+```
+  --version=[VERSION]
+      Set the target version name to build.
+```
+
+## Install package sources
+
+This command allow you to install the build in the release path.
+
+```
+stardeps install PACKAGE_NAME [OPTIONS]
 ```
 
 You can use the following OPTIONS:
