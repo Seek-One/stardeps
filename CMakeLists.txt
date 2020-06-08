@@ -181,6 +181,8 @@ set(APPLICATION_SOURCES
     src/Formulas/FormulaParser.h
     src/Formulas/FormulaRecipe.cpp
     src/Formulas/FormulaRecipe.h
+    src/Formulas/FormulasDependencies.cpp
+    src/Formulas/FormulasDependencies.h
     src/Global/QApplicationSettings.cpp
     src/Global/QApplicationSettings.h
     src/Platform/Platform.cpp

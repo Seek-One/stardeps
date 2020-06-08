@@ -83,6 +83,11 @@ bool FormulaParser::parse(const QString& szFilePath)
 			bRes = parseSCM(mainObject.value("scm").toObject());
 		}
 
+		// Dependencies
+		if(bRes && mainObject.contains("dependencies")){
+			bRes = parseDependencies(mainObject.value("dependencies").toObject());
+		}
+
 		// Recipes
 		if(bRes && mainObject.contains("recipes")){
 			bRes = parseRecipe(mainObject.value("recipes").toObject());
@@ -113,6 +118,52 @@ bool FormulaParser::parseSCM(const QJsonObject& objectRoot)
 	if(objectRoot.contains("url")){
 		value = objectRoot.value("url");
 		m_pFormula->setSCMURL(value.toString());
+	}
+
+	return true;
+}
+
+bool FormulaParser::parseDependencies(const QJsonObject& objectRoot)
+{
+	bool bRes = true;
+
+	QJsonObject::const_iterator iter_prop;
+
+	for(iter_prop = objectRoot.constBegin(); iter_prop != objectRoot.constEnd(); ++iter_prop)
+	{
+		// Target platform
+		QString szVersion = iter_prop.key();
+
+		// Recipe
+		QJsonValue value = iter_prop.value();
+		QJsonObject objectDepsList = value.toObject();
+
+		FormulasDependencies formulaDependencies;
+
+		QJsonObject::const_iterator iter_deps;
+		for(iter_deps = objectDepsList.constBegin(); iter_deps != objectDepsList.constEnd(); ++iter_deps)
+		{
+			// Package name
+			QString szPackageName = iter_prop.key();
+			QString szVersionMin;
+			QString szVersionMax;
+
+			// Attributes
+			QJsonValue value2 = iter_prop.value();
+			QJsonObject objectAttrsList = value2.toObject();
+
+			if(objectAttrsList.contains("min")){
+				szVersionMin = objectAttrsList.value("min").toString();
+			}
+
+			if(objectAttrsList.contains("max")){
+				szVersionMax = objectAttrsList.value("max").toString();
+			}
+
+			formulaDependencies.addDependency(szPackageName, szVersionMin, szVersionMax);
+		}
+
+		m_pFormula->addDependencies(szVersion, formulaDependencies);
 	}
 
 	return true;

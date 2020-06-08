@@ -26,6 +26,7 @@ public:
 
 private:
 	bool parseSCM(const QJsonObject& objectRoot);
+	bool parseDependencies(const QJsonObject& objectRoot);
 	bool parseRecipe(const QJsonObject& objectRoot);
 	bool parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands);
 

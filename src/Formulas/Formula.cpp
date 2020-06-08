@@ -57,6 +57,11 @@ QString Formula::getSCMURL() const
 	return m_szSCMURL;
 }
 
+void Formula::addDependencies(const QString& szVersion, const FormulasDependencies& dependencies)
+{
+	m_listDependencies.insert(szVersion, dependencies);
+}
+
 void Formula::addRecipe(const QString& szTargetPlateform, const FormulaRecipe& recipe)
 {
 	m_listRecipes.insert(szTargetPlateform, recipe);
