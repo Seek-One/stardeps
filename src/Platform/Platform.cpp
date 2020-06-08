@@ -27,6 +27,7 @@ const char* Platform::toString(Platform::Type iType)
 	case Linux_GCC_32: return "linux-gcc-32";
 	case Linux_GCC_64: return "linux-gcc-64";
 	case Win32_GCC: return "win32-gcc";
+	default: break;
 	}
 	return "";
 }
