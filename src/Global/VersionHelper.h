@@ -15,8 +15,9 @@ public:
 	VersionHelper();
 	virtual ~VersionHelper();
 
-	static bool isVersionLessThan(const QString& szVersion1, const QString& szVersion2);
-	static bool isVersionGreaterThan(const QString& szVersion1, const QString& szVersion2);
+	static bool isLessThan(const QString& szVersion1, const QString& szVersion2);
+	static bool isGreaterThan(const QString& szVersion1, const QString& szVersion2);
+	static int compare(const QString& szVersion1, const QString& szVersion2);
 };
 
 #endif /* SRC_GLOBAL_VERSIONHELPER_H_ */
