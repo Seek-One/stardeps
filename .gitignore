@@ -12,6 +12,7 @@ ts.qrc
 config.h
 version.h
 stardeps
+stardeps-testsuite
 moc_*.c*
 README
 build

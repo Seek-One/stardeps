@@ -27,6 +27,7 @@ protected:
 	bool doExecute();
 
 private:
+	bool checkDependencies(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy);
 	bool prepareSources(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy);
 	bool configureVersion(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy);
 	const QString& getConfigureVersion() const;

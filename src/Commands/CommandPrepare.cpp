@@ -39,13 +39,31 @@ bool CommandPrepare::doExecute()
 	QSharedPointer<Formula> pFormula;
 	bRes = loadFormula(m_szPackageName, pFormula);
 
+	// Check dependencies
+
 	// Get sources
 	if(bRes){
 		bRes = prepareSources(pFormula, dirSrcPackage);
 	}
 
+	// Configure the version
 	if(bRes && !getConfigureVersion().isEmpty()){
 		bRes = configureVersion(pFormula, dirSrcPackage);
+	}
+
+	return bRes;
+}
+
+bool CommandPrepare::checkDependencies(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy)
+{
+	bool bRes = true;
+
+	QString szVersion = getPackageNameVersion();
+
+	const FormulasDependenciesList& listDependencies = pFormula->getDependenciesList();
+
+	if(!listDependencies.isEmpty()){
+
 	}
 
 	return bRes;

@@ -149,6 +149,11 @@ include_directories (${PROJECT_BINARY_DIR})
 
 include_directories (${PROJECT_SOURCE_DIR}/src)
 
+set(APP_COMMON_SOURCES
+    src/Global/VersionHelper.cpp
+    src/Global/VersionHelper.h
+)
+
 set(APPLICATION_SOURCES
     src/main.cpp
     src/Commands/AbstractCommand.cpp
@@ -189,6 +194,7 @@ set(APPLICATION_SOURCES
     src/Platform/Platform.h
     src/Shell/ShellExecutor.cpp
     src/Shell/ShellExecutor.h
+    ${APP_COMMON_SOURCES}
 )
 
 # Creating MOC file for sources file using "slots" or Q_OBJECT macro
@@ -312,6 +318,37 @@ if(UNIX AND NOT WIN32)
         )
     endforeach(ICON)
 endif(UNIX AND NOT WIN32)
+
+####################
+# Build test suite
+####################
+
+SET (UNITTEST_SRC 
+    test/main.cpp
+    test/Global/VersionHelperTestCase.cpp
+    test/Global/VersionHelperTestCase.h
+)
+    
+# Creating MOC file for sources file using "slots" or Q_OBJECT macro
+set(UNITTEST_MOC_HEADERS
+    test/Global/VersionHelperTestCase.h
+)
+QT_WRAP_CPP(
+  UNITTEST_MOC_OUTFILES
+  ${UNITTEST_MOC_HEADERS}
+)
+
+set (UNITTEST_EXE ${APPLICATION_EXE_NAME}-testsuite)
+add_executable (${UNITTEST_EXE} ${UNITTEST_SRC} ${UNITTEST_MOC_OUTFILES}
+    ${APP_COMMON_SOURCES}
+    ${RCS_OUTFILES}
+    
+)
+set_target_properties(${UNITTEST_EXE} PROPERTIES COMPILE_FLAGS -DUNITTEST)
+target_link_libraries (${UNITTEST_EXE}
+    ${QT_LIBRARIES}
+    ${PTHREAD_LIBRARIES}
+)
 
 #################
 # Build package

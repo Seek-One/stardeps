@@ -41,6 +41,7 @@ public:
 	QString getSCMURL() const;
 
 	void addDependencies(const QString& szVersion, const FormulasDependencies& dependencies);
+	const FormulasDependenciesList& getDependenciesList() const;
 
 	void addRecipe(const QString& szTargetPlateform, const FormulaRecipe& recipe);
 	const FormulaRecipeList& getRecipeList() const;

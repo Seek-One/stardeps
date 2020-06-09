@@ -62,6 +62,11 @@ void Formula::addDependencies(const QString& szVersion, const FormulasDependenci
 	m_listDependencies.insert(szVersion, dependencies);
 }
 
+const FormulasDependenciesList& Formula::getDependenciesList() const
+{
+	return m_listDependencies;
+}
+
 void Formula::addRecipe(const QString& szTargetPlateform, const FormulaRecipe& recipe)
 {
 	m_listRecipes.insert(szTargetPlateform, recipe);
