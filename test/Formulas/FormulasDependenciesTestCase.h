@@ -10,13 +10,14 @@
 
 #include <QTest>
 
-class FormulasDependenciesTestCase {
+class FormulasDependenciesTestCase : public QObject  {
+	Q_OBJECT
 public:
 	FormulasDependenciesTestCase();
 	virtual ~FormulasDependenciesTestCase();
 
 private slots:
-	void test_version_Compare();
+	void test_getBestVersion();
 };
 
 #endif /* TEST_FORMULAS_FORMULASDEPENDENCIESTESTCASE_H_ */
