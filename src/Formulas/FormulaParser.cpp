@@ -166,7 +166,7 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot)
 		m_pFormula->addDependencies(szVersion, formulaDependencies);
 	}
 
-	return true;
+	return bRes;
 }
 
 bool FormulaParser::parseRecipe(const QJsonObject& objectRoot)

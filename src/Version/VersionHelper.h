@@ -16,7 +16,9 @@ public:
 	virtual ~VersionHelper();
 
 	static bool isLessThan(const QString& szVersion1, const QString& szVersion2);
+	static bool isLessThanOrEqual(const QString& szVersion1, const QString& szVersion2);
 	static bool isGreaterThan(const QString& szVersion1, const QString& szVersion2);
+	static bool isGreaterThanOrEqual(const QString& szVersion1, const QString& szVersion2);
 	static int compare(const QString& szVersion1, const QString& szVersion2);
 };
 

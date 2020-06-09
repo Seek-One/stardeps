@@ -5,9 +5,11 @@
  *      Author: ebeuque
  */
 
-#include "Global/VersionHelper.h"
+#include "Version/VersionHelper.h"
 
 #include "VersionHelperTestCase.h"
+
+
 
 VersionHelperTestCase::VersionHelperTestCase()
 {

@@ -5,8 +5,8 @@
  *      Author: ebeuque
  */
 
-#ifndef TEST_GLOBAL_VERSIONHELPERTESTCASE_H_
-#define TEST_GLOBAL_VERSIONHELPERTESTCASE_H_
+#ifndef TEST_VERSION_VERSIONHELPERTESTCASE_H_
+#define TEST_VERSION_VERSIONHELPERTESTCASE_H_
 
 #include <QTest>
 
@@ -20,4 +20,4 @@ private slots:
 	void test_version_Compare();
 };
 
-#endif /* TEST_GLOBAL_VERSIONHELPERTESTCASE_H_ */
+#endif /* TEST_VERSION_VERSIONHELPERTESTCASE_H_ */

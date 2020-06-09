@@ -83,6 +83,11 @@ FormulasDependenciesList::~FormulasDependenciesList()
 
 }
 
+void FormulasDependenciesList::setDependencies(const QString& szVersion, const FormulasDependencies& deps)
+{
+	insert(szVersion, deps);
+}
+
 void FormulasDependenciesList::addDependency(const QString& szVersion, const FormulasDependency& dependency)
 {
 	if(contains(szVersion)){
@@ -96,7 +101,11 @@ void FormulasDependenciesList::addDependency(const QString& szVersion, const For
 
 QString FormulasDependenciesList::getBestDependeciesVersion(const QString& szVersion) const
 {
-	QString szBestVersion;
+	QString szFirstVersion;
+	QString szLastVersion;
+
+	QString szBeforeVersion;
+	QString szAfterVersion;
 
 	FormulasDependenciesList::const_iterator iter;
 
@@ -104,16 +113,46 @@ QString FormulasDependenciesList::getBestDependeciesVersion(const QString& szVer
 	{
 		const QString& szCurrentVersion = iter.key();
 
-		if(VersionHelper::isLessThan(szCurrentVersion, szVersion)){
-			if(szBestVersion.isEmpty()){
-				szBestVersion = szCurrentVersion;
-			}else{
-				if(VersionHelper::isGreaterThan(szCurrentVersion, szBestVersion)){
-					szBestVersion = szCurrentVersion;
-				}
+		if(szCurrentVersion == szVersion){
+			return szCurrentVersion;
+		}
+
+		// Get first version
+		if(szFirstVersion.isEmpty() || VersionHelper::isLessThan(szCurrentVersion, szFirstVersion)){
+			szFirstVersion = szCurrentVersion;
+		}
+
+		// Get last version
+		if(szLastVersion.isEmpty() || VersionHelper::isGreaterThan(szCurrentVersion, szLastVersion)){
+			szLastVersion = szCurrentVersion;
+		}
+
+		// Get before version
+		if(VersionHelper::isLessThanOrEqual(szCurrentVersion, szVersion)){
+			if(szBeforeVersion.isEmpty() || VersionHelper::isGreaterThan(szCurrentVersion, szVersion)){
+				szBeforeVersion = szCurrentVersion;
+			}
+		}
+
+		// Get after version
+		if(VersionHelper::isGreaterThanOrEqual(szCurrentVersion, szVersion)){
+			if(szAfterVersion.isEmpty() || VersionHelper::isLessThan(szCurrentVersion, szVersion)){
+				szAfterVersion = szCurrentVersion;
 			}
 		}
 	}
 
-	return szBestVersion;
+	if(szBeforeVersion.isEmpty()){
+		return szFirstVersion;
+	}
+	if(szAfterVersion.isEmpty()){
+		return szLastVersion;
+	}
+	if(szVersion.startsWith(szBeforeVersion)){
+		return szBeforeVersion;
+	}
+	if(szAfterVersion == "latest"){
+		return szAfterVersion;
+	}
+	return szBeforeVersion;
 }

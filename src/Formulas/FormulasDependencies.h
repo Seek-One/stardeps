@@ -54,6 +54,7 @@ public:
 	FormulasDependenciesList();
 	virtual ~FormulasDependenciesList();
 
+	void setDependencies(const QString& szVersion, const FormulasDependencies& deps);
 	void addDependency(const QString& szVersion, const FormulasDependency& dependency);
 
 	QString getBestDependeciesVersion(const QString& szVersion) const;

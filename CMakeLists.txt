@@ -150,6 +150,8 @@ include_directories (${PROJECT_BINARY_DIR})
 include_directories (${PROJECT_SOURCE_DIR}/src)
 
 set(APP_COMMON_SOURCES
+    src/Formulas/FormulasDependencies.cpp
+    src/Formulas/FormulasDependencies.h
     src/Version/VersionHelper.cpp
     src/Version/VersionHelper.h
 )
@@ -186,8 +188,6 @@ set(APPLICATION_SOURCES
     src/Formulas/FormulaParser.h
     src/Formulas/FormulaRecipe.cpp
     src/Formulas/FormulaRecipe.h
-    src/Formulas/FormulasDependencies.cpp
-    src/Formulas/FormulasDependencies.h
     src/Global/QApplicationSettings.cpp
     src/Global/QApplicationSettings.h
     src/Platform/Platform.cpp
@@ -325,12 +325,15 @@ endif(UNIX AND NOT WIN32)
 
 SET (UNITTEST_SRC 
     test/main.cpp
+    test/Formulas/FormulasDependenciesTestCase.cpp
+    test/Formulas/FormulasDependenciesTestCase.h
     test/Version/VersionHelperTestCase.cpp
     test/Version/VersionHelperTestCase.h
 )
     
 # Creating MOC file for sources file using "slots" or Q_OBJECT macro
 set(UNITTEST_MOC_HEADERS
+    test/Formulas/FormulasDependenciesTestCase.h
     test/Version/VersionHelperTestCase.h
 )
 QT_WRAP_CPP(

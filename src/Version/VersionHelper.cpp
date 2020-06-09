@@ -7,7 +7,7 @@
 
 #include <QStringList>
 
-#include "Global/VersionHelper.h"
+#include "Version/VersionHelper.h"
 
 VersionHelper::VersionHelper()
 {
@@ -21,12 +21,22 @@ VersionHelper::~VersionHelper()
 
 bool VersionHelper::isLessThan(const QString& szVersion1, const QString& szVersion2)
 {
-	return (compare(szVersion1, szVersion2) == -1);
+	return (compare(szVersion1, szVersion2) < -1);
+}
+
+bool VersionHelper::isLessThanOrEqual(const QString& szVersion1, const QString& szVersion2)
+{
+	return (compare(szVersion1, szVersion2) <= -1);
 }
 
 bool VersionHelper::isGreaterThan(const QString& szVersion1, const QString& szVersion2)
 {
-	return (compare(szVersion1, szVersion2) == 1);
+	return (compare(szVersion1, szVersion2) > 0);
+}
+
+bool VersionHelper::isGreaterThanOrEqual(const QString& szVersion1, const QString& szVersion2)
+{
+	return (compare(szVersion1, szVersion2) >= 0);
 }
 
 int VersionHelper::compare(const QString& szVersion1, const QString& szVersion2)
