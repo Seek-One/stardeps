@@ -5,7 +5,7 @@
  *      Author: ebeuque
  */
 
-#include "Global/VersionHelper.h"
+#include "Version/VersionHelper.h"
 
 #include "FormulasDependencies.h"
 

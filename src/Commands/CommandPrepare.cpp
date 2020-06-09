@@ -40,6 +40,9 @@ bool CommandPrepare::doExecute()
 	bRes = loadFormula(m_szPackageName, pFormula);
 
 	// Check dependencies
+	if(bRes){
+		bRes = checkDependencies(pFormula, dirSrcPackage);
+	}
 
 	// Get sources
 	if(bRes){

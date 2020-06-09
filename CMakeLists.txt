@@ -150,8 +150,8 @@ include_directories (${PROJECT_BINARY_DIR})
 include_directories (${PROJECT_SOURCE_DIR}/src)
 
 set(APP_COMMON_SOURCES
-    src/Global/VersionHelper.cpp
-    src/Global/VersionHelper.h
+    src/Version/VersionHelper.cpp
+    src/Version/VersionHelper.h
 )
 
 set(APPLICATION_SOURCES
@@ -325,13 +325,13 @@ endif(UNIX AND NOT WIN32)
 
 SET (UNITTEST_SRC 
     test/main.cpp
-    test/Global/VersionHelperTestCase.cpp
-    test/Global/VersionHelperTestCase.h
+    test/Version/VersionHelperTestCase.cpp
+    test/Version/VersionHelperTestCase.h
 )
     
 # Creating MOC file for sources file using "slots" or Q_OBJECT macro
 set(UNITTEST_MOC_HEADERS
-    test/Global/VersionHelperTestCase.h
+    test/Version/VersionHelperTestCase.h
 )
 QT_WRAP_CPP(
   UNITTEST_MOC_OUTFILES

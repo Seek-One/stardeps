@@ -1,8 +1,7 @@
 
 #include <QtTest>
 
-#include "Global/VersionHelperTestCase.h"
-
+#include "Version/VersionHelperTestCase.h"
 
 // Enable memory leak detection
 #if defined(_MSC_VER) && defined(_DEBUG)
