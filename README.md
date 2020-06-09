@@ -114,6 +114,14 @@ You can use the following OPTIONS:
       Set the target version name to build.
 ```
 
+## Formulas
+
+Package are described in a JSON file called formula.
+
+* TOOL::GIT
+* TOOL::MAKE
+* TOOL::RSYNC
+
 ## Supported package
 
 startdeps support build of the folowwing package :
