@@ -16,6 +16,18 @@
             "install": [
                 "${TOOL::MAKE} install"
             ]
-        }
+        },
+        "win32-gcc": {
+            "host":"linux",
+            "configure": [
+                "${PACKAGE_SRC_PATH}/config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install"
+            ]
+        },
     }
 }
