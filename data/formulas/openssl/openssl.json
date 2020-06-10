@@ -28,6 +28,6 @@
             "install": [
                 "${TOOL::MAKE} install"
             ]
-        },
+        }
     }
 }
