@@ -93,3 +93,22 @@ int VersionHelper::compare(const QString& szVersion1, const QString& szVersion2)
 
 	return 0;
 }
+
+bool VersionHelper::checkVersion(const QString& szVersion, const QString& szVersionMin, const QString& szVersionMax)
+{
+	bool bRes = true;
+
+	if(!szVersionMin.isEmpty()){
+		if(isLessThan(szVersion, szVersionMin)){
+			bRes = false;
+		}
+	}
+
+	if(!szVersionMax.isEmpty()){
+		if(isGreaterThan(szVersion, szVersionMax)){
+			bRes = false;
+		}
+	}
+
+	return bRes;
+}

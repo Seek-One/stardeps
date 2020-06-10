@@ -144,12 +144,12 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot)
 		for(iter_deps = objectDepsList.constBegin(); iter_deps != objectDepsList.constEnd(); ++iter_deps)
 		{
 			// Package name
-			QString szPackageName = iter_prop.key();
+			QString szPackageName = iter_deps.key();
 			QString szVersionMin;
 			QString szVersionMax;
 
 			// Attributes
-			QJsonValue value2 = iter_prop.value();
+			QJsonValue value2 = iter_deps.value();
 			QJsonObject objectAttrsList = value2.toObject();
 
 			if(objectAttrsList.contains("min")){

@@ -30,6 +30,8 @@ private:
 	bool checkDependencies(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy);
 	bool prepareSources(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy);
 	bool configureVersion(const QSharedPointer<Formula>& pFormula, const QDir& dirWorkingCopy);
+	bool checkDependencyPresent(const PackageDependency& dependency, QString& szOutVersion);
+
 	const QString& getConfigureVersion() const;
 
 private:

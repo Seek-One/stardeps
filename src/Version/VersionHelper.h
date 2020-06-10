@@ -20,6 +20,8 @@ public:
 	static bool isGreaterThan(const QString& szVersion1, const QString& szVersion2);
 	static bool isGreaterThanOrEqual(const QString& szVersion1, const QString& szVersion2);
 	static int compare(const QString& szVersion1, const QString& szVersion2);
+
+	static bool checkVersion(const QString& szVersion, const QString& szVersionMin, const QString& szVersionMax);
 };
 
 #endif /* SRC_GLOBAL_VERSIONHELPER_H_ */

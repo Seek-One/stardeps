@@ -13,39 +13,24 @@
 #include <QList>
 #include <QMap>
 
+#include "Package/PackageDependency.h"
+
 #include "FormulaCommands.h"
 
 class FormulaRecipe;
-
-class FormulasDependency
-{
-public:
-	FormulasDependency();
-	virtual ~FormulasDependency();
-
-	void setPackage(const QString& szPackage);
-	const QString& getPackage() const;
-	void setVersionMin(const QString& szVersionMin);
-	const QString& getVersionMin() const;
-	void setVersionMax(const QString& szVersionMax);
-	const QString& getVersionMax() const;
-
-private:
-	QString m_szPackage;
-	QString m_szVersionMin;
-	QString m_szVersionMax;
-};
 
 class FormulasDependencies {
 public:
 	FormulasDependencies();
 	virtual ~FormulasDependencies();
 
-	void addDependency(const FormulasDependency& dependency);
+	void addDependency(const PackageDependency& dependency);
 	void addDependency(const QString& szPackage, const QString& szVersionMin, const QString& szVersionMax);
 
+	const PackageDependencyList& getList() const;
+
 private:
-	QList<FormulasDependency> m_listDependency;
+	PackageDependencyList m_listDependency;
 };
 
 class FormulasDependenciesList : public QMap<QString, FormulasDependencies>
@@ -55,7 +40,7 @@ public:
 	virtual ~FormulasDependenciesList();
 
 	void setDependencies(const QString& szVersion, const FormulasDependencies& deps);
-	void addDependency(const QString& szVersion, const FormulasDependency& dependency);
+	void addDependency(const QString& szVersion, const PackageDependency& dependency);
 
 	QString getBestDependeciesVersion(const QString& szVersion) const;
 };

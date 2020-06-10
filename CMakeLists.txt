@@ -152,6 +152,8 @@ include_directories (${PROJECT_SOURCE_DIR}/src)
 set(APP_COMMON_SOURCES
     src/Formulas/FormulasDependencies.cpp
     src/Formulas/FormulasDependencies.h
+    src/Package/PackageDependency.cpp
+    src/Package/PackageDependency.h
     src/Version/VersionHelper.cpp
     src/Version/VersionHelper.h
 )

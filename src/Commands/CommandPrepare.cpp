@@ -5,6 +5,7 @@
  *      Author: ebeuque
  */
 
+#include "Version/VersionHelper.h"
 #include "Connector/ConnectorGit.h"
 
 #include "CommandPrepare.h"
@@ -64,9 +65,35 @@ bool CommandPrepare::checkDependencies(const QSharedPointer<Formula>& pFormula, 
 	QString szVersion = getPackageNameVersion();
 
 	const FormulasDependenciesList& listDependencies = pFormula->getDependenciesList();
+	QString szDepsVersion = listDependencies.getBestDependeciesVersion(szVersion);
 
-	if(!listDependencies.isEmpty()){
+	if(!szDepsVersion.isEmpty()){
+		qDebug("[prepare] using dependencies rules for version '%s'", qPrintable(szDepsVersion));
 
+		const FormulasDependencies& deps = listDependencies.value(szDepsVersion);
+
+		const PackageDependencyList& depsList = deps.getList();
+		PackageDependencyList::const_iterator iter;
+
+		for(iter = depsList.constBegin(); iter != depsList.constEnd(); ++iter)
+		{
+			const PackageDependency& dependency = (*iter);
+			qWarning("[prepare] checking dependency %s", qPrintable(dependency.toString()));
+
+			QString szFoundVersion;
+			bRes = checkDependencyPresent(dependency, szFoundVersion);
+			if(bRes){
+				qDebug("[prepare] required dependency is found %s", qPrintable(szFoundVersion));
+			}else{
+				qWarning("[prepare] required dependency is not found");
+			}
+
+			if(!bRes){
+				break;
+			}
+		}
+
+		return bRes;
 	}
 
 	return bRes;
@@ -98,6 +125,30 @@ bool CommandPrepare::configureVersion(const QSharedPointer<Formula>& pFormula, c
 	{
 		ConnectorGit connector(m_env);
 		bRes = connector.git_checkout(getConfigureVersion(), dirWorkingCopy);
+	}
+
+	return bRes;
+}
+
+bool CommandPrepare::checkDependencyPresent(const PackageDependency& dependency, QString& szOutVersion)
+{
+	bool bRes = false;
+
+	QDir releaseDir = m_env.getVirtualEnvironmentReleaseDir();
+
+	QStringList listFilters;
+	listFilters << QString("%0*").arg(dependency.getPackage());
+	QFileInfoList listFiles = releaseDir.entryInfoList(listFilters, QDir::Dirs, QDir::Name);
+
+	QFileInfoList::const_iterator iter;
+	for(iter = listFiles.constBegin(); iter != listFiles.constEnd(); ++iter)
+	{
+		const QFileInfo& fileInfo = (*iter);
+		QString szVersion = fileInfo.fileName().remove(dependency.getPackage() + "-");
+		if(VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())){
+			bRes = true;
+			szOutVersion = szVersion;
+		}
 	}
 
 	return bRes;
