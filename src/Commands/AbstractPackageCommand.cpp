@@ -9,6 +9,8 @@
 
 #include "AbstractPackageCommand.h"
 
+#define PER_PACKAGE_PATH
+
 AbstractPackageCommand::AbstractPackageCommand(const QString& szLabel) : AbstractCommand(szLabel)
 {
 
@@ -48,19 +50,36 @@ QString AbstractPackageCommand::getPackageNameVersion() const
 	return szVersionName;
 }
 
+QDir AbstractPackageCommand::getRootPackageDir() const
+{
+	return m_env.getVirtualEnvironmentPath().filePath(getPackageNameVersion());
+}
+
 QDir AbstractPackageCommand::getSourcePackageDir() const
 {
+#ifdef PER_PACKAGE_PATH
+	return getRootPackageDir().filePath("src");
+#else
 	return m_env.getVirtualEnvironmentSourceDir().filePath(getPackageNameVersion());
+#endif
 }
 
 QDir AbstractPackageCommand::getBuildPackageDir() const
 {
+#ifdef PER_PACKAGE_PATH
+	return getRootPackageDir().filePath("build");
+#else
 	return m_env.getVirtualEnvironmentBuildDir().filePath(getPackageNameVersion());
+#endif
 }
 
 QDir AbstractPackageCommand::getReleasePackageDir() const
 {
+#ifdef PER_PACKAGE_PATH
+	return getRootPackageDir().filePath("release");
+#else
 	return m_env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion());
+#endif
 }
 
 bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory)
