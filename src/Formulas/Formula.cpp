@@ -57,17 +57,17 @@ QString Formula::getSCMURL() const
 	return m_szSCMURL;
 }
 
-void Formula::addDependencies(const QString& szVersion, const FormulasDependencies& dependencies)
+void Formula::addDependencies(const QString& szVersion, const FormulaDependencies& dependencies)
 {
 	m_listDependencies.insert(szVersion, dependencies);
 }
 
-void Formula::setDependenciesList(const FormulasDependenciesList& listDependencies)
+void Formula::setDependenciesList(const FormulaDependenciesList& listDependencies)
 {
 	m_listDependencies = listDependencies;
 }
 
-const FormulasDependenciesList& Formula::getDependenciesList() const
+const FormulaDependenciesList& Formula::getDependenciesList() const
 {
 	return m_listDependencies;
 }

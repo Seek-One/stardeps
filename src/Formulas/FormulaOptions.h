@@ -10,8 +10,8 @@
 
 #include <QList>
 
-#include <Formulas/FormulasDependencies.h>
 #include <Formulas/FormulaVariableList.h>
+#include <Formulas/FormulaDependencies.h>
 
 class FormulaOption {
 public:
@@ -21,8 +21,8 @@ public:
 	void setOptionName(const QString& szName);
 	const QString& getOptionName() const;
 
-	void setDependenciesList(const FormulasDependenciesList& listDependencies);
-	const FormulasDependenciesList& getDependenciesList() const;
+	void setDependenciesList(const FormulaDependenciesList& listDependencies);
+	const FormulaDependenciesList& getDependenciesList() const;
 
 	void addVariable(const QString& szVarName, const QString& szVarValue);
 	QString getVariable(const QString& szVarName) const;
@@ -33,7 +33,7 @@ public:
 private:
 	QString m_szOptionName;
 
-	FormulasDependenciesList m_listDependencies;
+	FormulaDependenciesList m_listDependencies;
 
 	FormulaVariableList m_listVars;
 };

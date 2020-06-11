@@ -12,7 +12,7 @@
 #include <QMap>
 #include <QList>
 
-#include "FormulasDependencies.h"
+#include "FormulaDependencies.h"
 #include "FormulaOptions.h"
 #include "FormulaRecipe.h"
 
@@ -41,9 +41,9 @@ public:
 	void setSCMURL(const QString& szSCMURL);
 	QString getSCMURL() const;
 
-	void addDependencies(const QString& szVersion, const FormulasDependencies& dependencies);
-	void setDependenciesList(const FormulasDependenciesList& listDependencies);
-	const FormulasDependenciesList& getDependenciesList() const;
+	void addDependencies(const QString& szVersion, const FormulaDependencies& dependencies);
+	void setDependenciesList(const FormulaDependenciesList& listDependencies);
+	const FormulaDependenciesList& getDependenciesList() const;
 
 	void addOption(const FormulaOption& option);
 	const FormulaOptionList& getOptions() const;
@@ -58,7 +58,7 @@ private:
 	TypeSCM m_iTypeSCM;
 	QString m_szSCMURL;
 
-	FormulasDependenciesList m_listDependencies;
+	FormulaDependenciesList m_listDependencies;
 	FormulaOptionList m_listOptions;
 	FormulaRecipeList m_listRecipes;
 

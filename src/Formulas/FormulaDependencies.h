@@ -5,8 +5,8 @@
  *      Author: ebeuque
  */
 
-#ifndef SRC_FORMULAS_FORMULASDEPENDENCIES_H_
-#define SRC_FORMULAS_FORMULASDEPENDENCIES_H_
+#ifndef SRC_FORMULAS_FORMULADEPENDENCIES_H_
+#define SRC_FORMULAS_FORMULADEPENDENCIES_H_
 
 #include <QString>
 #include <QSharedPointer>
@@ -17,12 +17,10 @@
 
 #include "FormulaCommands.h"
 
-class FormulaRecipe;
-
-class FormulasDependencies {
+class FormulaDependencies {
 public:
-	FormulasDependencies();
-	virtual ~FormulasDependencies();
+	FormulaDependencies();
+	virtual ~FormulaDependencies();
 
 	void addDependency(const PackageDependency& dependency);
 	void addDependency(const QString& szPackage, const QString& szVersionMin, const QString& szVersionMax);
@@ -33,16 +31,16 @@ private:
 	PackageDependencyList m_listDependency;
 };
 
-class FormulasDependenciesList : public QMap<QString, FormulasDependencies>
+class FormulaDependenciesList : public QMap<QString, FormulaDependencies>
 {
 public:
-	FormulasDependenciesList();
-	virtual ~FormulasDependenciesList();
+	FormulaDependenciesList();
+	virtual ~FormulaDependenciesList();
 
-	void setDependencies(const QString& szVersion, const FormulasDependencies& deps);
+	void setDependencies(const QString& szVersion, const FormulaDependencies& deps);
 	void addDependency(const QString& szVersion, const PackageDependency& dependency);
 
 	QString getBestDependeciesVersion(const QString& szVersion) const;
 };
 
-#endif /* SRC_FORMULAS_FORMULASDEPENDENCIES_H_ */
+#endif /* SRC_FORMULAS_FORMULADEPENDENCIES_H_ */

@@ -1,40 +1,40 @@
 /*
- * FormulasDependenciesTestCase.cpp
+ * FormulaDependenciesTestCase.cpp
  *
  *  Created on: 9 juin 2020
  *      Author: ebeuque
  */
 
-#include "Formulas/FormulasDependencies.h"
+#include <Formulas/FormulaDependencies.h>
 
-#include "FormulasDependenciesTestCase.h"
+#include "FormulaDependenciesTestCase.h"
 
-FormulasDependenciesTestCase::FormulasDependenciesTestCase()
+FormulaDependenciesTestCase::FormulaDependenciesTestCase()
 {
 
 }
 
-FormulasDependenciesTestCase::~FormulasDependenciesTestCase()
+FormulaDependenciesTestCase::~FormulaDependenciesTestCase()
 {
 
 }
 
-void FormulasDependenciesTestCase::test_getBestVersion()
+void FormulaDependenciesTestCase::test_getBestVersion()
 {
-	FormulasDependenciesList depsList;
+	FormulaDependenciesList depsList;
 
 	{
-		FormulasDependencies deps;
+		FormulaDependencies deps;
 		deps.addDependency("openssl", "3.0", QString());
 		depsList.setDependencies("latest", deps);
 	}
 	{
-		FormulasDependencies deps;
+		FormulaDependencies deps;
 		deps.addDependency("openssl", "2.0", QString());
 		depsList.setDependencies("1.5", deps);
 	}
 	{
-		FormulasDependencies deps;
+		FormulaDependencies deps;
 		deps.addDependency("openssl", "1.0", QString());
 		depsList.setDependencies("1.0", deps);
 	}

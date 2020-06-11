@@ -1,8 +1,8 @@
 
 #include <QtTest>
 
+#include "Formulas/FormulaDependenciesTestCase.h"
 #include "Version/VersionHelperTestCase.h"
-#include "Formulas/FormulasDependenciesTestCase.h"
 
 // Enable memory leak detection
 #if defined(_MSC_VER) && defined(_DEBUG)
@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
 	}
 
 	if(iRes == 0){
-		FormulasDependenciesTestCase tc;
+		FormulaDependenciesTestCase tc;
 		iRes = QTest::qExec(&tc, iQtArgsCount, iQtArgsV);
 	}
 

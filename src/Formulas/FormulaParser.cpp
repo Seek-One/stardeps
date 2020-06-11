@@ -85,7 +85,7 @@ bool FormulaParser::parse(const QString& szFilePath)
 
 		// Dependencies
 		if(bRes && mainObject.contains("dependencies")){
-			FormulasDependenciesList listDependencies;
+			FormulaDependenciesList listDependencies;
 			bRes = parseDependencies(mainObject.value("dependencies").toObject(), listDependencies);
 			if(bRes){
 				m_pFormula->setDependenciesList(listDependencies);
@@ -154,7 +154,7 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 		}
 
 		if(objectOptionDataList.contains("dependencies")){
-			FormulasDependenciesList listDependencies;
+			FormulaDependenciesList listDependencies;
 			bRes = parseDependencies(objectOptionDataList.value("dependencies").toObject(), listDependencies);
 			if(bRes){
 				formulaOption.setDependenciesList(listDependencies);
@@ -167,7 +167,7 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 	return bRes;
 }
 
-bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulasDependenciesList& listDependencies)
+bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDependenciesList& listDependencies)
 {
 	bool bRes = true;
 
@@ -182,7 +182,7 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulasDep
 		QJsonValue value = iter_prop.value();
 		QJsonObject objectDepsList = value.toObject();
 
-		FormulasDependencies formulaDependencies;
+		FormulaDependencies formulaDependencies;
 
 		QJsonObject::const_iterator iter_deps;
 		for(iter_deps = objectDepsList.constBegin(); iter_deps != objectDepsList.constEnd(); ++iter_deps)

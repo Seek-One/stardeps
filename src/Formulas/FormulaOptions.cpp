@@ -27,12 +27,12 @@ const QString& FormulaOption::getOptionName() const
 	return m_szOptionName;
 }
 
-void FormulaOption::setDependenciesList(const FormulasDependenciesList& listDependencies)
+void FormulaOption::setDependenciesList(const FormulaDependenciesList& listDependencies)
 {
 	m_listDependencies = listDependencies;
 }
 
-const FormulasDependenciesList& FormulaOption::getDependenciesList() const
+const FormulaDependenciesList& FormulaOption::getDependenciesList() const
 {
 	return m_listDependencies;
 }

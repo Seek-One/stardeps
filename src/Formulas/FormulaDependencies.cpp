@@ -1,5 +1,5 @@
 /*
- * FormulasDependencies.cpp
+ * FormulaDependencies.cpp
  *
  *  Created on: 8 juin 2020
  *      Author: ebeuque
@@ -7,24 +7,24 @@
 
 #include "Version/VersionHelper.h"
 
-#include "FormulasDependencies.h"
+#include "FormulaDependencies.h"
 
-FormulasDependencies::FormulasDependencies()
+FormulaDependencies::FormulaDependencies()
 {
 
 }
 
-FormulasDependencies::~FormulasDependencies()
+FormulaDependencies::~FormulaDependencies()
 {
 
 }
 
-void FormulasDependencies::addDependency(const PackageDependency& dependency)
+void FormulaDependencies::addDependency(const PackageDependency& dependency)
 {
 	m_listDependency.append(dependency);
 }
 
-void FormulasDependencies::addDependency(const QString& szPackage, const QString& szVersionMin, const QString& szVersionMax)
+void FormulaDependencies::addDependency(const QString& szPackage, const QString& szVersionMin, const QString& szVersionMax)
 {
 	PackageDependency dependency;
 	dependency.setPackage(szPackage);
@@ -33,38 +33,38 @@ void FormulasDependencies::addDependency(const QString& szPackage, const QString
 	m_listDependency.append(dependency);
 }
 
-const PackageDependencyList& FormulasDependencies::getList() const
+const PackageDependencyList& FormulaDependencies::getList() const
 {
 	return m_listDependency;
 }
 
-FormulasDependenciesList::FormulasDependenciesList()
+FormulaDependenciesList::FormulaDependenciesList()
 {
 
 }
 
-FormulasDependenciesList::~FormulasDependenciesList()
+FormulaDependenciesList::~FormulaDependenciesList()
 {
 
 }
 
-void FormulasDependenciesList::setDependencies(const QString& szVersion, const FormulasDependencies& deps)
+void FormulaDependenciesList::setDependencies(const QString& szVersion, const FormulaDependencies& deps)
 {
 	insert(szVersion, deps);
 }
 
-void FormulasDependenciesList::addDependency(const QString& szVersion, const PackageDependency& dependency)
+void FormulaDependenciesList::addDependency(const QString& szVersion, const PackageDependency& dependency)
 {
 	if(contains(szVersion)){
 		(*this)[szVersion].addDependency(dependency);
 	}else{
-		FormulasDependencies list;
+		FormulaDependencies list;
 		list.addDependency(dependency);
 		insert(szVersion, list);
 	}
 }
 
-QString FormulasDependenciesList::getBestDependeciesVersion(const QString& szVersion) const
+QString FormulaDependenciesList::getBestDependeciesVersion(const QString& szVersion) const
 {
 	QString szFirstVersion;
 	QString szLastVersion;
@@ -72,7 +72,7 @@ QString FormulasDependenciesList::getBestDependeciesVersion(const QString& szVer
 	QString szBeforeVersion;
 	QString szAfterVersion;
 
-	FormulasDependenciesList::const_iterator iter;
+	FormulaDependenciesList::const_iterator iter;
 
 	for(iter = constBegin(); iter != constEnd(); ++iter)
 	{
