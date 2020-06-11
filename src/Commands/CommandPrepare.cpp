@@ -68,8 +68,6 @@ bool CommandPrepare::checkDependencies(const QSharedPointer<Formula>& pFormula, 
 	const QStringList& listOptions = getOptions();
 	FormulaDependenciesList listDependencies = pFormula->getDependenciesListForOptions(listOptions);
 
-	qDebug("[prepare] checking dependencies: %d %d", listOptions.count(), listDependencies.count());
-
 	QString szDepsVersion = listDependencies.getBestDependenciesVersion(szVersion);
 
 	if(!szDepsVersion.isEmpty()){
