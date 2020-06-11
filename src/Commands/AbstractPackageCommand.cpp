@@ -29,6 +29,16 @@ void AbstractPackageCommand::setVersion(const QString& szVersion)
 	m_szVersion = szVersion;
 }
 
+void AbstractPackageCommand::addOption(const QString& szOption)
+{
+	m_listOptions.append(szOption);
+}
+
+const QStringList& AbstractPackageCommand::getOptions() const
+{
+	return m_listOptions;
+}
+
 QString AbstractPackageCommand::getPackageNameVersion() const
 {
 	QString szVersionName = m_szPackageName;

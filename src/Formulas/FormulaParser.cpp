@@ -85,7 +85,11 @@ bool FormulaParser::parse(const QString& szFilePath)
 
 		// Dependencies
 		if(bRes && mainObject.contains("dependencies")){
-			bRes = parseDependencies(mainObject.value("dependencies").toObject());
+			FormulasDependenciesList listDependencies;
+			bRes = parseDependencies(mainObject.value("dependencies").toObject(), listDependencies);
+			if(bRes){
+				m_pFormula->setDependenciesList(listDependencies);
+			}
 		}
 
 		// Recipes
@@ -123,7 +127,47 @@ bool FormulaParser::parseSCM(const QJsonObject& objectRoot)
 	return true;
 }
 
-bool FormulaParser::parseDependencies(const QJsonObject& objectRoot)
+bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
+{
+	bool bRes = true;
+
+	QJsonObject::const_iterator iter_prop;
+
+	for(iter_prop = objectRoot.constBegin(); iter_prop != objectRoot.constEnd(); ++iter_prop)
+	{
+		// Target platform
+		QString szOptionName = iter_prop.key();
+
+		FormulaOption formulaOption;
+		formulaOption.setOptionName(szOptionName);
+
+		// Recipe
+		QJsonValue value = iter_prop.value();
+		QJsonObject objectOptionDataList = value.toObject();
+
+		if(objectOptionDataList.contains("vars")){
+			FormulaVariableList listVars;
+			bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
+			if(bRes){
+				formulaOption.setVariableList(listVars);
+			}
+		}
+
+		if(objectOptionDataList.contains("dependencies")){
+			FormulasDependenciesList listDependencies;
+			bRes = parseDependencies(objectOptionDataList.value("dependencies").toObject(), listDependencies);
+			if(bRes){
+				formulaOption.setDependenciesList(listDependencies);
+			}
+		}
+
+		m_pFormula->addOption(formulaOption);
+	}
+
+	return bRes;
+}
+
+bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulasDependenciesList& listDependencies)
 {
 	bool bRes = true;
 
@@ -162,8 +206,6 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot)
 
 			formulaDependencies.addDependency(szPackageName, szVersionMin, szVersionMax);
 		}
-
-		m_pFormula->addDependencies(szVersion, formulaDependencies);
 	}
 
 	return bRes;
@@ -214,6 +256,16 @@ bool FormulaParser::parseCommands(const QJsonArray& arrayCommands, FormulaComman
 	for(iter_item = arrayCommands.constBegin(); iter_item != arrayCommands.constEnd(); ++iter_item)
 	{
 		listCommands.append((*iter_item).toString());
+	}
+	return true;
+}
+
+bool FormulaParser::parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable)
+{
+	QJsonObject::const_iterator iter_item;
+	for(iter_item = objectRoot.constBegin(); iter_item != objectRoot.constEnd(); ++iter_item)
+	{
+		listVariable.insert(iter_item.key(), iter_item.value().toString());
 	}
 	return true;
 }

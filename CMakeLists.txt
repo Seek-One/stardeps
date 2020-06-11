@@ -186,10 +186,14 @@ set(APPLICATION_SOURCES
     src/Formulas/Formula.h
     src/Formulas/FormulaCommands.cpp
     src/Formulas/FormulaCommands.h
+    src/Formulas/FormulaOptions.cpp
+    src/Formulas/FormulaOptions.h
     src/Formulas/FormulaParser.cpp
     src/Formulas/FormulaParser.h
     src/Formulas/FormulaRecipe.cpp
     src/Formulas/FormulaRecipe.h
+    src/Formulas/FormulaVariableList.cpp
+    src/Formulas/FormulaVariableList.h
     src/Global/QApplicationSettings.cpp
     src/Global/QApplicationSettings.h
     src/Platform/Platform.cpp

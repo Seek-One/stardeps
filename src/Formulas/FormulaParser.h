@@ -13,6 +13,8 @@
 
 class Formula;
 class FormulaCommands;
+class FormulasDependenciesList;
+class FormulaVariableList;
 
 class FormulaParser
 {
@@ -26,9 +28,11 @@ public:
 
 private:
 	bool parseSCM(const QJsonObject& objectRoot);
-	bool parseDependencies(const QJsonObject& objectRoot);
+	bool parseDependencies(const QJsonObject& objectRoot, FormulasDependenciesList& listDependencies);
+	bool parseOptions(const QJsonObject& objectRoot);
 	bool parseRecipe(const QJsonObject& objectRoot);
 	bool parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands);
+	bool parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable);
 
 private:
 	QSharedPointer<Formula> m_pFormula;

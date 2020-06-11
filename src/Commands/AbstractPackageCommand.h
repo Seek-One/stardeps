@@ -21,6 +21,9 @@ public:
 	void setPackageName(const QString& szPackageName);
 	void setVersion(const QString& szVersion);
 
+	void addOption(const QString& szOption);
+	const QStringList& getOptions() const;
+
 	QString getPackageNameVersion() const;
 	QDir getSourcePackageDir() const;
 	QDir getBuildPackageDir() const;
@@ -33,6 +36,8 @@ protected:
 protected:
 	QString m_szPackageName;
 	QString m_szVersion;
+
+	QStringList m_listOptions;
 };
 
 #endif /* SRC_COMMANDS_ABSTRACTPACKAGECOMMAND_H_ */

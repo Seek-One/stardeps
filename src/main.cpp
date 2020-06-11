@@ -150,6 +150,8 @@ static int processCommandPrepare(int argc, char **argv)
 			cmd.setScmBranchVersion(szArg.mid(21));
 		}else if(szArg.startsWith("--scm-tag-version=")){
 			cmd.setScmTagVersion(szArg.mid(18));
+		}else if(szArg.startsWith("--option=")){
+			cmd.addOption(szArg.mid(9));
 		}
 	}
 

@@ -5,12 +5,24 @@
         "type": "git",
         "url": "git://github.com/bagder/curl.git"
     },
-    "dependencies": {
-        "latest": {
-            "openssl" : {"min":"1.1"}
+    "options": {
+        "debug" : {
+            "vars": {
+                "OPTIONS::DEBUG":"--enable-debug"
+            }
         },
-        "7.41": {
-            "openssl" : {"min":"1.0", "max":"1.1"}
+        "openssl" : {
+            "dependencies": {
+                "latest": {
+                    "openssl" : {"min":"1.1"}
+                },
+                "7.41": {
+                    "openssl" : {"min":"1.0", "max":"1.1"}
+                }
+            },
+            "vars": {
+                "OPTIONS::SSL":"--with-ssl=${PACKAGE::OPENSSL::PATH}"
+            }
         }
     },
     "recipes": {
@@ -18,7 +30,7 @@
             "configure": [
                 "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
                 "${PACKAGE_BUILD_PATH}/buildconf",
-                "${PACKAGE_BUILD_PATH}/configure --prefix=${PACKAGE_PREFIX_PATH} --enable-debug"
+                "${PACKAGE_BUILD_PATH}/configure --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::DEBUG} ${OPTIONS::SSL}"
             ],
             "build": [
                 "${TOOL::MAKE}"
