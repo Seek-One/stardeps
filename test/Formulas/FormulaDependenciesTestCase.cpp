@@ -41,24 +41,24 @@ void FormulaDependenciesTestCase::test_getBestVersion()
 
 	QString szBestVersion;
 
-	szBestVersion = depsList.getBestDependeciesVersion("0.1.1");
+	szBestVersion = depsList.getBestDependenciesVersion("0.1.1");
 	QVERIFY(szBestVersion == "1.0");
 
-	szBestVersion = depsList.getBestDependeciesVersion("1");
+	szBestVersion = depsList.getBestDependenciesVersion("1");
 	QVERIFY(szBestVersion == "1.0");
 
-	szBestVersion = depsList.getBestDependeciesVersion("1.0");
+	szBestVersion = depsList.getBestDependenciesVersion("1.0");
 	QVERIFY(szBestVersion == "1.0");
 
-	szBestVersion = depsList.getBestDependeciesVersion("1.0.5");
+	szBestVersion = depsList.getBestDependenciesVersion("1.0.5");
 	QVERIFY(szBestVersion == "1.0");
 
-	szBestVersion = depsList.getBestDependeciesVersion("1.1");
+	szBestVersion = depsList.getBestDependenciesVersion("1.1");
 	QVERIFY(szBestVersion == "1.0");
 
-	szBestVersion = depsList.getBestDependeciesVersion("1.5");
+	szBestVersion = depsList.getBestDependenciesVersion("1.5");
 	QVERIFY(szBestVersion == "1.5");
 
-	szBestVersion = depsList.getBestDependeciesVersion("1.6");
+	szBestVersion = depsList.getBestDependenciesVersion("1.6");
 	QVERIFY(szBestVersion == "latest");
 }
