@@ -37,7 +37,7 @@ bool CommandCreateEnv::doProcessArgument(int i, const QString& szArg)
 	if(i == 0){
 		setTargetPlatform(szArg);
 	}
-	return true;
+	return AbstractCommand::doProcessArgument(i, szArg);
 }
 
 bool CommandCreateEnv::doExecute()

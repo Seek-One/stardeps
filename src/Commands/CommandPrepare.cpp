@@ -40,7 +40,7 @@ bool CommandPrepare::doProcessArgument(int i, const QString& szArg)
 		setScmTagVersion(szArg.mid(18));
 		return true;
 	}
-	return true;
+	return AbstractPackageCommand::doProcessArgument(i, szArg);
 }
 
 bool CommandPrepare::doExecute()

@@ -162,5 +162,5 @@ bool AbstractPackageCommand::doProcessArgument(int i, const QString& szArg)
 		return true;
 	}
 
-	return true;
+	return AbstractCommand::doProcessArgument(i, szArg);
 }
