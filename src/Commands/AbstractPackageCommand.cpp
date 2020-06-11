@@ -9,8 +9,6 @@
 
 #include "AbstractPackageCommand.h"
 
-#define PER_PACKAGE_PATH
-
 AbstractPackageCommand::AbstractPackageCommand(const QString& szLabel) : AbstractCommand(szLabel)
 {
 
@@ -57,29 +55,29 @@ QDir AbstractPackageCommand::getRootPackageDir() const
 
 QDir AbstractPackageCommand::getSourcePackageDir() const
 {
-#ifdef PER_PACKAGE_PATH
-	return getRootPackageDir().filePath("src");
-#else
-	return m_env.getVirtualEnvironmentSourceDir().filePath(getPackageNameVersion());
-#endif
+	if(m_env.isPerPackageMode()){
+		return getRootPackageDir().filePath("src");
+	}else{
+		return m_env.getVirtualEnvironmentSourceDir().filePath(getPackageNameVersion());
+	}
 }
 
 QDir AbstractPackageCommand::getBuildPackageDir() const
 {
-#ifdef PER_PACKAGE_PATH
-	return getRootPackageDir().filePath("build");
-#else
-	return m_env.getVirtualEnvironmentBuildDir().filePath(getPackageNameVersion());
-#endif
+	if(m_env.isPerPackageMode()){
+		return getRootPackageDir().filePath("build");
+	}else{
+		return m_env.getVirtualEnvironmentBuildDir().filePath(getPackageNameVersion());
+	}
 }
 
 QDir AbstractPackageCommand::getReleasePackageDir() const
 {
-#ifdef PER_PACKAGE_PATH
-	return getRootPackageDir().filePath("release");
-#else
-	return m_env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion());
-#endif
+	if(m_env.isPerPackageMode()){
+		return getRootPackageDir().filePath("release");
+	}else{
+		return m_env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion());
+	}
 }
 
 bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory)
@@ -142,6 +140,26 @@ bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szC
 	for(iter = dictVars.constBegin(); iter != dictVars.constEnd(); ++iter)
 	{
 		szCmdOut = szCmdOut.replace(iter.key(), iter.value());
+	}
+
+	return true;
+}
+
+bool AbstractPackageCommand::doProcessArgument(int i, const QString& szArg)
+{
+	if(i == 0){
+		setPackageName(szArg);
+		return true;
+	}
+
+	if(szArg.startsWith("--version=")){
+		setVersion(szArg.mid(10));
+		return true;
+	}
+
+	if(szArg.startsWith("--option=")){
+		addOption(szArg.mid(9));
+		return true;
 	}
 
 	return true;

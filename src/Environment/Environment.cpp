@@ -29,6 +29,11 @@ const QDir& Environment::getVirtualEnvironmentPath() const
 	return m_dirVE;
 }
 
+bool Environment::isPerPackageMode() const
+{
+	return true;
+}
+
 QDir Environment::getVirtualEnvironmentSourceDir() const
 {
 	return m_dirVE.filePath("src");

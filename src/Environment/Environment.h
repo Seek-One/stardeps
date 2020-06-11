@@ -25,6 +25,8 @@ public:
 	void setVirtualEnvironmentPath(const QDir& dir);
 	const QDir& getVirtualEnvironmentPath() const;
 
+	bool isPerPackageMode() const;
+
 	QDir getVirtualEnvironmentSourceDir() const;
 	QDir getVirtualEnvironmentBuildDir() const;
 	QDir getVirtualEnvironmentReleaseDir() const;

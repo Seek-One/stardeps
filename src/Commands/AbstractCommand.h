@@ -25,10 +25,13 @@ public:
 	void setVirtualEnvironmentPath(const QDir& dir);
 	const QDir& getVirtualEnvironmentPath() const;
 
+	bool prepare(int argc, char**argv);
+
 	bool execute();
 
 protected:
 	virtual bool doInitEnv();
+	virtual bool doProcessArgument(int i, const QString& szArg);
 	virtual bool doExecute() = 0;
 
 	bool loadFormula(const QString& szPackageName, QSharedPointer<Formula>& pFormula);

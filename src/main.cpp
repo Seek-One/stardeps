@@ -17,18 +17,9 @@
 
 #include "Global/QApplicationSettings.h"
 
-#include <Commands/CommandCreateEnv.h>
-#include "Commands/CommandPrepare.h"
-#include "Commands/CommandConfigure.h"
-#include "Commands/CommandBuild.h"
-#include "Commands/CommandInstall.h"
+#include "Commands/CommandsExecutor.h"
 
 static int processCommandVersion();
-static int processCommandCreateEnv(int argc, char **argv);
-static int processCommandPrepare(int argc, char **argv);
-static int processCommandConfigure(int argc, char **argv);
-static int processCommandBuild(int argc, char **argv);
-static int processCommandInstall(int argc, char **argv);
 
 int main(int argc, char **argv)
 {
@@ -78,30 +69,47 @@ int main(int argc, char **argv)
             iRes = processCommandVersion();
         }else if(szCommand == "help"){
             bShowUsage = true;
-        }else if(szCommand == "createenv"){
-            iRes = processCommandCreateEnv(argc, argv);
-        }else if(szCommand == "prepare"){
-            iRes = processCommandPrepare(argc, argv);
-        }else if(szCommand == "configure"){
-            iRes = processCommandConfigure(argc, argv);
-        }else if(szCommand == "build"){
-            iRes = processCommandBuild(argc, argv);
-        }else if(szCommand == "install"){
-            iRes = processCommandInstall(argc, argv);
         }else{
-            bShowUsage = true;
+        	bool bRes;
+        	CommandsExecutor executor;
+        	bRes = executor.prepareCommands(szCommand, argc+2, argv+2);
+        	if(bRes){
+        		bRes = executor.executeCommands();
+        		if(!bRes){
+        			iRes = -1;
+        		}
+        	}else{
+        		bShowUsage = true;
+        	}
         }
     }
 
     // Show help
     if(bShowUsage){
 		qDebug("Usage: %s command [args]", argv[0]);
+		qDebug("   LIST OF COMMANDS");
 		qDebug("       createenv TARGET_PLATFORM");
+		qDebug("             create an environment directory.");
 		qDebug("       listenv");
-		qDebug("       prepare PACKAGE_NAME [--version=[VERSION]]");
-		qDebug("       configure PACKAGE_NAME [--version=[VERSION]]");
+		qDebug("       prepare PACKAGE_NAME");
+		qDebug("             get the sources of the package in the sources directory.");
+		qDebug("       configure PACKAGE_NAME");
+		qDebug("             configure the sources of the package in the build directory.");
+		qDebug("       build PACKAGE_NAME");
+		qDebug("             run the build command in the build directory.");
 		qDebug("       install PACKAGE_NAME");
+		qDebug("             install the generated package files in the release directory.");
 		qDebug("       version");
+		qDebug("       ");
+		qDebug("   LIST OF ARGUMENTS");
+		qDebug("       --version=VERSION");
+		qDebug("             define the version of the package to build.");
+		qDebug("       --scm-tag-version=VERSION");
+		qDebug("             define the tag version in the SCM to use.");
+		qDebug("       --scm-branch-version=VERSION");
+		qDebug("             define the branch version in the SCM to use.");
+		qDebug("       --option=OPTION");
+		qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
     }
 
 	return iRes;
@@ -111,131 +119,4 @@ static int processCommandVersion()
 {
     qDebug("%s", APPLICATION_VERSION);
     return 0;
-}
-
-static int processCommandCreateEnv(int argc, char **argv)
-{
-	if(argc < 3){
-		qCritical("[main] Missing TARGET_PLATFORM argument");
-		return -1;
-	}
-
-	CommandCreateEnv cmd;
-	cmd.setVirtualEnvironmentPath(QDir("."));
-	cmd.setTargetPlatform(argv[2]);
-	bool bRes = cmd.execute();
-	if(!bRes){
-		return -1;
-	}
-	return 0;
-}
-
-static int processCommandPrepare(int argc, char **argv)
-{
-	if(argc < 3){
-		qCritical("[main] Missing PACKAGE_NAME argument");
-		return -1;
-	}
-
-	CommandPrepare cmd;
-	cmd.setVirtualEnvironmentPath(QDir("."));
-	cmd.setPackageName(argv[2]);
-
-	for(int i=3; i<argc; i++)
-	{
-		QString szArg = argv[i];
-		if(szArg.startsWith("--version=")){
-			cmd.setVersion(szArg.mid(10));
-		}else if(szArg.startsWith("--scm-branch-version=")){
-			cmd.setScmBranchVersion(szArg.mid(21));
-		}else if(szArg.startsWith("--scm-tag-version=")){
-			cmd.setScmTagVersion(szArg.mid(18));
-		}else if(szArg.startsWith("--option=")){
-			cmd.addOption(szArg.mid(9));
-		}
-	}
-
-	bool bRes = cmd.execute();
-	if(!bRes){
-		return -1;
-	}
-	return 0;
-}
-
-static int processCommandConfigure(int argc, char **argv)
-{
-	if(argc < 3){
-		qCritical("[main] Missing PACKAGE_NAME argument");
-		return -1;
-	}
-
-	CommandConfigure cmd;
-	cmd.setVirtualEnvironmentPath(QDir("."));
-	cmd.setPackageName(argv[2]);
-
-	for(int i=3; i<argc; i++)
-	{
-		QString szArg = argv[i];
-		if(szArg.startsWith("--version=")){
-			cmd.setVersion(szArg.mid(10));
-		}
-	}
-
-	bool bRes = cmd.execute();
-	if(!bRes){
-		return -1;
-	}
-	return 0;
-}
-
-static int processCommandBuild(int argc, char **argv)
-{
-	if(argc < 3){
-		qCritical("[main] Missing PACKAGE_NAME argument");
-		return -1;
-	}
-
-	CommandBuild cmd;
-	cmd.setVirtualEnvironmentPath(QDir("."));
-	cmd.setPackageName(argv[2]);
-
-	for(int i=3; i<argc; i++)
-	{
-		QString szArg = argv[i];
-		if(szArg.startsWith("--version=")){
-			cmd.setVersion(szArg.mid(10));
-		}
-	}
-
-	bool bRes = cmd.execute();
-	if(!bRes){
-		return -1;
-	}
-	return 0;
-}
-
-static int processCommandInstall(int argc, char **argv)
-{
-	if(argc < 3){
-		qCritical("[main] Missing PACKAGE_NAME argument");
-		return -1;
-	}
-
-	CommandInstall cmd;
-	cmd.setVirtualEnvironmentPath(QDir("."));
-	cmd.setPackageName(argv[2]);
-
-	for(int i=3; i<argc; i++)
-	{
-		QString szArg = argv[i];
-		if(szArg.startsWith("--version=")){
-			cmd.setVersion(szArg.mid(10));
-		}
-	}
-
-	bool bRes = cmd.execute();
-	if(!bRes){
-		return -1;
-	}
-	return 0;
 }

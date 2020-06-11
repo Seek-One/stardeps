@@ -30,6 +30,19 @@ void CommandPrepare::setScmTagVersion(const QString& szVersion)
 	m_szScmBranchVersion = szVersion;
 }
 
+bool CommandPrepare::doProcessArgument(int i, const QString& szArg)
+{
+	if(szArg.startsWith("--scm-branch-version=")){
+		setScmBranchVersion(szArg.mid(21));
+		return true;
+	}
+	if(szArg.startsWith("--scm-tag-version=")){
+		setScmTagVersion(szArg.mid(18));
+		return true;
+	}
+	return true;
+}
+
 bool CommandPrepare::doExecute()
 {
 	bool bRes = true;
@@ -137,11 +150,17 @@ bool CommandPrepare::checkDependencyPresent(const PackageDependency& dependency,
 {
 	bool bRes = false;
 
-	QDir releaseDir = m_env.getVirtualEnvironmentReleaseDir();
+	QDir dirSearchPackage;
+
+	if(m_env.isPerPackageMode()){
+		dirSearchPackage = m_env.getVirtualEnvironmentPath();
+	}else{
+		dirSearchPackage = m_env.getVirtualEnvironmentReleaseDir();
+	}
 
 	QStringList listFilters;
 	listFilters << QString("%0*").arg(dependency.getPackage());
-	QFileInfoList listFiles = releaseDir.entryInfoList(listFilters, QDir::Dirs, QDir::Name);
+	QFileInfoList listFiles = dirSearchPackage.entryInfoList(listFilters, QDir::Dirs, QDir::Name);
 
 	QFileInfoList::const_iterator iter;
 	for(iter = listFiles.constBegin(); iter != listFiles.constEnd(); ++iter)

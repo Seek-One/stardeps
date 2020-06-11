@@ -31,6 +31,15 @@ void CommandCreateEnv::setTargetPlatform(const QString& szTargetPlatform)
 	m_szTargetPlatform = szTargetPlatform;
 }
 
+
+bool CommandCreateEnv::doProcessArgument(int i, const QString& szArg)
+{
+	if(i == 0){
+		setTargetPlatform(szArg);
+	}
+	return true;
+}
+
 bool CommandCreateEnv::doExecute()
 {
 	bool bRes = true;

@@ -34,6 +34,8 @@ protected:
 	bool doPrepareCommand(const QString& szCmd, QString& szCmdOut);
 	bool doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory);
 
+	virtual bool doProcessArgument(int i, const QString& szArg);
+
 protected:
 	QString m_szPackageName;
 	QString m_szVersion;

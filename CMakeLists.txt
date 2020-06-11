@@ -174,6 +174,8 @@ set(APPLICATION_SOURCES
     src/Commands/CommandInstall.h
     src/Commands/CommandPrepare.cpp
     src/Commands/CommandPrepare.h
+    src/Commands/CommandsExecutor.cpp
+    src/Commands/CommandsExecutor.h
     src/Connector/AbstractConnector.cpp
     src/Connector/AbstractConnector.h
     src/Connector/ConnectorGit.cpp

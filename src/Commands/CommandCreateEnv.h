@@ -21,6 +21,7 @@ public:
 	void setTargetPlatform(const QString& szTargetPlatform);
 
 protected:
+	bool doProcessArgument(int i, const QString& szArg);
 	bool doExecute();
 
 private:
