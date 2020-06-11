@@ -33,6 +33,11 @@ void FormulaDependencies::addDependency(const QString& szPackage, const QString&
 	m_listDependency.append(dependency);
 }
 
+void FormulaDependencies::addDependencyList(const PackageDependencyList& listDependency)
+{
+	m_listDependency.append(listDependency);
+}
+
 const PackageDependencyList& FormulaDependencies::getList() const
 {
 	return m_listDependency;
@@ -53,6 +58,15 @@ void FormulaDependenciesList::setDependencies(const QString& szVersion, const Fo
 	insert(szVersion, deps);
 }
 
+void FormulaDependenciesList::addDependencies(const QString& szVersion, const FormulaDependencies& deps)
+{
+	if(contains(szVersion)){
+		(*this)[szVersion].addDependencyList(deps.getList());
+	}else{
+		insert(szVersion, deps);
+	}
+}
+
 void FormulaDependenciesList::addDependency(const QString& szVersion, const PackageDependency& dependency)
 {
 	if(contains(szVersion)){
@@ -64,7 +78,7 @@ void FormulaDependenciesList::addDependency(const QString& szVersion, const Pack
 	}
 }
 
-QString FormulaDependenciesList::getBestDependeciesVersion(const QString& szVersion) const
+QString FormulaDependenciesList::getBestDependenciesVersion(const QString& szVersion) const
 {
 	QString szFirstVersion;
 	QString szLastVersion;

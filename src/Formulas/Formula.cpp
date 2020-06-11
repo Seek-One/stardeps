@@ -72,6 +72,35 @@ const FormulaDependenciesList& Formula::getDependenciesList() const
 	return m_listDependencies;
 }
 
+FormulaDependenciesList Formula::getDependenciesListForOptions(const QStringList& listOptions) const
+{
+	FormulaDependenciesList listDependencies = m_listDependencies;
+
+	FormulaOptionList::const_iterator iter_options;
+	FormulaDependenciesList::const_iterator iter_deps;
+
+	for(iter_options = m_listOptions.constBegin(); iter_options != m_listOptions.constEnd(); ++iter_options)
+	{
+		const FormulaOption& option = (*iter_options);
+		if(listOptions.contains(option.getOptionName()))
+		{
+			const FormulaDependenciesList& listOptionsDependencies = option.getDependenciesList();
+			if(!listOptionsDependencies.isEmpty())
+			{
+				for(iter_deps = listOptionsDependencies.constBegin(); iter_deps != listOptionsDependencies.constEnd(); ++iter_deps)
+				{
+					QString szVersion = iter_deps.key();
+					const FormulaDependencies& deps = iter_deps.value();
+
+					listDependencies.addDependencies(szVersion, deps);
+				}
+			}
+		}
+	}
+
+	return listDependencies;
+}
+
 void Formula::addOption(const FormulaOption& option)
 {
 	m_listOptions.append(option);

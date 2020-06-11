@@ -24,6 +24,7 @@ public:
 
 	void addDependency(const PackageDependency& dependency);
 	void addDependency(const QString& szPackage, const QString& szVersionMin, const QString& szVersionMax);
+	void addDependencyList(const PackageDependencyList& listDependency);
 
 	const PackageDependencyList& getList() const;
 
@@ -38,9 +39,12 @@ public:
 	virtual ~FormulaDependenciesList();
 
 	void setDependencies(const QString& szVersion, const FormulaDependencies& deps);
+	void addDependencies(const QString& szVersion, const FormulaDependencies& deps);
+
+
 	void addDependency(const QString& szVersion, const PackageDependency& dependency);
 
-	QString getBestDependeciesVersion(const QString& szVersion) const;
+	QString getBestDependenciesVersion(const QString& szVersion) const;
 };
 
 #endif /* SRC_FORMULAS_FORMULADEPENDENCIES_H_ */

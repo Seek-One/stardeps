@@ -92,6 +92,11 @@ bool FormulaParser::parse(const QString& szFilePath)
 			}
 		}
 
+		// Options
+		if(bRes && mainObject.contains("options")){
+			bRes = parseOptions(mainObject.value("options").toObject());
+		}
+
 		// Recipes
 		if(bRes && mainObject.contains("recipes")){
 			bRes = parseRecipe(mainObject.value("recipes").toObject());
@@ -145,19 +150,19 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 		QJsonValue value = iter_prop.value();
 		QJsonObject objectOptionDataList = value.toObject();
 
-		if(objectOptionDataList.contains("vars")){
-			FormulaVariableList listVars;
-			bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
-			if(bRes){
-				formulaOption.setVariableList(listVars);
-			}
-		}
-
 		if(objectOptionDataList.contains("dependencies")){
 			FormulaDependenciesList listDependencies;
 			bRes = parseDependencies(objectOptionDataList.value("dependencies").toObject(), listDependencies);
 			if(bRes){
 				formulaOption.setDependenciesList(listDependencies);
+			}
+		}
+
+		if(objectOptionDataList.contains("vars")){
+			FormulaVariableList listVars;
+			bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
+			if(bRes){
+				formulaOption.setVariableList(listVars);
 			}
 		}
 
@@ -206,6 +211,8 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDepe
 
 			formulaDependencies.addDependency(szPackageName, szVersionMin, szVersionMax);
 		}
+
+		listDependencies.addDependencies(szVersion, formulaDependencies);
 	}
 
 	return bRes;

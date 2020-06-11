@@ -45,6 +45,8 @@ public:
 	void setDependenciesList(const FormulaDependenciesList& listDependencies);
 	const FormulaDependenciesList& getDependenciesList() const;
 
+	FormulaDependenciesList getDependenciesListForOptions(const QStringList& listOptions) const;
+
 	void addOption(const FormulaOption& option);
 	const FormulaOptionList& getOptions() const;
 

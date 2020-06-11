@@ -62,10 +62,15 @@ bool CommandPrepare::checkDependencies(const QSharedPointer<Formula>& pFormula, 
 {
 	bool bRes = true;
 
-	QString szVersion = getPackageNameVersion();
+	qDebug("[prepare] checking dependencies");
 
-	const FormulaDependenciesList& listDependencies = pFormula->getDependenciesList();
-	QString szDepsVersion = listDependencies.getBestDependeciesVersion(szVersion);
+	QString szVersion = getPackageNameVersion();
+	const QStringList& listOptions = getOptions();
+	FormulaDependenciesList listDependencies = pFormula->getDependenciesListForOptions(listOptions);
+
+	qDebug("[prepare] checking dependencies: %d %d", listOptions.count(), listDependencies.count());
+
+	QString szDepsVersion = listDependencies.getBestDependenciesVersion(szVersion);
 
 	if(!szDepsVersion.isEmpty()){
 		qDebug("[prepare] using dependencies rules for version '%s'", qPrintable(szDepsVersion));
