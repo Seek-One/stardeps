@@ -42,12 +42,13 @@ Directory structure will have the following scheme :
 ```
 ./
  |-- ve.env  
- |-- src/  
- |   |-- PACKAGE_NAME[-VERSION]  
- |-- build/  
- |   |-- PACKAGE_NAME[-VERSION]  
- |-- release/  
- |   |-- PACKAGE_NAME[-VERSION]  
+ |-- PACKAGE_NAME[-VERSION]
+ |   |-- src/
+ |   |-- build/
+ |   |-- release/
+ |-- PACKAGE_NAME[-VERSION]
+ |   |-- src/
+ |   |-- ...
 ```
 
 ## Prepare package sources
