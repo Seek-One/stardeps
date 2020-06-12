@@ -19,16 +19,12 @@ CommandConfigure::~CommandConfigure()
 
 bool CommandConfigure::doExecute()
 {
-	bool bRes;
-
-	// Load formula
-	QSharedPointer<Formula> pFormula;
-	bRes = loadFormula(m_szPackageName, pFormula);
+	bool bRes = true;
 
 	// Execute commands
 	if(bRes){
-		const FormulaRecipeList& listRecipes = pFormula->getRecipeList();
-		QString szTargetPlateform = m_env.getPlatformTypeName();
+		const FormulaRecipeList& listRecipes = getFormula()->getRecipeList();
+		QString szTargetPlateform = getEnv().getPlatformTypeName();
 		if(listRecipes.contains(szTargetPlateform)){
 			const FormulaRecipe& recipe = listRecipes.value(szTargetPlateform);
 			const FormulaCommands& listCommands = recipe.getConfigureCommands();

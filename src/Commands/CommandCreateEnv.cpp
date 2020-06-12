@@ -18,7 +18,7 @@
 
 CommandCreateEnv::CommandCreateEnv() : AbstractCommand("createenv")
 {
-	m_bNeedEnvVars = false;
+
 }
 
 CommandCreateEnv::~CommandCreateEnv()

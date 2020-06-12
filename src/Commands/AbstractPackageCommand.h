@@ -12,19 +12,19 @@
 
 #include "AbstractCommand.h"
 
+class PackageCommandEnvironment;
+
 class AbstractPackageCommand : public AbstractCommand
 {
 public:
 	AbstractPackageCommand(const QString& szLabel);
 	virtual ~AbstractPackageCommand();
 
-	void setPackageName(const QString& szPackageName);
-	void setVersion(const QString& szVersion);
-
-	void addOption(const QString& szOption);
-	const QStringList& getOptions() const;
-
+	const QString& getPackageName() const;
+	const QString& getPackageVersion() const;
+	const QStringList& getPackageOptions() const;
 	QString getPackageNameVersion() const;
+
 	QDir getRootPackageDir() const;
 	QDir getSourcePackageDir() const;
 	QDir getBuildPackageDir() const;
@@ -36,11 +36,10 @@ protected:
 
 	virtual bool doProcessArgument(int i, const QString& szArg);
 
-protected:
-	QString m_szPackageName;
-	QString m_szVersion;
+	PackageCommandEnvironment* getPackageCommandEnvironment() const;
+	const QSharedPointer<Formula>& getFormula() const;
 
-	QStringList m_listOptions;
+	Environment& getEnv() const;
 };
 
 #endif /* SRC_COMMANDS_ABSTRACTPACKAGECOMMAND_H_ */

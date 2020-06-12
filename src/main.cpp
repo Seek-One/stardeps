@@ -17,7 +17,7 @@
 
 #include "Global/QApplicationSettings.h"
 
-#include "Commands/CommandsExecutor.h"
+#include "CommandsExecutor/CommandsExecutor.h"
 
 static int processCommandVersion();
 

@@ -16,31 +16,31 @@
 #include "Shell/ShellExecutor.h"
 #include "Formulas/Formula.h"
 
+class AbstractCommandEnvironment;
+
 class AbstractCommand
 {
 public:
 	AbstractCommand(const QString& szLabel);
 	virtual ~AbstractCommand();
 
-	void setVirtualEnvironmentPath(const QDir& dir);
+	void setCommandEnvironment(AbstractCommandEnvironment* pCmdEnd);
+	AbstractCommandEnvironment* getCommandEnvironment() const;
+
 	const QDir& getVirtualEnvironmentPath() const;
 
-	bool prepare(int argc, char**argv);
+	bool init(int argc, char**argv);
 
 	bool execute();
 
 protected:
-	virtual bool doInitEnv();
 	virtual bool doProcessArgument(int i, const QString& szArg);
 	virtual bool doExecute() = 0;
-
-	bool loadFormula(const QString& szPackageName, QSharedPointer<Formula>& pFormula);
 
 protected:
 	QString m_szLabel;
 
-	Environment m_env;
-	bool m_bNeedEnvVars;
+	AbstractCommandEnvironment* m_pCommandEnvironment;
 
 	ShellExecutor m_shell;
 };

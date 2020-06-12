@@ -11,7 +11,7 @@
 #include <QString>
 #include <QList>
 
-#include "AbstractCommand.h"
+#include "Commands/AbstractCommand.h"
 
 class CommandsExecutor
 {
@@ -25,6 +25,12 @@ public:
 
 private:
 	QList<AbstractCommand*> m_listCommands;
+
+	AbstractCommandEnvironment* m_pCommandEnv;
+
+	// For package commands
+	QString m_szPackageName;
+	QString m_szPackageVersion;
 };
 
 #endif /* SRC_COMMANDS_COMMANDSEXECUTOR_H_ */

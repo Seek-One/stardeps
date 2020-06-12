@@ -7,6 +7,8 @@
 
 #include "Environment/EnvironmentDefs.h"
 
+#include "CommandEnvironment/PackageCommandEnvironment.h"
+
 #include "AbstractPackageCommand.h"
 
 AbstractPackageCommand::AbstractPackageCommand(const QString& szLabel) : AbstractCommand(szLabel)
@@ -19,64 +21,60 @@ AbstractPackageCommand::~AbstractPackageCommand()
 
 }
 
-void AbstractPackageCommand::setPackageName(const QString& szPackageName)
+
+const QString& AbstractPackageCommand::getPackageName() const
 {
-	m_szPackageName = szPackageName;
+	return getPackageCommandEnvironment()->getPackageName();
 }
 
-void AbstractPackageCommand::setVersion(const QString& szVersion)
+const QString& AbstractPackageCommand::getPackageVersion() const
 {
-	m_szVersion = szVersion;
+	return getPackageCommandEnvironment()->getPackageVersion();
 }
 
-void AbstractPackageCommand::addOption(const QString& szOption)
+const QStringList& AbstractPackageCommand::getPackageOptions() const
 {
-	m_listOptions.append(szOption);
-}
-
-const QStringList& AbstractPackageCommand::getOptions() const
-{
-	return m_listOptions;
+	return getPackageCommandEnvironment()->getPackageOptions();
 }
 
 QString AbstractPackageCommand::getPackageNameVersion() const
 {
-	QString szVersionName = m_szPackageName;
-	if(!m_szVersion.isEmpty()){
-		szVersionName += "-" + m_szVersion;
-	}
-	return szVersionName;
+	return getPackageCommandEnvironment()->getPackageNameVersion();
 }
 
 QDir AbstractPackageCommand::getRootPackageDir() const
 {
-	return m_env.getVirtualEnvironmentPath().filePath(getPackageNameVersion());
+	Environment& env = getEnv();
+	return env.getVirtualEnvironmentPath().filePath(getPackageNameVersion());
 }
 
 QDir AbstractPackageCommand::getSourcePackageDir() const
 {
-	if(m_env.isPerPackageMode()){
+	Environment& env = getEnv();
+	if(env.isPerPackageMode()){
 		return getRootPackageDir().filePath("src");
 	}else{
-		return m_env.getVirtualEnvironmentSourceDir().filePath(getPackageNameVersion());
+		return env.getVirtualEnvironmentSourceDir().filePath(getPackageNameVersion());
 	}
 }
 
 QDir AbstractPackageCommand::getBuildPackageDir() const
 {
-	if(m_env.isPerPackageMode()){
+	Environment& env = getEnv();
+	if(env.isPerPackageMode()){
 		return getRootPackageDir().filePath("build");
 	}else{
-		return m_env.getVirtualEnvironmentBuildDir().filePath(getPackageNameVersion());
+		return env.getVirtualEnvironmentBuildDir().filePath(getPackageNameVersion());
 	}
 }
 
 QDir AbstractPackageCommand::getReleasePackageDir() const
 {
-	if(m_env.isPerPackageMode()){
+	Environment& env = getEnv();
+	if(env.isPerPackageMode()){
 		return getRootPackageDir().filePath("release");
 	}else{
-		return m_env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion());
+		return env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion());
 	}
 }
 
@@ -121,11 +119,13 @@ bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szC
 
 	QMap<QString, QString> dictVars;
 
+	Environment& env = getEnv();
+
 	// Tools
-	dictVars.insert("${TOOL::GIT}", m_env.getEnvVar(VE_VAR_GIT));
-	dictVars.insert("${TOOL::MAKE}", m_env.getEnvVar(VE_VAR_MAKE));
-	dictVars.insert("${TOOL::RSYNC}", m_env.getEnvVar(VE_VAR_RSYNC));
-	dictVars.insert("${TOOL::COMPILER}", m_env.getEnvVar(VE_VAR_COMPILER));
+	dictVars.insert("${TOOL::GIT}", env.getEnvVar(VE_VAR_GIT));
+	dictVars.insert("${TOOL::MAKE}", env.getEnvVar(VE_VAR_MAKE));
+	dictVars.insert("${TOOL::RSYNC}", env.getEnvVar(VE_VAR_RSYNC));
+	dictVars.insert("${TOOL::COMPILER}", env.getEnvVar(VE_VAR_COMPILER));
 
 	// Package infos
 	dictVars.insert("${PACKAGE_VERSION}", getPackageNameVersion());
@@ -147,20 +147,20 @@ bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szC
 
 bool AbstractPackageCommand::doProcessArgument(int i, const QString& szArg)
 {
-	if(i == 0){
-		setPackageName(szArg);
-		return true;
-	}
-
-	if(szArg.startsWith("--version=")){
-		setVersion(szArg.mid(10));
-		return true;
-	}
-
-	if(szArg.startsWith("--option=")){
-		addOption(szArg.mid(9));
-		return true;
-	}
-
 	return AbstractCommand::doProcessArgument(i, szArg);
+}
+
+PackageCommandEnvironment* AbstractPackageCommand::getPackageCommandEnvironment() const
+{
+	return (PackageCommandEnvironment*)getCommandEnvironment();
+}
+
+const QSharedPointer<Formula>& AbstractPackageCommand::getFormula() const
+{
+	return getPackageCommandEnvironment()->getFormula();
+}
+
+Environment& AbstractPackageCommand::getEnv() const
+{
+	return m_pCommandEnvironment->getEnv();
 }
