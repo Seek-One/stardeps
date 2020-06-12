@@ -29,6 +29,7 @@ private slots:
 	void readCommandAllStandardError();
 
 private:
+	void printCommand(const QString& szCommand, const QStringList& listArgs);
 	void printCommandLines(const QString& szDomain, const QString& szMsg);
 
 	QEventLoop m_eventLoop;

@@ -35,6 +35,7 @@ bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& list
 	connect(&process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(processFinished(int, QProcess::ExitStatus)));
 	connect(&process, SIGNAL(errorOccurred(QProcess::ProcessError)), this, SLOT(processErrorOccurred(QProcess::ProcessError)));
 
+	printCommand(szCommand, listArgs);
 	process.start(szCommand, listArgs);
 
 	m_eventLoop.exec();
@@ -69,6 +70,15 @@ void ShellExecutor::readCommandAllStandardError()
 	QProcess* pProcess = (QProcess*)sender();
 	QByteArray buf = pProcess->readAllStandardError();
 	printCommandLines("stderr", QString::fromUtf8(buf));
+}
+
+void ShellExecutor::printCommand(const QString& szCommand, const QStringList& listArgs)
+{
+	if(listArgs.empty()){
+		qDebug("[shell] %s", qPrintable(szCommand));
+	}else{
+		qDebug("[shell] %s %s", qPrintable(szCommand), qPrintable(listArgs.join(' ')));
+	}
 }
 
 void ShellExecutor::printCommandLines(const QString& szDomain, const QString& szMsg)
