@@ -11,6 +11,7 @@
 #include <QDir>
 
 #include "Environment/Environment.h"
+#include "Variable/VariableList.h"
 
 class AbstractCommandEnvironment
 {
@@ -21,6 +22,7 @@ public:
 // Data access
 public:
 	Environment& getEnv();
+	const Environment& getEnv() const;
 
 	void setVirtualEnvironmentPath(const QDir& dir);
 	const QDir& getVirtualEnvironmentPath() const;
@@ -40,13 +42,16 @@ protected:
 
 	void setNeedEnvVars(bool bNeed);
 
+	void addVariable(const QString& szName, const QString& szValue);
+	const VariableList& getVariableList() const;
+
 private:
 	virtual bool doLoadEnv();
 
 private:
 	Environment m_env;
 	bool m_bNeedEnvVars;
-
+	VariableList m_listCmdEnvVars;
 };
 
 #endif /* SRC_COMMANDENVIRONMENT_ABSTRACTCOMMANDENVIRONMENT_H_ */

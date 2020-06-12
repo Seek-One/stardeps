@@ -154,6 +154,8 @@ set(APP_COMMON_SOURCES
     src/Formulas/FormulaDependencies.h
     src/Package/PackageDependency.cpp
     src/Package/PackageDependency.h
+    src/Variable/VariableList.cpp
+    src/Variable/VariableList.h
     src/Version/VersionHelper.cpp
     src/Version/VersionHelper.h
 )

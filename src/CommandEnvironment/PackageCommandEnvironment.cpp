@@ -45,9 +45,14 @@ const QString& PackageCommandEnvironment::getPackageVersion() const
 
 QString PackageCommandEnvironment::getPackageNameVersion() const
 {
-	QString szVersionName = m_szPackageName;
-	if(!m_szPackageVersion.isEmpty()){
-		szVersionName += "-" + m_szPackageVersion;
+	return getPackageNameVersion(m_szPackageName, m_szPackageVersion);
+}
+
+QString PackageCommandEnvironment::getPackageNameVersion(const QString& szPackageName, const QString& szPackageVersion)
+{
+	QString szVersionName = szPackageName;
+	if(!szPackageVersion.isEmpty()){
+		szVersionName += "-" + szPackageVersion;
 	}
 	return szVersionName;
 }
@@ -65,6 +70,42 @@ const QStringList& PackageCommandEnvironment::getPackageOptions() const
 const QSharedPointer<Formula>& PackageCommandEnvironment::getFormula() const
 {
 	return m_pFormula;
+}
+
+QDir PackageCommandEnvironment::getRootPackageDir(const QString& szPackageName, const QString& szVersion) const
+{
+	const Environment& env = getEnv();
+	return env.getVirtualEnvironmentPath().filePath(getPackageNameVersion(szPackageName, szVersion));
+}
+
+QDir PackageCommandEnvironment::getSourcePackageDir(const QString& szPackageName, const QString& szVersion) const
+{
+	const Environment& env = getEnv();
+	if(env.isPerPackageMode()){
+		return getRootPackageDir(szPackageName, szVersion).filePath("src");
+	}else{
+		return env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion(szPackageName, szVersion));
+	}
+}
+
+QDir PackageCommandEnvironment::getBuildPackageDir(const QString& szPackageName, const QString& szVersion) const
+{
+	const Environment& env = getEnv();
+	if(env.isPerPackageMode()){
+		return getRootPackageDir(szPackageName, szVersion).filePath("build");
+	}else{
+		return env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion(szPackageName, szVersion));
+	}
+}
+
+QDir PackageCommandEnvironment::getReleasePackageDir(const QString& szPackageName, const QString& szVersion) const
+{
+	const Environment& env = getEnv();
+	if(env.isPerPackageMode()){
+		return getRootPackageDir(szPackageName, szVersion).filePath("release");
+	}else{
+		return env.getVirtualEnvironmentReleaseDir().filePath(getPackageNameVersion(szPackageName, szVersion));
+	}
 }
 
 bool PackageCommandEnvironment::doProcessArgument(int i, const QString& szArg)
@@ -143,10 +184,14 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 			const PackageDependency& dependency = (*iter);
 			qWarning("[load-env] checking dependency %s", qPrintable(dependency.toString()));
 
+			QDir dirFoundPath;
 			QString szFoundVersion;
-			bRes = checkDependencyPresent(dependency, szFoundVersion);
+			bRes = checkDependencyPresent(dependency, dirFoundPath, szFoundVersion);
 			if(bRes){
 				qDebug("[load-env] required dependency is found %s", qPrintable(szFoundVersion));
+				QString szBaseVar = "DEPENDENCY::" + dependency.getPackage().toUpper() + "::";
+				addVariable(szBaseVar + "ROOTPATH", dirFoundPath.path());
+				addVariable(szBaseVar + "VERSION", szFoundVersion);
 			}else{
 				qWarning("[load-env] required dependency is not found");
 			}
@@ -155,14 +200,12 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 				break;
 			}
 		}
-
-		return bRes;
 	}
 
 	return bRes;
 }
 
-bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& dependency, QString& szOutVersion)
+bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& dependency, QDir& pathOut, QString& szOutVersion)
 {
 	bool bRes = false;
 
@@ -186,6 +229,7 @@ bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& 
 		QString szVersion = fileInfo.fileName().remove(dependency.getPackage() + "-");
 		if(VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())){
 			bRes = true;
+			pathOut = getReleasePackageDir(dependency.getPackage(), szVersion);
 			szOutVersion = szVersion;
 		}
 	}

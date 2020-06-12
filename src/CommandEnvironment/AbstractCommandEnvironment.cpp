@@ -24,6 +24,11 @@ Environment& AbstractCommandEnvironment::getEnv()
 	return m_env;
 }
 
+const Environment& AbstractCommandEnvironment::getEnv() const
+{
+	return m_env;
+}
+
 void AbstractCommandEnvironment::setVirtualEnvironmentPath(const QDir& dir)
 {
 	m_env.setVirtualEnvironmentPath(dir);
@@ -64,6 +69,9 @@ bool AbstractCommandEnvironment::load()
 	if(bRes){
 		bRes = doLoad();
 	}
+
+	m_listCmdEnvVars.print();
+
 	return bRes;
 }
 
@@ -91,4 +99,14 @@ bool AbstractCommandEnvironment::doLoadEnv()
 void AbstractCommandEnvironment::setNeedEnvVars(bool bNeed)
 {
 	m_bNeedEnvVars = bNeed;
+}
+
+void AbstractCommandEnvironment::addVariable(const QString& szName, const QString& szValue)
+{
+	m_listCmdEnvVars.insert(szName, szValue);
+}
+
+const VariableList& AbstractCommandEnvironment::getVariableList() const
+{
+	return m_listCmdEnvVars;
 }
