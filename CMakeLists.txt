@@ -160,6 +160,12 @@ set(APP_COMMON_SOURCES
 
 set(APPLICATION_SOURCES
     src/main.cpp
+    src/CommandEnvironment/AbstractCommandEnvironment.cpp
+    src/CommandEnvironment/AbstractCommandEnvironment.h
+    src/CommandEnvironment/DefaultCommandEnvironment.cpp
+    src/CommandEnvironment/DefaultCommandEnvironment.h
+    src/CommandEnvironment/PackageCommandEnvironment.cpp
+    src/CommandEnvironment/PackageCommandEnvironment.h
     src/Commands/AbstractCommand.cpp
     src/Commands/AbstractCommand.h
     src/Commands/AbstractPackageCommand.cpp
@@ -174,8 +180,8 @@ set(APPLICATION_SOURCES
     src/Commands/CommandInstall.h
     src/Commands/CommandPrepare.cpp
     src/Commands/CommandPrepare.h
-    src/Commands/CommandsExecutor.cpp
-    src/Commands/CommandsExecutor.h
+    src/CommandsExecutor/CommandsExecutor.cpp
+    src/CommandsExecutor/CommandsExecutor.h
     src/Connector/AbstractConnector.cpp
     src/Connector/AbstractConnector.h
     src/Connector/ConnectorGit.cpp
