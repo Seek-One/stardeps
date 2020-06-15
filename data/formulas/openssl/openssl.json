@@ -28,6 +28,17 @@
             "install": [
                 "${TOOL::MAKE} install"
             ]
+        },
+        "darwin-clang-64": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/Configure darwin64-x86_64-cc ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install"
+            ]
         }
     }
 }

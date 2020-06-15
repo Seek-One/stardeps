@@ -18,6 +18,9 @@ Platform::Type Platform::fromString(const QString& szPlatform)
 	if(szPlatform == "win32-gcc"){
 		return Win32_GCC;
 	}
+    if(szPlatform == "darwin-clang-64"){
+        return Darwin_CLANG_64;
+    }
 	return Unknown;
 }
 
@@ -27,6 +30,7 @@ const char* Platform::toString(Platform::Type iType)
 	case Linux_GCC_32: return "linux-gcc-32";
 	case Linux_GCC_64: return "linux-gcc-64";
 	case Win32_GCC: return "win32-gcc";
+    case Darwin_CLANG_64: return "darwin-clang-64";
 	default: break;
 	}
 	return "";

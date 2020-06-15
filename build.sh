@@ -10,10 +10,15 @@
 # Define constants
 IDE_NONE=0
 IDE_ECLIPSE=1
+IDE_XCODE=2
 MAKE_CMD=make
 
 # Build options
-USE_IDE=${IDE_ECLIPSE}
+if [[ "$OSTYPE" == "darwin"* ]]; then
+	USE_IDE=${IDE_XCODE}
+else
+	USE_IDE=${IDE_ECLIPSE}
+fi
 SRC_PATH=`pwd`
 BIN_PATH=.
 
@@ -89,6 +94,8 @@ if [ ${DO_REGEN} -eq 1 ]; then
 		if [ ${DO_REGEN} -eq 1 ]; then
 			if [ ${USE_IDE} -eq ${IDE_ECLIPSE} ]; then
 				cmake -G"Eclipse CDT4 - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_ECLIPSE_GENERATE_LINKED_RESOURCES=FALSE ${SRC_ABS_PATH}
+			elif [ ${USE_IDE} -eq ${IDE_XCODE} ]; then
+				cmake -G"Xcode" -DCMAKE_BUILD_TYPE=Debug ${SRC_ABS_PATH}
 			else
 				cmake -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug ${SRC_ABS_PATH}
 			fi

@@ -16,7 +16,8 @@ public:
 		Unknown,
 		Linux_GCC_32,
 		Linux_GCC_64,
-		Win32_GCC
+		Win32_GCC,
+        Darwin_CLANG_64
 	};
 
 public:
