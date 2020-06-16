@@ -24,7 +24,7 @@ set (APPLICATION_PACKAGE_VENDOR "jet1oeil")
 set (APPLICATION_PACKAGE_NAME "stardeps")
 set (APPLICATION_EXE_NAME stardeps)
 
-project (opendbviewer CXX C)
+project (stardeps CXX C)
 
 #set (CMAKE_VERBOSE_MAKEFILE OFF)
 
