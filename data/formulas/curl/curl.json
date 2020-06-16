@@ -28,6 +28,11 @@
             "vars": {
                 "OPTIONS::SSL":"--with-darwinssl"
             }
+        },
+        "darwinssl" : {
+            "vars": {
+                "OPTIONS::SSL":"--with-darwinssl"
+            }
         }
     },
     "recipes": {
