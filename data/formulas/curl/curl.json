@@ -21,7 +21,7 @@
                 }
             },
             "vars": {
-                "OPTIONS::SSL":"--with-ssl=${PACKAGE::OPENSSL::PATH}"
+                "OPTIONS::SSL":"--with-ssl=${DEPENDENCY::OPENSSL::ROOTPATH}"
             }
         },
         "darwinssl" : {
