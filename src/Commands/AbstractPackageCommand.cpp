@@ -135,14 +135,51 @@ bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szC
 
 	// Configure
 	dictVars.insert("${CONFIGURE_OPTIONS}", QString());
-
+    
+    // Options
+    /**
+     TODO: make sure that formula's options are previously prepared if necessary (step is missing for now)
+     */
+    doPrepareCommandOptions(dictVars);
+    
 	QMap<QString, QString>::const_iterator iter;
 	for(iter = dictVars.constBegin(); iter != dictVars.constEnd(); ++iter)
 	{
 		szCmdOut = szCmdOut.replace(iter.key(), iter.value());
 	}
 
+    // Last step, remove non-referenced optional values
+    szCmdOut = szCmdOut.remove(QRegExp("\\$\\{.*\\}"));
+
 	return true;
+}
+
+bool AbstractPackageCommand::doPrepareCommandOptions(QMap<QString, QString>& dictVars) const
+{
+    if(!getPackageOptions().isEmpty() && getFormula()){
+        FormulaOptionList::const_iterator formulaOptionIter;
+        FormulaVariableList::const_iterator formulaVariableIter;
+        
+        QStringList packagesOptions = getPackageOptions();
+        QStringList::const_iterator packageOptionIter = packagesOptions.constBegin();
+        for(; packageOptionIter != packagesOptions.constEnd(); ++packageOptionIter){
+            formulaOptionIter = getFormula()->getOptions().constBegin();
+            
+            for(; formulaOptionIter != getFormula()->getOptions().constEnd(); ++formulaOptionIter){
+                if(formulaOptionIter->getOptionName() == *packageOptionIter){
+                    formulaVariableIter = formulaOptionIter->getVariableList().constBegin();
+                    
+                    for(; formulaVariableIter != formulaOptionIter->getVariableList().constEnd(); ++formulaVariableIter) {
+                        dictVars.insert(QString("${%0}").arg(formulaVariableIter.key()), formulaVariableIter.value());
+                    }
+                    
+                    continue;
+                }
+            }
+        }
+    }
+    
+    return true;
 }
 
 bool AbstractPackageCommand::doProcessArgument(int i, const QString& szArg)

@@ -32,6 +32,7 @@ public:
 
 protected:
 	bool doPrepareCommand(const QString& szCmd, QString& szCmdOut);
+    bool doPrepareCommandOptions(QMap<QString, QString>& dictVars) const;
 	bool doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory);
 
 	virtual bool doProcessArgument(int i, const QString& szArg);

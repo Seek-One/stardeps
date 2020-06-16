@@ -23,10 +23,28 @@
             "vars": {
                 "OPTIONS::SSL":"--with-ssl=${PACKAGE::OPENSSL::PATH}"
             }
+        },
+        "darwinssl" : {
+            "vars": {
+                "OPTIONS::SSL":"--with-darwinssl"
+            }
         }
     },
     "recipes": {
         "linux-gcc-64": {
+            "configure": [
+                "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
+                "${PACKAGE_BUILD_PATH}/buildconf",
+                "${PACKAGE_BUILD_PATH}/configure --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::DEBUG} ${OPTIONS::SSL}"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install"
+            ]
+        },
+        "darwin-clang-64": {
             "configure": [
                 "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
                 "${PACKAGE_BUILD_PATH}/buildconf",
