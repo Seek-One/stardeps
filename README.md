@@ -130,6 +130,7 @@ startdeps support build of the following package :
 
 * openssl : https://www.openssl.org/
 * curl : https://curl.haxx.se/
+* live555 : http://live555.com/
 
 
      
