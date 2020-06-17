@@ -113,73 +113,86 @@ bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirW
 	return bRes;
 }
 
-bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szCmdOut)
+bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 {
-	szCmdOut = szCmd;
-
-	QMap<QString, QString> dictVars;
-
 	Environment& env = getEnv();
 
-	// Tools
-	dictVars.insert("${TOOL::GIT}", env.getEnvVar(VE_VAR_GIT));
-	dictVars.insert("${TOOL::MAKE}", env.getEnvVar(VE_VAR_MAKE));
-	dictVars.insert("${TOOL::RSYNC}", env.getEnvVar(VE_VAR_RSYNC));
-	dictVars.insert("${TOOL::COMPILER}", env.getEnvVar(VE_VAR_COMPILER));
+	const QSharedPointer<Formula>& pFormula = getFormula();
+	const FormulaOptionList& listFormulaOptions = pFormula->getOptions();
 
-	// Package infos
-	dictVars.insert("${PACKAGE_VERSION}", getPackageNameVersion());
-	dictVars.insert("${PACKAGE_SRC_PATH}", getSourcePackageDir().absolutePath());
-	dictVars.insert("${PACKAGE_BUILD_PATH}", getBuildPackageDir().absolutePath());
-	dictVars.insert("${PACKAGE_PREFIX_PATH}", getReleasePackageDir().absolutePath());
-
-	// Configure
-	dictVars.insert("${CONFIGURE_OPTIONS}", QString());
-    
-    // Options
-    /**
-     TODO: make sure that formula's options are previously prepared if necessary (step is missing for now)
-     */
-    doPrepareCommandOptions(dictVars);
-    
-	QMap<QString, QString>::const_iterator iter;
-	for(iter = dictVars.constBegin(); iter != dictVars.constEnd(); ++iter)
+	// Get command environement variables
+	const VariableList& listCmdEndVars = getCommandEnvironment()->getVariableList();
+	VariableList::const_iterator iter_var;
+	for(iter_var = listCmdEndVars.constBegin(); iter_var != listCmdEndVars.constEnd(); ++iter_var)
 	{
-		szCmdOut = szCmdOut.replace(iter.key(), iter.value());
+		dictVars.insert(iter_var.key(), iter_var.value());
 	}
 
-    // Last step, remove non-referenced optional values
-    szCmdOut = szCmdOut.remove(QRegExp("\\$\\{.*\\}"));
+	// Tools
+	dictVars.insert("TOOL::GIT", env.getEnvVar(VE_VAR_GIT));
+	dictVars.insert("TOOL::MAKE", env.getEnvVar(VE_VAR_MAKE));
+	dictVars.insert("TOOL::RSYNC", env.getEnvVar(VE_VAR_RSYNC));
+	dictVars.insert("TOOL::COMPILER", env.getEnvVar(VE_VAR_COMPILER));
+
+	// Package infos
+	dictVars.insert("PACKAGE_VERSION", getPackageNameVersion());
+	dictVars.insert("PACKAGE_SRC_PATH", getSourcePackageDir().absolutePath());
+	dictVars.insert("PACKAGE_BUILD_PATH", getBuildPackageDir().absolutePath());
+	dictVars.insert("PACKAGE_PREFIX_PATH", getReleasePackageDir().absolutePath());
+
+	// Formula options variable
+	const QStringList& listOptions = getPackageOptions();
+	QStringList::const_iterator iter;
+	for(iter = listOptions.constBegin(); iter != listOptions.constEnd(); ++iter)
+	{
+		const FormulaOption& formulaOption = listFormulaOptions.getOptionByName(*iter);
+		if(!formulaOption.isNull()){
+			const FormulaVariableList& listOptionsVars = formulaOption.getVariableList();
+			FormulaVariableList::const_iterator iter_var;
+			for(iter_var = listOptionsVars.constBegin(); iter_var != listOptionsVars.constEnd(); ++iter_var)
+			{
+				QString szNewValue;
+				doReplaceVariable(iter_var.value(), dictVars, szNewValue);
+				dictVars.insert(iter_var.key(), szNewValue);
+			}
+		}
+	}
 
 	return true;
 }
 
-bool AbstractPackageCommand::doPrepareCommandOptions(QMap<QString, QString>& dictVars) const
+bool AbstractPackageCommand::doReplaceVariable(const QString& szText, const VariableList& dictVars, QString& szTextOut)
 {
-    if(!getPackageOptions().isEmpty() && getFormula()){
-        FormulaOptionList::const_iterator formulaOptionIter;
-        FormulaVariableList::const_iterator formulaVariableIter;
-        
-        QStringList packagesOptions = getPackageOptions();
-        QStringList::const_iterator packageOptionIter = packagesOptions.constBegin();
-        for(; packageOptionIter != packagesOptions.constEnd(); ++packageOptionIter){
-            formulaOptionIter = getFormula()->getOptions().constBegin();
-            
-            for(; formulaOptionIter != getFormula()->getOptions().constEnd(); ++formulaOptionIter){
-                if(formulaOptionIter->getOptionName() == *packageOptionIter){
-                    formulaVariableIter = formulaOptionIter->getVariableList().constBegin();
-                    
-                    for(; formulaVariableIter != formulaOptionIter->getVariableList().constEnd(); ++formulaVariableIter) {
-                        dictVars.insert(QString("${%0}").arg(formulaVariableIter.key()), formulaVariableIter.value());
-                    }
-                    
-                    continue;
-                }
-            }
-        }
-    }
-    
-    return true;
+	szTextOut = szText;
+
+	VariableList::const_iterator iter;
+	for(iter = dictVars.constBegin(); iter != dictVars.constEnd(); ++iter)
+	{
+		QString szKey = "${" + iter.key() + "}";
+		szTextOut = szTextOut.replace(szKey, iter.value());
+	}
+
+	// Last step, remove non-referenced optional values
+	szTextOut = szTextOut.remove(QRegExp("\\$\\{.*\\}"));
+
+	return true;
+}
+
+bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szCmdOut)
+{
+	bool bRes;
+
+	szCmdOut = szCmd;
+
+	VariableList dictVars;
+
+	bRes = doInitDictVars(dictVars);
+
+	if(bRes){
+		bRes = doReplaceVariable(szCmd, dictVars, szCmdOut);
+	}
+
+	return bRes;
 }
 
 bool AbstractPackageCommand::doProcessArgument(int i, const QString& szArg)

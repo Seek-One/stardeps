@@ -17,6 +17,11 @@ FormulaOption::~FormulaOption()
 
 }
 
+bool FormulaOption::isNull() const
+{
+	return m_szOptionName.isEmpty();
+}
+
 void FormulaOption::setOptionName(const QString& szName)
 {
 	m_szOptionName = szName;
@@ -67,3 +72,14 @@ FormulaOptionList::~FormulaOptionList()
 
 }
 
+const FormulaOption& FormulaOptionList::getOptionByName(const QString& szOptionName, const FormulaOption& defaultOption) const
+{
+	FormulaOptionList::const_iterator iter;
+	for(iter = constBegin(); iter != constEnd(); ++iter)
+	{
+		if((*iter).getOptionName() == szOptionName){
+			return (*iter);
+		}
+	}
+	return defaultOption;
+}

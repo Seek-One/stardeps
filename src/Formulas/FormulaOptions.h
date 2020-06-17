@@ -18,6 +18,8 @@ public:
 	FormulaOption();
 	virtual ~FormulaOption();
 
+	bool isNull() const;
+
 	void setOptionName(const QString& szName);
 	const QString& getOptionName() const;
 
@@ -38,10 +40,13 @@ private:
 	FormulaVariableList m_listVars;
 };
 
-class FormulaOptionList : public QList<FormulaOption> {
+class FormulaOptionList : public QList<FormulaOption>
+{
 public:
 	FormulaOptionList();
 	virtual ~FormulaOptionList();
+
+	const FormulaOption& getOptionByName(const QString& szOptionName, const FormulaOption& defaultOption = FormulaOption()) const;
 };
 
 #endif /* SRC_FORMULAS_FORMULAOPTIONS_H_ */

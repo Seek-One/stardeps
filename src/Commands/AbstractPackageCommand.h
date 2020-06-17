@@ -10,6 +10,8 @@
 
 #include <QDir>
 
+#include "Variable/VariableList.h"
+
 #include "AbstractCommand.h"
 
 class PackageCommandEnvironment;
@@ -31,8 +33,9 @@ public:
 	QDir getReleasePackageDir() const;
 
 protected:
+	bool doInitDictVars(VariableList& dictVars);
+	bool doReplaceVariable(const QString& szText, const VariableList& dictVars, QString& szTextOut);
 	bool doPrepareCommand(const QString& szCmd, QString& szCmdOut);
-    bool doPrepareCommandOptions(QMap<QString, QString>& dictVars) const;
 	bool doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory);
 
 	virtual bool doProcessArgument(int i, const QString& szArg);

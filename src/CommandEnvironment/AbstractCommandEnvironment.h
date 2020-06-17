@@ -36,6 +36,8 @@ public:
 public:
 	bool load();
 
+	const VariableList& getVariableList() const;
+
 protected:
 	virtual bool doProcessArgument(int i, const QString& szArg);
 	virtual bool doLoad();
@@ -43,7 +45,6 @@ protected:
 	void setNeedEnvVars(bool bNeed);
 
 	void addVariable(const QString& szName, const QString& szValue);
-	const VariableList& getVariableList() const;
 
 private:
 	virtual bool doLoadEnv();
