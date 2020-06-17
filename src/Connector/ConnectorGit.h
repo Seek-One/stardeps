@@ -15,8 +15,6 @@ public:
 	ConnectorGit(const Environment& env);
 	virtual ~ConnectorGit();
 
-	void setGitCmd(const QString& szCmd);
-
 	bool git_clone(const QString& szURL, const QDir& dirWorkingDirectory);
 	bool git_pull(const QDir& dirWorkingDirectory);
 	bool git_checkout(const QString& szVersion, const QDir& dirWorkingDirectory);

@@ -64,6 +64,12 @@ bool CommandCreateEnv::doExecute()
 	if(bRes){
 		bRes = findCompiler(env);
 	}
+    if(bRes){
+        bRes = findTar(env);
+    }
+    if(bRes){
+        bRes = findWget(env);
+    }
 
 	QDir dirVE = getVirtualEnvironmentPath();
 	QString szFilePath = dirVE.filePath("ve.env");
@@ -147,4 +153,43 @@ bool CommandCreateEnv::findRSync(Environment& env)
 		env.setEnvVar(VE_VAR_RSYNC, "rsync");
 	}
 	return true;
+}
+
+bool CommandCreateEnv::findTar(Environment& env)
+{
+    // Detect tar
+#ifdef WIN32
+    // TODO
+    return false;
+#else
+    if(QFile::exists("/usr/bin/tar")){
+        env.setEnvVar(VE_VAR_TAR, "/usr/bin/tar");
+    }else{
+        env.setEnvVar(VE_VAR_TAR, "tar");
+    }
+    return true;
+#endif
+}
+
+bool CommandCreateEnv::findWget(Environment& env)
+{
+    // Detect wget
+#ifdef WIN32
+    // TODO
+    return false;
+#elif defined(APPLE)
+    if(QFile::exists("/usr/local/bin/wget")){
+        env.setEnvVar(VE_VAR_WGET, "/usr/local/bin/wget");
+    }else{
+        env.setEnvVar(VE_VAR_WGET, "wget");
+    }
+    return true;
+#else
+    if(QFile::exists("/usr/bin/wget")){
+        env.setEnvVar(VE_VAR_WGET, "/usr/bin/wget");
+    }else{
+        env.setEnvVar(VE_VAR_WGET, "wget");
+    }
+    return true;
+#endif
 }

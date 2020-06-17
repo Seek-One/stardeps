@@ -44,6 +44,9 @@ protected:
 	const QSharedPointer<Formula>& getFormula() const;
 
 	Environment& getEnv() const;
+    
+private:
+    void parseCommand(const QString& szCmd, QStringList& tokens) const;
 };
 
 #endif /* SRC_COMMANDS_ABSTRACTPACKAGECOMMAND_H_ */

@@ -120,7 +120,9 @@ bool FormulaParser::parseSCM(const QJsonObject& objectRoot)
 			m_pFormula->setTypeSCM(Formula::SCM_Git);
 		}else if(szTmp == "svn"){
 			m_pFormula->setTypeSCM(Formula::SCM_Svn);
-		}
+        }else if(szTmp == "archive"){
+            m_pFormula->setTypeSCM(Formula::SCM_Archive);
+        }
 	}
 
 	// SCM url

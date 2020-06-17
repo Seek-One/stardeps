@@ -186,6 +186,8 @@ set(APPLICATION_SOURCES
     src/CommandsExecutor/CommandsExecutor.h
     src/Connector/AbstractConnector.cpp
     src/Connector/AbstractConnector.h
+    src/Connector/ConnectorArchive.cpp
+    src/Connector/ConnectorArchive.h
     src/Connector/ConnectorGit.cpp
     src/Connector/ConnectorGit.h
     src/Environment/Environment.cpp

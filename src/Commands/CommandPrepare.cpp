@@ -5,6 +5,7 @@
  *      Author: ebeuque
  */
 
+#include "Connector/ConnectorArchive.h"
 #include "Connector/ConnectorGit.h"
 
 #include "CommandPrepare.h"
@@ -76,7 +77,16 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
 		}else{
 			bRes = connector.git_clone(pFormula->getSCMURL(), dirWorkingCopy);
 		}
-	}
+    }else if(pFormula->getTypeSCM() == Formula::SCM_Archive){
+        ConnectorArchive conector(getEnv());
+        if(!dirWorkingCopy.exists()){
+            if(dirWorkingCopy.mkpath(".")){
+                bRes = conector.archive_download(pFormula->getSCMURL(), dirWorkingCopy);
+            }else{
+                bRes = false;
+            }
+        }
+    }
 
 	return bRes;
 }

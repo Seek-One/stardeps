@@ -22,7 +22,8 @@ public:
 	enum TypeSCM {
 		SCM_None,
 		SCM_Git,
-		SCM_Svn
+		SCM_Svn,
+        SCM_Archive
 	};
 
 public:

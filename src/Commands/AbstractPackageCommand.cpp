@@ -87,8 +87,9 @@ bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirW
 
 	if(bRes){
 		qDebug("[%s] %s", qPrintable(m_szLabel), qPrintable(szCmdBind));
-		QStringList tokens = szCmdBind.split(' ');
-		QString szCommand = tokens[0];
+
+        QStringList tokens;
+        parseCommand(szCmdBind, tokens);
 
 		// Rebuild cmd
 		int i = 0;
@@ -133,6 +134,8 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 	dictVars.insert("TOOL::MAKE", env.getEnvVar(VE_VAR_MAKE));
 	dictVars.insert("TOOL::RSYNC", env.getEnvVar(VE_VAR_RSYNC));
 	dictVars.insert("TOOL::COMPILER", env.getEnvVar(VE_VAR_COMPILER));
+    dictVars.insert("TOOL:TAR", env.getEnvVar(VE_VAR_TAR));
+    dictVars.insert("TOOL:WEGT", env.getEnvVar(VE_VAR_WGET));
 
 	// Package infos
 	dictVars.insert("PACKAGE_VERSION", getPackageNameVersion());
@@ -213,4 +216,28 @@ const QSharedPointer<Formula>& AbstractPackageCommand::getFormula() const
 Environment& AbstractPackageCommand::getEnv() const
 {
 	return m_pCommandEnvironment->getEnv();
+}
+
+void AbstractPackageCommand::parseCommand(const QString& szCmd, QStringList& outTokens) const
+{
+    QString szTmp;
+    QStringList list = szCmd.split(' ');
+    QStringList::const_iterator iter = list.constBegin();
+    for(; iter != list.constEnd(); ++iter){
+        if(!iter->startsWith("\"") && szTmp.isEmpty()){
+            outTokens.append(*iter);
+            continue;
+        }else{
+            if(szTmp.isEmpty()){
+                szTmp = *iter;
+            }else{
+                szTmp += " " + *iter;
+            }
+        }
+        
+        if(iter->endsWith("\"")){
+            outTokens.append(szTmp);
+            szTmp = QString();
+        }
+    }
 }
