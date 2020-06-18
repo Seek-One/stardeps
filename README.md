@@ -63,8 +63,14 @@ stardeps prepare PACKAGE_NAME [OPTIONS]
 You can use the following OPTIONS:
 
 ```
-  --version=[VERSION]
+  --formulas-dir=[DIR]
+      set DIR as formula dir.
+
+  --pkg-version=[VERSION]
       Set the target version name. This defines the target source directory name as src/PACKAGE_NAME[-VERSION]. If no version is set it will use the current developpement version.
+  --pkg-option=[OPTION]
+      tell use the option specified in the formula of the package. You can use this option multiple times.
+
   --scm-branch-version=[VERSION]
       Use this version instead of the --version to checkout in SCM.
   --scm-tag-version=[VERSION]

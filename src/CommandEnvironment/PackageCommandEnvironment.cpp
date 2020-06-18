@@ -115,12 +115,12 @@ bool PackageCommandEnvironment::doProcessArgument(int i, const QString& szArg)
 		return true;
 	}
 
-	if(szArg.startsWith("--version=")){
+	if(szArg.startsWith("--pkg-version=")){
 		setPackageVersion(szArg.mid(10));
 		return true;
 	}
 
-	if(szArg.startsWith("--option=")){
+	if(szArg.startsWith("--pkg-option=")){
 		addPackageOption(szArg.mid(9));
 		return true;
 	}

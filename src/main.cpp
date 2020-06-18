@@ -65,9 +65,9 @@ int main(int argc, char **argv)
 
     if(!bShowUsage){
         QString szCommand = argv[1];
-        if(szCommand == "version"){
+        if(szCommand == "--version"){
             iRes = processCommandVersion();
-        }else if(szCommand == "help"){
+        }else if(szCommand == "--help"){
             bShowUsage = true;
         }else{
 
@@ -104,10 +104,21 @@ int main(int argc, char **argv)
     // Show help
     if(bShowUsage){
 		qDebug("Usage: %s command [args]", argv[0]);
-		qDebug("   LIST OF COMMANDS");
+        qDebug(" ");
+        qDebug("  LIST OF ARGUMENTS");
+        qDebug("       --version ");
+        qDebug("             display application version");
+        qDebug("       --help ");
+        qDebug("             show help");
+        qDebug("       --no-shell-trace");
+        qDebug("             don't display shell command trace.");
+        qDebug(" ");
+		qDebug("  LIST OF COMMANDS: ENVIRONMENT");
 		qDebug("       createenv TARGET_PLATFORM");
-		qDebug("             create an environment directory.");
-		qDebug("       listenv");
+		qDebug("             create an environment directory and a ve.env file with useful environment variables.");
+		//qDebug("       listenv");
+        qDebug(" ");
+        qDebug("  LIST OF COMMANDS: PACKAGE");
 		qDebug("       prepare PACKAGE_NAME");
 		qDebug("             get the sources of the package in the sources directory.");
 		qDebug("       configure PACKAGE_NAME");
@@ -116,18 +127,15 @@ int main(int argc, char **argv)
 		qDebug("             run the build command in the build directory.");
 		qDebug("       install PACKAGE_NAME");
 		qDebug("             install the generated package files in the release directory.");
-		qDebug("       version");
-		qDebug("       ");
-		qDebug("   LIST OF ARGUMENTS");
-		qDebug("       --version=VERSION");
-		qDebug("             define the version of the package to build.");
-        qDebug(" ");
-        qDebug("       --option=OPTION");
-        qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
-        qDebug("       --no-shell-trace");
-        qDebug("             don't display shell command trace.");
+		qDebug(" ");
+        qDebug("  LIST OF ARGUMENTS FOR PACKAGE COMMANDS");
         qDebug("       --formulas-dir=DIR");
         qDebug("             set DIR as formula dir.");
+        qDebug(" ");
+        qDebug("       --pkg-version=VERSION");
+        qDebug("             define the version of the package to build.");
+        qDebug("       --pkg-option=OPTION");
+        qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
         qDebug(" ");
 		qDebug("       --scm-tag-version=VERSION");
 		qDebug("             define the tag version in the SCM to use.");
