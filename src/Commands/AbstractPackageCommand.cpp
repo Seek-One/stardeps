@@ -48,6 +48,16 @@ QDir AbstractPackageCommand::getRootPackageDir() const
 	return env.getVirtualEnvironmentPath().filePath(getPackageNameVersion());
 }
 
+QDir AbstractPackageCommand::getSourceArchivePackageDir() const
+{
+    Environment& env = getEnv();
+    if(env.isPerPackageMode()){
+        return getRootPackageDir();
+    }else{
+        return getRootPackageDir();
+    }
+}
+
 QDir AbstractPackageCommand::getSourcePackageDir() const
 {
 	Environment& env = getEnv();

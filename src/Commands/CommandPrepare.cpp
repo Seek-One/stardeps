@@ -77,14 +77,34 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
 		}else{
 			bRes = connector.git_clone(pFormula->getSCMURL(), dirWorkingCopy);
 		}
-    }else if(pFormula->getTypeSCM() == Formula::SCM_Archive){
+    }else if(pFormula->getTypeSCM() == Formula::SCM_Archive)
+    {
         ConnectorArchive conector(getEnv());
-        if(!dirWorkingCopy.exists()){
-            if(dirWorkingCopy.mkpath(".")){
-                bRes = conector.archive_download(pFormula->getSCMURL(), dirWorkingCopy);
-            }else{
-                bRes = false;
+
+        // Create archive directory
+        QDir dirArchive = getSourceArchivePackageDir();
+        if(!dirArchive.exists()){
+            bRes = dirWorkingCopy.mkpath(".");
+        }
+
+        // Download archive
+        QString szArchiveFile;
+        if(bRes){
+            QString szFileName;
+            if(pFormula->getSCMURL().endsWith("tar.gz")){
+                szFileName = getPackageNameVersion() + ".tar.gz";
             }
+            bRes = conector.archive_download(pFormula->getSCMURL(), dirArchive, szArchiveFile, szFileName);
+        }
+
+        // Extract archive directory
+        if(bRes){
+            if(!dirWorkingCopy.exists()){
+                bRes = dirWorkingCopy.mkpath(".");
+            }
+        }
+        if(bRes){
+            bRes = conector.archive_extract(szArchiveFile, dirWorkingCopy);
         }
     }
 

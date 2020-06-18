@@ -28,6 +28,7 @@ public:
 	QString getPackageNameVersion() const;
 
 	QDir getRootPackageDir() const;
+	QDir getSourceArchivePackageDir() const;
 	QDir getSourcePackageDir() const;
 	QDir getBuildPackageDir() const;
 	QDir getReleasePackageDir() const;

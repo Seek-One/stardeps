@@ -15,7 +15,8 @@ public:
     ConnectorArchive(const Environment& env);
     virtual ~ConnectorArchive();
 
-    bool archive_download(const QString& szURL, const QDir& dirWorkingDirectory);
+    bool archive_download(const QString& szURL, const QDir& dirWorkingDirectory, QString& szOutputFilePath, const QString& szOutputFileName = QString());
+    bool archive_extract(const QString& szArchiveFile, const QDir& dirWorkingDirectory);
 
 private:
     QString m_szGitCmd;
