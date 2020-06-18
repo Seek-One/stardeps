@@ -116,12 +116,12 @@ bool PackageCommandEnvironment::doProcessArgument(int i, const QString& szArg)
 	}
 
 	if(szArg.startsWith("--pkg-version=")){
-		setPackageVersion(szArg.mid(10));
+		setPackageVersion(szArg.mid(14));
 		return true;
 	}
 
 	if(szArg.startsWith("--pkg-option=")){
-		addPackageOption(szArg.mid(9));
+		addPackageOption(szArg.mid(13));
 		return true;
 	}
 
@@ -146,7 +146,7 @@ bool PackageCommandEnvironment::loadFormula(const QString& szPackageName, QShare
 {
     bool bRes = false;
 
-    QDir dir = QApplicationSettings::applicationFormulasPath().filePath(szPackageName);
+    QDir dir = getFormulasDir().filePath(szPackageName);
     QString szFileName = QString("%0.json").arg(szPackageName);
     QString szFilePath = dir.filePath(szFileName);
 

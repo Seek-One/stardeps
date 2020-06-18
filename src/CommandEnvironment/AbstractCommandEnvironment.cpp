@@ -5,6 +5,8 @@
  *      Author: ebeuque
  */
 
+#include "Global/QApplicationSettings.h"
+
 #include "Environment/EnvironmentLoader.h"
 
 #include "AbstractCommandEnvironment.h"
@@ -37,6 +39,21 @@ void AbstractCommandEnvironment::setVirtualEnvironmentPath(const QDir& dir)
 const QDir& AbstractCommandEnvironment::getVirtualEnvironmentPath() const
 {
 	return m_env.getVirtualEnvironmentPath();
+}
+
+QDir AbstractCommandEnvironment::getFormulasDir() const
+{
+    QDir dir = QApplicationSettings::applicationCustomFormulasDir();
+    if(dir != QDir()){
+        return dir;
+    }
+
+    QString szDir = m_env.getEnvVar("FORMULAS_DIR", QString());
+    if(!szDir.isEmpty()){
+        return szDir;
+    }
+
+    return QApplicationSettings::applicationDefaultFormulasDir();
 }
 
 bool AbstractCommandEnvironment::init(int argc, char**argv)

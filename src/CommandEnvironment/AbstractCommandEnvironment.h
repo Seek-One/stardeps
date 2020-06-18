@@ -27,6 +27,9 @@ public:
 	void setVirtualEnvironmentPath(const QDir& dir);
 	const QDir& getVirtualEnvironmentPath() const;
 
+    QDir getFormulasDir() const;
+
+
 // Initialization
 public:
 	bool init(int argc, char**argv);

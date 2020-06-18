@@ -32,7 +32,7 @@ public:
     static const QDir& applicationCustomFormulasDir();
     static void setApplicationCustomFormulasDir(const QDir& dir);
 
-    static QDir applicationFormulasPath();
+    static QDir applicationDefaultFormulasDir();
 
     static int applicationVerboseMode();
     static void setApplicationVerboseMode(const int iVerboseMode);

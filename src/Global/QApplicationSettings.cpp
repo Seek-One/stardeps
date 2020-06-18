@@ -52,12 +52,9 @@ void QApplicationSettings::setApplicationCustomFormulasDir(const QDir& dir)
     g_applicationCustomFormulasDir = dir;
 }
 
-QDir QApplicationSettings::applicationFormulasPath()
+QDir QApplicationSettings::applicationDefaultFormulasDir()
 {
-    if(g_applicationCustomFormulasDir == QDir()){
-        return QDir(g_applicationDataDir.filePath("formulas"));
-    }
-    return g_applicationCustomFormulasDir;
+    return QDir(g_applicationDataDir.filePath("formulas"));
 }
 
 int QApplicationSettings::applicationVerboseMode()
