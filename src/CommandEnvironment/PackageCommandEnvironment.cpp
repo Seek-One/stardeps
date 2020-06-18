@@ -144,17 +144,23 @@ bool PackageCommandEnvironment::doLoad()
 
 bool PackageCommandEnvironment::loadFormula(const QString& szPackageName, QSharedPointer<Formula>& pFormula)
 {
-	bool bRes;
+    bool bRes = false;
 
-	QDir dir = QApplicationSettings::applicationFormulasPath().filePath(szPackageName);
-	QString szFilePath = dir.filePath(QString("%0.json").arg(szPackageName));
-	qDebug("[load-env] Loading formula from file %s", qPrintable(szFilePath));
+    QDir dir = QApplicationSettings::applicationFormulasPath().filePath(szPackageName);
+    QString szFileName = QString("%0.json").arg(szPackageName);
+    QString szFilePath = dir.filePath(szFileName);
 
-	FormulaParser parser;
-	bRes = parser.parse(szFilePath);
-	if(bRes){
-		pFormula = parser.getFormula();
-	}
+    if (dir.exists(szFileName)) {
+        qDebug("[load-env] Loading formula from file %s", qPrintable(szFilePath));
+
+        FormulaParser parser;
+        bRes = parser.parse(szFilePath);
+        if (bRes) {
+            pFormula = parser.getFormula();
+        }
+    }else {
+        qCritical("[load-env] Cannot find formula file %s", qPrintable(szFilePath));
+    }
 
 	return bRes;
 }
