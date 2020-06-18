@@ -81,6 +81,10 @@ int main(int argc, char **argv)
                     szTmp = szArg.mid(10);
                     QApplicationSettings::setApplicationVerboseMode(szTmp == "full" ? 1 : 0);
                 }
+                if (szArg.startsWith("--formulas-dir")) {
+                    szTmp = szArg.mid(15);
+                    QApplicationSettings::setApplicationCustomFormulasDir(szTmp);
+                }
             }
 
         	bool bRes;
@@ -122,6 +126,8 @@ int main(int argc, char **argv)
         qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
         qDebug("       --no-shell-trace");
         qDebug("             don't display shell command trace.");
+        qDebug("       --formulas-dir=DIR");
+        qDebug("             set DIR as formula dir.");
         qDebug(" ");
 		qDebug("       --scm-tag-version=VERSION");
 		qDebug("             define the tag version in the SCM to use.");

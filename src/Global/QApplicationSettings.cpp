@@ -10,6 +10,7 @@
 QDir QApplicationSettings::g_applicationDir;
 QDir QApplicationSettings::g_applicationDataDir;
 int QApplicationSettings::g_applicationVerboseMode = 1; // full
+QDir QApplicationSettings::g_applicationCustomFormulasDir;
 
 QApplicationSettings::QApplicationSettings()
 {
@@ -41,10 +42,22 @@ void QApplicationSettings::setApplicationDataDir(const QDir& dir)
 	g_applicationDataDir = dir;
 }
 
+const QDir& QApplicationSettings::applicationCustomFormulasDir()
+{
+    return g_applicationCustomFormulasDir;
+}
+
+void QApplicationSettings::setApplicationCustomFormulasDir(const QDir& dir)
+{
+    g_applicationCustomFormulasDir = dir;
+}
 
 QDir QApplicationSettings::applicationFormulasPath()
 {
-	return QDir(g_applicationDataDir.filePath("formulas"));
+    if(g_applicationCustomFormulasDir == QDir()){
+        return QDir(g_applicationDataDir.filePath("formulas"));
+    }
+    return g_applicationCustomFormulasDir;
 }
 
 int QApplicationSettings::applicationVerboseMode()
