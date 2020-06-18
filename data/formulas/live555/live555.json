@@ -16,22 +16,38 @@
                 }
             },
             "vars": {
-                "OPTIONS::SSL":""
+                "OPTIONS::NOOPENSSL":""
             }
         },
         "no-openssl" : {
             "vars": {
-                "OPTIONS::SSL":"-no-openssl"
+                "OPTIONS::NOOPENSSL":"-no-openssl"
             }
         }
     },
     "recipes": {
+        "linux-gcc-64": {
+            "configure": [
+                "chmod -R u+rw ${PACKAGE_SRC_PATH}",
+                "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
+                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_BUILD_PATH}/config.linux${OPTIONS::NOOPENSSL}\"\"",
+                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_BUILD_PATH}/config.linux${OPTIONS::NOOPENSSL}\"\"",
+                "${PACKAGE_BUILD_PATH}/genMakefiles linux${OPTIONS::NOOPENSSL}"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}"
+            ]
+        },
         "darwin-clang-64": {
             "configure": [
                 "chmod -R u+rw ${PACKAGE_SRC_PATH}",
-                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_SRC_PATH}/config.macosx${OPTIONS::SSL}\"\"",
-                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_SRC_PATH}/config.macosx${OPTIONS::SSL}\"\"",
-                "bash -c \"\"cd ${PACKAGE_SRC_PATH} && ./genMakefiles macosx${OPTIONS::SSL}\"\""
+                "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
+                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
+                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
+                "${PACKAGE_BUILD_PATH}/genMakefiles macosx${OPTIONS::NOOPENSSL}\"\""
             ],
             "build": [
                 "bash -c \"\"cd ${PACKAGE_SRC_PATH} && ${TOOL::MAKE}\"\""
