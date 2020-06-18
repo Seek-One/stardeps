@@ -196,7 +196,7 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 			if(bRes){
 				qDebug("[load-env] required dependency is found %s", qPrintable(szFoundVersion));
 				QString szBaseVar = "DEPENDENCY::" + dependency.getPackage().toUpper() + "::";
-				addVariable(szBaseVar + "ROOTPATH", dirFoundPath.path());
+				addVariable(szBaseVar + "ROOTPATH", dirFoundPath.absolutePath());
 				addVariable(szBaseVar + "VERSION", szFoundVersion);
 			}else{
 				qWarning("[load-env] required dependency is not found");
