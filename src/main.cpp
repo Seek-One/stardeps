@@ -110,8 +110,8 @@ int main(int argc, char **argv)
         qDebug("             display application version");
         qDebug("       --help ");
         qDebug("             show help");
-        qDebug("       --no-shell-trace");
-        qDebug("             don't display shell command trace.");
+        qDebug("       --verbose=[normal,full]");
+        qDebug("             set level of verbosity.");
         qDebug(" ");
 		qDebug("  LIST OF COMMANDS: ENVIRONMENT");
 		qDebug("       createenv TARGET_PLATFORM");
