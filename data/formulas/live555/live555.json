@@ -1,0 +1,44 @@
+{
+	"name": "Live555",
+	"homepage": "https://http://www.live555.com/",
+	"scm": {
+        "type": "archive",
+        "url": "http://www.live555.com/liveMedia/public/live555-latest.tar.gz"
+    },
+    "options": {
+        "openssl" : {
+            "dependencies": {
+                "latest": {
+                    "openssl" : {"min":"1.1"}
+                },
+                "7.41": {
+                    "openssl" : {"min":"1.0", "max":"1.1"}
+                }
+            },
+            "vars": {
+                "OPTIONS::SSL":""
+            }
+        },
+        "no-openssl" : {
+            "vars": {
+                "OPTIONS::SSL":"-no-openssl"
+            }
+        }
+    },
+    "recipes": {
+        "darwin-clang-64": {
+            "configure": [
+                "chmod -R u+rw ${PACKAGE_SRC_PATH}",
+                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_SRC_PATH}/config.macosx${OPTIONS::SSL}\"\"",
+                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_SRC_PATH}/config.macosx${OPTIONS::SSL}\"\"",
+                "bash -c \"\"cd ${PACKAGE_SRC_PATH} && ./genMakefiles macosx${OPTIONS::SSL}\"\""
+            ],
+            "build": [
+                "bash -c \"\"cd ${PACKAGE_SRC_PATH} && ${TOOL::MAKE}\"\""
+            ],
+            "install": [
+                "bash -c \"\"cd ${PACKAGE_SRC_PATH} && ${TOOL::MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}\"\""
+            ]
+        }
+    }
+}
