@@ -9,6 +9,7 @@
 
 QDir QApplicationSettings::g_applicationDir;
 QDir QApplicationSettings::g_applicationDataDir;
+int QApplicationSettings::g_applicationVerboseMode = 1; // full
 
 QApplicationSettings::QApplicationSettings()
 {
@@ -44,4 +45,14 @@ void QApplicationSettings::setApplicationDataDir(const QDir& dir)
 QDir QApplicationSettings::applicationFormulasPath()
 {
 	return QDir(g_applicationDataDir.filePath("formulas"));
+}
+
+int QApplicationSettings::applicationVerboseMode()
+{
+    return g_applicationVerboseMode;
+}
+
+void QApplicationSettings::setApplicationVerboseMode(int iVerboseMode)
+{
+    g_applicationVerboseMode = iVerboseMode;
 }

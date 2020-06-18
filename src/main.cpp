@@ -70,6 +70,19 @@ int main(int argc, char **argv)
         }else if(szCommand == "help"){
             bShowUsage = true;
         }else{
+
+            QString szArg;
+            QString szTmp;
+
+            // Parse for global option
+            for(int i=0; i<argc; i++) {
+                szArg = argv[i];
+                if (szArg.startsWith("--verbose")) {
+                    szTmp = szArg.mid(10);
+                    QApplicationSettings::setApplicationVerboseMode(szTmp == "full" ? 1 : 0);
+                }
+            }
+
         	bool bRes;
         	CommandsExecutor executor;
         	bRes = executor.prepareCommands(szCommand, argc+2, argv+2);
@@ -104,12 +117,16 @@ int main(int argc, char **argv)
 		qDebug("   LIST OF ARGUMENTS");
 		qDebug("       --version=VERSION");
 		qDebug("             define the version of the package to build.");
+        qDebug(" ");
+        qDebug("       --option=OPTION");
+        qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
+        qDebug("       --no-shell-trace");
+        qDebug("             don't display shell command trace.");
+        qDebug(" ");
 		qDebug("       --scm-tag-version=VERSION");
 		qDebug("             define the tag version in the SCM to use.");
 		qDebug("       --scm-branch-version=VERSION");
 		qDebug("             define the branch version in the SCM to use.");
-		qDebug("       --option=OPTION");
-		qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
     }
 
 	return iRes;

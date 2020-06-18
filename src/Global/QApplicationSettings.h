@@ -19,6 +19,7 @@ private:
 	// Application dir
 	static QDir g_applicationDir;
 	static QDir g_applicationDataDir;
+	static int g_applicationVerboseMode;
 
 public:
 	static const QDir& applicationDir();
@@ -28,6 +29,9 @@ public:
 	static void setApplicationDataDir(const QDir& dir);
 
 	static QDir applicationFormulasPath();
+
+    static int applicationVerboseMode();
+    static void setApplicationVerboseMode(const int iVerboseMode);
 };
 
 #endif /* SRC_GLOBAL_QAPPLICATIONSETTINGS_H_ */
