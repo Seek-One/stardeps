@@ -128,12 +128,37 @@ bool PackageCommandEnvironment::doProcessArgument(int i, const QString& szArg)
 	return AbstractCommandEnvironment::doProcessArgument(i, szArg);
 }
 
-bool PackageCommandEnvironment::doLoad()
-{
-	bool bRes;
+bool PackageCommandEnvironment::doLoad() {
+    bool bRes = true;
 
-	// Load formula
-	bRes = loadFormula(m_szPackageName, m_pFormula);
+    // Setup version
+    if (getPackageVersion().isEmpty()) {
+        qDebug("[load-env] Auto detect version");
+        QList<QString> listVersions;
+        bRes = findPackageVersions(m_szPackageName, FindSource, listVersions);
+        if(listVersions.isEmpty()){
+            qCritical("[load-env] No version found for package %s", qPrintable(m_szPackageName));
+            bRes = false;
+        }else{
+            if(listVersions.count() > 1){
+                qWarning("[load-env] Multiple version found for package %s. Please use one of the following options", qPrintable(m_szPackageName));
+                QList<QString>::const_iterator iter;
+                for(iter = listVersions.constBegin(); iter != listVersions.constEnd(); ++iter){
+                    qWarning("[load-env]   --pkg-version=%s", qPrintable(*iter));
+                }
+                bRes = false;
+            }else{
+                QString szVersion = listVersions.first();
+                setPackageVersion(szVersion);
+                qDebug("[load-env] Auto-selecting version %s for package %s", qPrintable(szVersion), qPrintable(m_szPackageName));
+            }
+        }
+    }
+
+    // Load formula
+    if (bRes) {
+        bRes = loadFormula(m_szPackageName, m_pFormula);
+    }
 
 	if(bRes){
 		bRes = checkDependencies(m_pFormula);
@@ -241,4 +266,35 @@ bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& 
 	}
 
 	return bRes;
+}
+
+bool PackageCommandEnvironment::findPackageVersions(const QString& szPackageName, FindMode iMode, QList<QString>& listVersions)
+{
+    bool bRes = true;
+
+    QDir dirSearchPackage;
+
+    Environment& env = getEnv();
+    if(env.isPerPackageMode()){
+        dirSearchPackage = env.getVirtualEnvironmentPath();
+    }else{
+        if(iMode == FindSource){
+            dirSearchPackage = env.getVirtualEnvironmentSourceDir();
+        }else{
+            dirSearchPackage = env.getVirtualEnvironmentReleaseDir();
+        }
+    }
+
+    QStringList listFilters;
+    listFilters << QString("%0*").arg(szPackageName);
+    QFileInfoList listFiles = dirSearchPackage.entryInfoList(listFilters, QDir::Dirs, QDir::Name);
+
+    QFileInfoList::const_iterator iter;
+    for(iter = listFiles.constBegin(); iter != listFiles.constEnd(); ++iter) {
+        const QFileInfo &fileInfo = (*iter);
+        QString szVersion = fileInfo.fileName().remove(szPackageName + "-");
+        listVersions.append(szVersion);
+    }
+
+    return bRes;
 }

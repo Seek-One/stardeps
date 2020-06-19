@@ -48,6 +48,12 @@ private:
 	bool checkDependencies(const QSharedPointer<Formula>& pFormula);
 	bool checkDependencyPresent(const PackageDependency& dependency, QDir& pathOut, QString& szOutVersion);
 
+	enum FindMode {
+	    FindSource = 1,
+	    FondRelease = 2,
+	};
+	bool findPackageVersions(const QString& szPackageName, FindMode iMode, QList<QString>& listVersions);
+
 private:
 	QString m_szPackageName;
 	QString m_szPackageVersion;
