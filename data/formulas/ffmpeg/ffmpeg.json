@@ -1,0 +1,33 @@
+{
+	"name": "FFMPEG",
+	"homepage": "https://ffmpeg.org/",
+	"scm": {
+        "type": "git",
+        "url": "https://git.ffmpeg.org/ffmpeg.git"
+    },
+    "options": {
+        "debug" : {
+            "vars": {
+                "OPTIONS::DEBUG":"--disable-optimizations --disable-stripping"
+            }
+        },
+        "shared" : {
+            "vars": {
+                "OPTIONS::SHARED":"--enable-shared"
+            }
+        }
+    },
+    "recipes": {
+        "linux-gcc-64": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --enable-gpl --enable-nonfree --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libx264 --enable-libx265 ${OPTIONS::SHARED} ${OPTIONS::DEBUG} --prefix=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install"
+            ]
+        }
+    }
+}
