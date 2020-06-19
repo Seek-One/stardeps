@@ -50,7 +50,7 @@ private:
 
 	enum FindMode {
 	    FindSource = 1,
-	    FondRelease = 2,
+	    FindRelease = 2,
 	};
 	bool findPackageVersions(const QString& szPackageName, FindMode iMode, QList<QString>& listVersions);
 

@@ -238,34 +238,23 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 
 bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& dependency, QDir& pathOut, QString& szOutVersion)
 {
-	bool bRes = false;
+    bool bRes = false;
 
-	QDir dirSearchPackage;
+    QList<QString> listVersions;
+    bRes = findPackageVersions(m_szPackageName, FindRelease, listVersions);
 
-	Environment& env = getEnv();
-	if(env.isPerPackageMode()){
-		dirSearchPackage = env.getVirtualEnvironmentPath();
-	}else{
-		dirSearchPackage = env.getVirtualEnvironmentReleaseDir();
-	}
+    QList<QString>::const_iterator iter;
+    for(iter = listVersions.constBegin(); iter != listVersions.constEnd(); ++iter)
+    {
+        const QString& szVersion = (*iter);
+        if(VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())){
+            bRes = true;
+            pathOut = getReleasePackageDir(dependency.getPackage(), szVersion);
+            szOutVersion = szVersion;
+        }
+    }
 
-	QStringList listFilters;
-	listFilters << QString("%0*").arg(dependency.getPackage());
-	QFileInfoList listFiles = dirSearchPackage.entryInfoList(listFilters, QDir::Dirs, QDir::Name);
-
-	QFileInfoList::const_iterator iter;
-	for(iter = listFiles.constBegin(); iter != listFiles.constEnd(); ++iter)
-	{
-		const QFileInfo& fileInfo = (*iter);
-		QString szVersion = fileInfo.fileName().remove(dependency.getPackage() + "-");
-		if(VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())){
-			bRes = true;
-			pathOut = getReleasePackageDir(dependency.getPackage(), szVersion);
-			szOutVersion = szVersion;
-		}
-	}
-
-	return bRes;
+    return bRes;
 }
 
 bool PackageCommandEnvironment::findPackageVersions(const QString& szPackageName, FindMode iMode, QList<QString>& listVersions)
