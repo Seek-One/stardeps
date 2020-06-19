@@ -68,7 +68,6 @@ bool CommandPrepare::doExecute()
         if(listRecipes.contains(szTargetPlateform)){
             const FormulaRecipe& recipe = listRecipes.value(szTargetPlateform);
             const FormulaCommands& listCommands = recipe.getPrepareCommands();
-            qDebug("%d ", listCommands.count());
 
             FormulaCommands::const_iterator iter_cmd;
             for(iter_cmd = listCommands.constBegin(); iter_cmd != listCommands.constEnd(); ++iter_cmd)
