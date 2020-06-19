@@ -8,7 +8,29 @@
     "recipes": {
         "linux-gcc-64": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/config --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install"
+            ]
+        },
+        "linux-mingw-gcc-32": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/Configure mingw --cross-compile-prefix=i686-w64-mingw32- --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "${TOOL::MAKE}"
+            ],
+            "install": [
+                "${TOOL::MAKE} install"
+            ]
+        },
+        "linux-mingw-gcc-64": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/Configure mingw64 --cross-compile-prefix=x86_64-w64-mingw32- --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
                 "${TOOL::MAKE}"
@@ -20,7 +42,7 @@
         "win32-gcc": {
             "host":"linux",
             "configure": [
-                "${PACKAGE_SRC_PATH}/config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/config --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
                 "${TOOL::MAKE}"
@@ -31,7 +53,7 @@
         },
         "darwin-clang-64": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/Configure darwin64-x86_64-cc ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/Configure darwin64-x86_64-cc --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
                 "${TOOL::MAKE}"
