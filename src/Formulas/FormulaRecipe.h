@@ -22,6 +22,8 @@ public:
 	FormulaRecipe();
 	virtual ~FormulaRecipe();
 
+	void setPrepareCommands(const FormulaCommands& listCommands);
+	const FormulaCommands& getPrepareCommands() const;
 	void setConfigureCommands(const FormulaCommands& listCommands);
 	const FormulaCommands& getConfigureCommands() const;
 	void setBuildCommands(const FormulaCommands& listCommands);
@@ -30,6 +32,7 @@ public:
 	const FormulaCommands& getInstallCommands() const;
 
 private:
+	FormulaCommands m_listPrepareCommands;
 	FormulaCommands m_listConfigureCommands;
 	FormulaCommands m_listBuildCommands;
 	FormulaCommands m_listInstallCommands;

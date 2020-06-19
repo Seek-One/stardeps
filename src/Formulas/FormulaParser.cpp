@@ -238,6 +238,11 @@ bool FormulaParser::parseRecipe(const QJsonObject& objectRoot)
 		FormulaRecipe formulaRecipe;
 
 		// Recipes
+        if(bRes && objectPlatform.contains("prepare")){
+            FormulaCommands listCommands;
+            bRes = parseCommands(objectPlatform.value("prepare").toArray(), listCommands);
+            formulaRecipe.setPrepareCommands(listCommands);
+        }
 		if(bRes && objectPlatform.contains("configure")){
 			FormulaCommands listCommands;
 			bRes = parseCommands(objectPlatform.value("configure").toArray(), listCommands);

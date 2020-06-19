@@ -61,6 +61,27 @@ bool CommandPrepare::doExecute()
 		bRes = configureVersion(pFormula, dirSrcPackage);
 	}
 
+    // Execute commands
+    if(bRes){
+        const FormulaRecipeList& listRecipes = getFormula()->getRecipeList();
+        QString szTargetPlateform = getEnv().getPlatformTypeName();
+        if(listRecipes.contains(szTargetPlateform)){
+            const FormulaRecipe& recipe = listRecipes.value(szTargetPlateform);
+            const FormulaCommands& listCommands = recipe.getPrepareCommands();
+            qDebug("%d ", listCommands.count());
+
+            FormulaCommands::const_iterator iter_cmd;
+            for(iter_cmd = listCommands.constBegin(); iter_cmd != listCommands.constEnd(); ++iter_cmd)
+            {
+                bRes = doRunCommand((*iter_cmd), getSourcePackageDir());
+                if(!bRes){
+                    qCritical("[prepare] aborting prepare due to error");
+                    break;
+                }
+            }
+        }
+    }
+
 	return bRes;
 }
 

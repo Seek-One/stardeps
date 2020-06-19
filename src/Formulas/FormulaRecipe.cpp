@@ -17,6 +17,16 @@ FormulaRecipe::~FormulaRecipe()
 
 }
 
+void FormulaRecipe::setPrepareCommands(const FormulaCommands& listCommands)
+{
+    m_listPrepareCommands = listCommands;
+}
+
+const FormulaCommands& FormulaRecipe::getPrepareCommands() const
+{
+    return m_listPrepareCommands;
+}
+
 void FormulaRecipe::setConfigureCommands(const FormulaCommands& listCommands)
 {
 	m_listConfigureCommands = listCommands;
