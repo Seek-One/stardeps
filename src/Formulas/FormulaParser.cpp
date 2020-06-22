@@ -56,7 +56,7 @@ bool FormulaParser::parse(const QString& szFilePath)
 		document = QJsonDocument::fromJson(fileData, &error);
 		if(error.error != QJsonParseError::NoError){
 			bRes = false;
-			qDebug("[prepare] Error when parsing file: %s", qPrintable(error.errorString()));
+			qDebug("[prepare] Error when parsing file: %s at offset: %d", qPrintable(error.errorString()), error.offset);
 		}
 	}
 
