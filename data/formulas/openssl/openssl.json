@@ -18,32 +18,32 @@
                 "${PACKAGE_SRC_PATH}/config ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
-                "${TOOL::MAKE}"
+                "${MAKE}"
             ],
             "install": [
-                "${TOOL::MAKE} install"
+                "${MAKE} install"
             ]
         },
         "linux-mingw-gcc-32": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/Configure mingw --cross-compile-prefix=${CROSS_COMPILER_PREFIX} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/Configure mingw --cross-compile-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
-                "${TOOL::MAKE}"
+                "${MAKE}"
             ],
             "install": [
-                "${TOOL::MAKE} install"
+                "${MAKE} install"
             ]
         },
         "linux-mingw-gcc-64": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/Configure mingw64 --cross-compile-prefix=${CROSS_COMPILER_PREFIX} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/Configure mingw64 --cross-compile-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
-                "${TOOL::MAKE}"
+                "${MAKE}"
             ],
             "install": [
-                "${TOOL::MAKE} install"
+                "${MAKE} install"
             ]
         },
         "win32-gcc": {
@@ -52,10 +52,10 @@
                 "${PACKAGE_SRC_PATH}/config --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::SHARED} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
-                "${TOOL::MAKE}"
+                "${MAKE}"
             ],
             "install": [
-                "${TOOL::MAKE} install"
+                "${MAKE} install"
             ]
         },
         "darwin-clang-64": {
@@ -63,10 +63,10 @@
                 "${PACKAGE_SRC_PATH}/Configure darwin64-x86_64-cc ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
-                "${TOOL::MAKE}"
+                "${MAKE}"
             ],
             "install": [
-                "${TOOL::MAKE} install"
+                "${MAKE} install"
             ]
         }
     }

@@ -131,6 +131,13 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 	const QSharedPointer<Formula>& pFormula = getFormula();
 	const FormulaOptionList& listFormulaOptions = pFormula->getOptions();
 
+	// Add envirnoment variable
+	 const EnvironmentVars& environmentVars = env.getVars();
+	EnvironmentVars::const_iterator iter_env;
+	for(iter_env = environmentVars.constBegin(); iter_env != environmentVars.constEnd(); ++iter_env){
+	dictVars.insert(iter_env.key(), iter_env.value());
+	}
+
 	// Get command environement variables
 	const VariableList& listCmdEndVars = getCommandEnvironment()->getVariableList();
 	VariableList::const_iterator iter_var;
@@ -138,14 +145,6 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 	{
 		dictVars.insert(iter_var.key(), iter_var.value());
 	}
-
-	// Tools
-	dictVars.insert("TOOL::GIT", env.getEnvVar(VE_VAR_GIT));
-	dictVars.insert("TOOL::MAKE", env.getEnvVar(VE_VAR_MAKE));
-	dictVars.insert("TOOL::RSYNC", env.getEnvVar(VE_VAR_RSYNC));
-	dictVars.insert("TOOL::COMPILER", env.getEnvVar(VE_VAR_COMPILER));
-    dictVars.insert("TOOL:TAR", env.getEnvVar(VE_VAR_TAR));
-    dictVars.insert("TOOL:WEGT", env.getEnvVar(VE_VAR_WGET));
 
 	// Package infos
 	dictVars.insert("PACKAGE_VERSION", getPackageNameVersion());
@@ -200,6 +199,8 @@ bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szC
 	VariableList dictVars;
 
 	bRes = doInitDictVars(dictVars);
+
+    //dictVars.print();
 
 	if(bRes){
 		bRes = doReplaceVariable(szCmd, dictVars, szCmdOut);

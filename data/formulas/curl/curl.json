@@ -28,13 +28,19 @@
             "vars": {
                 "OPTIONS::SSL":"--with-darwinssl"
             }
+        },
+        "winssl" : {
+            "vars": {
+                "OPTIONS::SSL":"--with-winssl"
+            }
         }
     },
     "recipes": {
         "linux-gcc-64": {
+            "prepare": [
+                "${PACKAGE_SRC_PATH}/buildconf"
+            ],
             "configure": [
-                "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
-                "${PACKAGE_BUILD_PATH}/buildconf",
                 "${PACKAGE_BUILD_PATH}/configure --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::DEBUG} ${OPTIONS::SSL}"
             ],
             "build": [
@@ -44,17 +50,46 @@
                 "${TOOL::MAKE} install"
             ]
         },
-        "darwin-clang-64": {
+        "linux-mingw-gcc-32": {
+            "prepare": [
+                "${PACKAGE_SRC_PATH}/buildconf"
+            ],
             "configure": [
-                "${TOOL::RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
-                "${PACKAGE_BUILD_PATH}/buildconf",
+                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::DEBUG} ${OPTIONS::SSL}"
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install"
+            ]
+        },
+        "linux-mingw-gcc-64": {
+            "prepare": [
+                "${PACKAGE_SRC_PATH}/buildconf"
+            ],
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::DEBUG} ${OPTIONS::SSL}"
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install"
+            ]
+        },
+        "darwin-clang-64": {
+            "prepare": [
+                "${PACKAGE_SRC_PATH}/buildconf"
+            ],
+            "configure": [
                 "${PACKAGE_BUILD_PATH}/configure --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::DEBUG} ${OPTIONS::SSL}"
             ],
             "build": [
-                "${TOOL::MAKE}"
+                "${MAKE}"
             ],
             "install": [
-                "${TOOL::MAKE} install"
+                "${MAKE} install"
             ]
         }
     }

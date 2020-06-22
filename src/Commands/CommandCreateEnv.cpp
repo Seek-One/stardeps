@@ -139,7 +139,7 @@ bool CommandCreateEnv::findCompiler(Environment& env)
         } else {
             env.setEnvVar(VE_VAR_COMPILER, "x86_64-linux-gnu-gcc");
         }
-        env.setEnvVar(VE_VAR_CROSS_COMPILER_PREFIX, "x86_64-linux-gnu-");
+        env.setEnvVar(VE_VAR_CROSS_COMPILER_PREFIX, "x86_64-linux-gnu");
 	}else {
         if (QFile::exists("/usr/bin/gcc")) {
             env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/gcc");
