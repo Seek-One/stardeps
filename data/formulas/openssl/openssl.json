@@ -26,7 +26,7 @@
         },
         "linux-mingw-gcc-32": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/Configure mingw --cross-compile-prefix=i686-w64-mingw32- ${OPTIONS::SHARED}  --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/Configure mingw --cross-compile-prefix=${CROSS_COMPILER_PREFIX} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
                 "${TOOL::MAKE}"
@@ -37,7 +37,7 @@
         },
         "linux-mingw-gcc-64": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/Configure mingw64 --cross-compile-prefix=x86_64-w64-mingw32- ${OPTIONS::SHARED}  --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/Configure mingw64 --cross-compile-prefix=${CROSS_COMPILER_PREFIX} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
                 "${TOOL::MAKE}"

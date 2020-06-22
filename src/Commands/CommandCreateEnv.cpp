@@ -126,11 +126,27 @@ bool CommandCreateEnv::findCompiler(Environment& env)
 #elif defined(APPLE)
 	szCompiler = "xcodebuild";
 #else
-	if(QFile::exists("/usr/bin/gcc")){
-		env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/gcc");
-	}else{
-		env.setEnvVar(VE_VAR_COMPILER, "gcc");
-	}
+	if(m_szTargetPlatform == "linux-mingw-gcc-32"){
+        if (QFile::exists("/usr/bin/i686-w64-mingw32-gcc")) {
+            env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/i686-w64-mingw32-gcc");
+        } else {
+            env.setEnvVar(VE_VAR_COMPILER, "i686-w64-mingw32-gcc");
+        }
+        env.setEnvVar(VE_VAR_CROSS_COMPILER_PREFIX, "i686-w64-mingw32-gcc");
+	}else if(m_szTargetPlatform == "linux-mingw-gcc-64"){
+        if (QFile::exists("/usr/bin/x86_64-linux-gnu-gcc")) {
+            env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/x86_64-linux-gnu-gcc");
+        } else {
+            env.setEnvVar(VE_VAR_COMPILER, "x86_64-linux-gnu-gcc");
+        }
+        env.setEnvVar(VE_VAR_CROSS_COMPILER_PREFIX, "x86_64-linux-gnu-");
+	}else {
+        if (QFile::exists("/usr/bin/gcc")) {
+            env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/gcc");
+        } else {
+            env.setEnvVar(VE_VAR_COMPILER, "gcc");
+        }
+    }
 #endif
 	return true;
 }
