@@ -240,8 +240,10 @@ bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& 
 {
     bool bRes = false;
 
+    QString szDependencyPackage = dependency.getPackage();
+
     QList<QString> listVersions;
-    bRes = findPackageVersions(m_szPackageName, FindRelease, listVersions);
+    bRes = findPackageVersions(szDependencyPackage, FindRelease, listVersions);
 
     QList<QString>::const_iterator iter;
     for(iter = listVersions.constBegin(); iter != listVersions.constEnd(); ++iter)
