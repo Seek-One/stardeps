@@ -31,7 +31,32 @@
                 "${MAKE}"
             ],
             "install": [
-                "${MAKE} install"
+                "${MAKE} install",
+                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
+            ]
+        },
+        "linux-mingw-gcc-32": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} --cross-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} "
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install",
+                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
+            ]
+        },
+        "linux-mingw-gcc-64": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} --cross-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} "
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install",
+                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         }
     }
