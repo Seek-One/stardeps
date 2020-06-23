@@ -44,10 +44,10 @@
                 "${PACKAGE_BUILD_PATH}/configure --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::DEBUG} ${OPTIONS::SSL}"
             ],
             "build": [
-                "${TOOL::MAKE}"
+                "${MAKE}"
             ],
             "install": [
-                "${TOOL::MAKE} install"
+                "${MAKE} install"
             ]
         },
         "linux-mingw-gcc-32": {
