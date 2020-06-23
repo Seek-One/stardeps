@@ -97,6 +97,15 @@ bool FormulaParser::parse(const QString& szFilePath)
 			bRes = parseOptions(mainObject.value("options").toObject());
 		}
 
+        // Options
+        if(bRes && mainObject.contains("vars")){
+            FormulaVariableList listVars;
+            bRes = parseVars(mainObject.value("vars").toObject(), listVars);
+            if(bRes){
+                m_pFormula->setGlobalVariables(listVars);
+            }
+        }
+
 		// Recipes
 		if(bRes && mainObject.contains("recipes")){
 			bRes = parseRecipe(mainObject.value("recipes").toObject());

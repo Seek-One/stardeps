@@ -124,51 +124,57 @@ bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirW
 	return bRes;
 }
 
-bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
-{
-	Environment& env = getEnv();
+bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars) {
+    Environment &env = getEnv();
 
-	const QSharedPointer<Formula>& pFormula = getFormula();
-	const FormulaOptionList& listFormulaOptions = pFormula->getOptions();
+    const QSharedPointer<Formula> &pFormula = getFormula();
+    const FormulaOptionList &listFormulaOptions = pFormula->getOptions();
 
-	// Add envirnoment variable
-	 const EnvironmentVars& environmentVars = env.getVars();
-	EnvironmentVars::const_iterator iter_env;
-	for(iter_env = environmentVars.constBegin(); iter_env != environmentVars.constEnd(); ++iter_env){
-	dictVars.insert(iter_env.key(), iter_env.value());
-	}
+    // Add envirnoment variable
+    const EnvironmentVars &environmentVars = env.getVars();
+    EnvironmentVars::const_iterator iter_env;
+    for (iter_env = environmentVars.constBegin(); iter_env != environmentVars.constEnd(); ++iter_env) {
+        dictVars.insert(iter_env.key(), iter_env.value());
+    }
 
-	// Get command environement variables
-	const VariableList& listCmdEndVars = getCommandEnvironment()->getVariableList();
-	VariableList::const_iterator iter_var;
-	for(iter_var = listCmdEndVars.constBegin(); iter_var != listCmdEndVars.constEnd(); ++iter_var)
-	{
-		dictVars.insert(iter_var.key(), iter_var.value());
-	}
+    // Get command environement variables
+    const VariableList &listCmdEndVars = getCommandEnvironment()->getVariableList();
+    VariableList::const_iterator iter_var;
+    for (iter_var = listCmdEndVars.constBegin(); iter_var != listCmdEndVars.constEnd(); ++iter_var) {
+        dictVars.insert(iter_var.key(), iter_var.value());
+    }
 
-	// Package infos
-	dictVars.insert("PACKAGE_VERSION", getPackageNameVersion());
-	dictVars.insert("PACKAGE_SRC_PATH", getSourcePackageDir().absolutePath());
-	dictVars.insert("PACKAGE_BUILD_PATH", getBuildPackageDir().absolutePath());
-	dictVars.insert("PACKAGE_PREFIX_PATH", getReleasePackageDir().absolutePath());
+    // Package infos
+    dictVars.insert("PACKAGE_VERSION", getPackageNameVersion());
+    dictVars.insert("PACKAGE_SRC_PATH", getSourcePackageDir().absolutePath());
+    dictVars.insert("PACKAGE_BUILD_PATH", getBuildPackageDir().absolutePath());
+    dictVars.insert("PACKAGE_PREFIX_PATH", getReleasePackageDir().absolutePath());
 
-	// Formula options variable
-	const QStringList& listOptions = getPackageOptions();
-	QStringList::const_iterator iter;
-	for(iter = listOptions.constBegin(); iter != listOptions.constEnd(); ++iter)
-	{
-		const FormulaOption& formulaOption = listFormulaOptions.getOptionByName(*iter);
-		if(!formulaOption.isNull()){
-			const FormulaVariableList& listOptionsVars = formulaOption.getVariableList();
-			FormulaVariableList::const_iterator iter_var;
-			for(iter_var = listOptionsVars.constBegin(); iter_var != listOptionsVars.constEnd(); ++iter_var)
-			{
-				QString szNewValue;
-				doReplaceVariable(iter_var.value(), dictVars, szNewValue);
-				dictVars.insert(iter_var.key(), szNewValue);
-			}
-		}
-	}
+    // Formula options variable
+    const QStringList &listOptions = getPackageOptions();
+    QStringList::const_iterator iter;
+    for (iter = listOptions.constBegin(); iter != listOptions.constEnd(); ++iter) {
+        const FormulaOption &formulaOption = listFormulaOptions.getOptionByName(*iter);
+        if (!formulaOption.isNull()) {
+            const FormulaVariableList &listOptionsVars = formulaOption.getVariableList();
+            FormulaVariableList::const_iterator iter_var;
+            for (iter_var = listOptionsVars.constBegin(); iter_var != listOptionsVars.constEnd(); ++iter_var) {
+                QString szNewValue;
+                doReplaceVariable(iter_var.value(), dictVars, szNewValue);
+                dictVars.insert(iter_var.key(), szNewValue);
+            }
+        }
+    }
+
+    // Global formulas vars
+    {
+        const FormulaVariableList &listGlobalVars = pFormula->getGlobalVariables();
+        for (iter_var = listGlobalVars.constBegin(); iter_var != listGlobalVars.constEnd(); ++iter_var) {
+            QString szNewValue;
+            doReplaceVariable(iter_var.value(), dictVars, szNewValue);
+            dictVars.insert(iter_var.key(), szNewValue);
+        }
+    }
 
 	return true;
 }

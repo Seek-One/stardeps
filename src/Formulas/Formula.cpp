@@ -111,6 +111,16 @@ const FormulaOptionList& Formula::getOptions() const
 	return m_listOptions;
 }
 
+void Formula::setGlobalVariables(const FormulaVariableList& listVars)
+{
+    m_listGlobalVars = listVars;
+}
+
+const FormulaVariableList& Formula::getGlobalVariables() const
+{
+    return m_listGlobalVars;
+}
+
 void Formula::addRecipe(const QString& szTargetPlateform, const FormulaRecipe& recipe)
 {
 	m_listRecipes.insert(szTargetPlateform, recipe);

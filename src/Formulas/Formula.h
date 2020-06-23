@@ -51,6 +51,9 @@ public:
 	void addOption(const FormulaOption& option);
 	const FormulaOptionList& getOptions() const;
 
+	void setGlobalVariables(const FormulaVariableList& listVars);
+    const FormulaVariableList& getGlobalVariables() const;
+
 	void addRecipe(const QString& szTargetPlateform, const FormulaRecipe& recipe);
 	const FormulaRecipeList& getRecipeList() const;
 
@@ -63,8 +66,8 @@ private:
 
 	FormulaDependenciesList m_listDependencies;
 	FormulaOptionList m_listOptions;
+    FormulaVariableList m_listGlobalVars;
 	FormulaRecipeList m_listRecipes;
-
 };
 
 #endif /* SRC_FORMULAS_FORMULA_H_ */
