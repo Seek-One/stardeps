@@ -28,42 +28,42 @@ CommandCreateEnv::~CommandCreateEnv()
 
 void CommandCreateEnv::setTargetPlatform(const QString& szTargetPlatform)
 {
-	m_szTargetPlatform = szTargetPlatform;
+    m_szTargetPlatform = szTargetPlatform;
 }
 
 
 bool CommandCreateEnv::doProcessArgument(int i, const QString& szArg)
 {
-	if(i == 0){
-		setTargetPlatform(szArg);
-	}
-	return AbstractCommand::doProcessArgument(i, szArg);
+    if(i == 0){
+        setTargetPlatform(szArg);
+    }
+    return AbstractCommand::doProcessArgument(i, szArg);
 }
 
 bool CommandCreateEnv::doExecute()
 {
-	bool bRes = true;
+    bool bRes = true;
 
-	QString szHost;
-	QString szArch;
+    QString szHost;
+    QString szArch;
 
-	Environment env;
-	env.setEnvVar(VE_VAR_TARGET_PLATFORM, m_szTargetPlatform);
-	Platform::Type iPlateformType = Platform::fromString(m_szTargetPlatform);
-	env.setPlatformType(iPlateformType);
+    Environment env;
+    env.setEnvVar(VE_VAR_TARGET_PLATFORM, m_szTargetPlatform);
+    Platform::Type iPlateformType = Platform::fromString(m_szTargetPlatform);
+    env.setPlatformType(iPlateformType);
 
-	if(bRes){
-		bRes = findGit(env);
-	}
-	if(bRes){
-		bRes = findMake(env);
-	}
-	if(bRes){
-		bRes = findRSync(env);
-	}
-	if(bRes){
-		bRes = findCompiler(env);
-	}
+    if(bRes){
+        bRes = findGit(env);
+    }
+    if(bRes){
+        bRes = findMake(env);
+    }
+    if(bRes){
+        bRes = findRSync(env);
+    }
+    if(bRes){
+        bRes = findCompiler(env);
+    }
     if(bRes){
         bRes = findTar(env);
     }
@@ -71,78 +71,85 @@ bool CommandCreateEnv::doExecute()
         bRes = findWget(env);
     }
 
-	QDir dirVE = getVirtualEnvironmentPath();
-	QString szFilePath = dirVE.filePath("ve.env");
+    QDir dirVE = getVirtualEnvironmentPath();
+    QString szFilePath = dirVE.filePath("ve.env");
 
-	QDir dstPath = getVirtualEnvironmentPath();
+    QDir dstPath = getVirtualEnvironmentPath();
 
-	QString szLine;
-	QFile file(szFilePath);
-	if(!file.exists()){
-		bRes = file.open(QIODevice::WriteOnly);
-		if(bRes){
-			const EnvironmentVars& listVars = env.getVars();
-			EnvironmentVars::const_iterator iter;
-			for(iter = listVars.constBegin(); iter != listVars.constEnd(); ++iter){
-				szLine = QString("%0=%1\n").arg(iter.key()).arg(iter.value());
-				file.write(szLine.toUtf8());
-			}
-			file.close();
-		}else{
-			qCritical("[createenv] Unable to create environment file");
-		}
-	}else{
-		qCritical("[createenv] Environment file already exists");
-	}
+    // Pkg-config path
+    QDir pathPkgConfig = getVirtualEnvironmentPath().filePath(".pkgconfig-files");
+    if(bRes && !pathPkgConfig.exists()){
+        bRes = pathPkgConfig.mkpath(".");
+    }
+    env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, pathPkgConfig.absolutePath());
 
-	return bRes;
+    QString szLine;
+    if(bRes){
+        QFile file(szFilePath);
+        if (!file.exists()) {
+            bRes = file.open(QIODevice::WriteOnly);
+            if (bRes) {
+                const EnvironmentVars &listVars = env.getVars();
+                EnvironmentVars::const_iterator iter;
+                for (iter = listVars.constBegin(); iter != listVars.constEnd(); ++iter) {
+                    szLine = QString("%0=%1\n").arg(iter.key()).arg(iter.value());
+                    file.write(szLine.toUtf8());
+                }
+                file.close();
+            } else {
+                qCritical("[createenv] Unable to create environment file");
+            }
+        } else {
+            qCritical("[createenv] Environment file already exists");
+        }
+    }
+
+    return bRes;
 }
 
 bool CommandCreateEnv::findGit(Environment& env)
 {
 #ifdef WIN32
-	if(QFile::exists("/usr/bin/git")){
+    if(QFile::exists("/usr/bin/git")){
 		env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
 	}else{
 		qWarning("[env] git is not found");
 	}
 #else
-	if(QFile::exists("/usr/bin/git")){
-		env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
-	}else{
-		env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
-	}
+    if(QFile::exists("/usr/bin/git")){
+        env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
+    }else{
+        env.setEnvVar(VE_VAR_GIT, "/usr/bin/git");
+    }
 #endif
-	return true;
+    return true;
 }
 
 bool CommandCreateEnv::findCompiler(Environment& env)
 {
-	QString szCompiler;
+    QString szCompiler;
 
-	// Detect compiler
+    // Detect compiler
 #ifdef WIN32
-	szCompiler = "msbuild.exe";
+    szCompiler = "msbuild.exe";
 #elif defined(APPLE)
-	szCompiler = "xcodebuild";
+    szCompiler = "xcodebuild";
 #else
-	if(m_szTargetPlatform == "linux-mingw-gcc-32"){
+    if(m_szTargetPlatform == "linux-mingw-gcc-32"){
         if (QFile::exists("/usr/bin/i686-w64-mingw32-gcc")) {
             env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/i686-w64-mingw32-gcc");
-            env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, "/usr/i686-w64-mingw32/lib/pkgconfig");
         } else {
             env.setEnvVar(VE_VAR_COMPILER, "i686-w64-mingw32-gcc");
         }
         env.setEnvVar(VE_VAR_CROSS_COMPIL_PREFIX, "i686-w64-mingw32");
-	}else if(m_szTargetPlatform == "linux-mingw-gcc-64"){
+    }else if(m_szTargetPlatform == "linux-mingw-gcc-64"){
         if (QFile::exists("/usr/bin/x86_64-linux-gnu-gcc")) {
             env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/x86_64-linux-gnu-gcc");
-            env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, "/usr/x86_64-w64-mingw32/lib/pkgconfig");
         } else {
             env.setEnvVar(VE_VAR_COMPILER, "x86_64-linux-gnu-gcc");
         }
         env.setEnvVar(VE_VAR_CROSS_COMPIL_PREFIX, "x86_64-linux-gnu");
-	}else {
+    }else {
         if (QFile::exists("/usr/bin/gcc")) {
             env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/gcc");
         } else {
@@ -150,27 +157,27 @@ bool CommandCreateEnv::findCompiler(Environment& env)
         }
     }
 #endif
-	return true;
+    return true;
 }
 
 bool CommandCreateEnv::findMake(Environment& env)
 {
-	if(QFile::exists("/usr/bin/make")){
-		env.setEnvVar(VE_VAR_MAKE, "/usr/bin/make");
-	}else{
-		env.setEnvVar(VE_VAR_MAKE, "make");
-	}
-	return true;
+    if(QFile::exists("/usr/bin/make")){
+        env.setEnvVar(VE_VAR_MAKE, "/usr/bin/make");
+    }else{
+        env.setEnvVar(VE_VAR_MAKE, "make");
+    }
+    return true;
 }
 
 bool CommandCreateEnv::findRSync(Environment& env)
 {
-	if(QFile::exists("/usr/bin/rsync")){
-		env.setEnvVar(VE_VAR_RSYNC, "/usr/bin/rsync");
-	}else{
-		env.setEnvVar(VE_VAR_RSYNC, "rsync");
-	}
-	return true;
+    if(QFile::exists("/usr/bin/rsync")){
+        env.setEnvVar(VE_VAR_RSYNC, "/usr/bin/rsync");
+    }else{
+        env.setEnvVar(VE_VAR_RSYNC, "rsync");
+    }
+    return true;
 }
 
 bool CommandCreateEnv::findTar(Environment& env)
