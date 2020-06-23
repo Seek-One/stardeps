@@ -15,12 +15,49 @@
             "vars": {
                 "OPTIONS::SHARED":"--enable-shared"
             }
+        },
+        "video" : {
+            "vars": {
+                "OPTIONS::VIDEO":"--enable-libx264 --enable-libx265"
+            }
+        },
+        "audio" : {
+            "vars": {
+                "OPTIONS::AUDIO":"--enable-libass --enable-libfdk-aac"
+            }
+        },
+        "text" : {
+            "vars": {
+                "OPTIONS::TEXT":"--enable-libfreetype"
+            }
         }
     },
     "recipes": {
         "linux-gcc-64": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/configure --enable-gpl --enable-nonfree --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libx264 --enable-libx265 ${OPTIONS::SHARED} ${OPTIONS::DEBUG} --prefix=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/configure --enable-gpl --enable-nonfree ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::VIDEO} ${OPTIONS::AUDIO} ${OPTIONS::TEXT} --prefix=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install"
+            ]
+        },
+        "linux-mingw-gcc-32": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --enable-gpl --enable-nonfree --arch=x86 --target-os=mingw32 --cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::VIDEO} ${OPTIONS::AUDIO} ${OPTIONS::TEXT} --prefix=${PACKAGE_PREFIX_PATH}"
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install"
+            ]
+        },
+        "linux-mingw-gcc-64": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --enable-gpl --enable-nonfree --arch=x86_64 --target-os=mingw64 --cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::VIDEO} ${OPTIONS::AUDIO} ${OPTIONS::TEXT} --prefix=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
                 "${MAKE}"
@@ -31,7 +68,7 @@
         },
         "darwin-clang-64": {
             "configure": [
-                "${PACKAGE_SRC_PATH}/configure --enable-gpl --enable-nonfree --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libx264 --enable-libx265 ${OPTIONS::SHARED} ${OPTIONS::DEBUG} --prefix=${PACKAGE_PREFIX_PATH}"
+                "${PACKAGE_SRC_PATH}/configure --enable-gpl --enable-nonfree ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::VIDEO} ${OPTIONS::AUDIO} ${OPTIONS::TEXT} --prefix=${PACKAGE_PREFIX_PATH}"
             ],
             "build": [
                 "${MAKE}"
