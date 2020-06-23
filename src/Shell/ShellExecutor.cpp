@@ -21,6 +21,11 @@ ShellExecutor::~ShellExecutor()
 
 }
 
+void ShellExecutor::setEnvironmentVariableList(const VariableList& listVars)
+{
+    m_listEnvVars = listVars;
+}
+
 bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& listArgs, const QDir& dirWorkingDirectory) {
     bool bRes = false;
 
@@ -29,6 +34,21 @@ bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& list
     if (dirWorkingDirectory != QDir()) {
         process.setWorkingDirectory(dirWorkingDirectory.path());
     }
+
+    // Setup env variable
+    QProcessEnvironment processEnvironment = QProcessEnvironment::systemEnvironment();
+    VariableList::const_iterator iter_var;
+    for(iter_var = m_listEnvVars.constBegin(); iter_var != m_listEnvVars.constEnd(); ++iter_var){
+        processEnvironment.insert(iter_var.key(), iter_var.value());
+    }
+    process.setProcessEnvironment(processEnvironment);
+    /*
+    QStringList listProcessEnv = processEnvironment.toStringList();
+    QStringList::const_iterator iter;
+    for(iter = listProcessEnv.constBegin(); iter != listProcessEnv.constEnd(); ++iter) {
+        qDebug("%s", qPrintable(*iter));
+    }
+    */
 
     connect(&process, SIGNAL(readyReadStandardOutput()), this, SLOT(readCommandAllStandardOutput()));
     connect(&process, SIGNAL(readyReadStandardError()), this, SLOT(readCommandAllStandardError()));

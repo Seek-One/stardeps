@@ -129,17 +129,19 @@ bool CommandCreateEnv::findCompiler(Environment& env)
 	if(m_szTargetPlatform == "linux-mingw-gcc-32"){
         if (QFile::exists("/usr/bin/i686-w64-mingw32-gcc")) {
             env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/i686-w64-mingw32-gcc");
+            env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, "/usr/i686-w64-mingw32/lib/pkgconfig");
         } else {
             env.setEnvVar(VE_VAR_COMPILER, "i686-w64-mingw32-gcc");
         }
-        env.setEnvVar(VE_VAR_CROSS_COMPILER_PREFIX, "i686-w64-mingw32-gcc");
+        env.setEnvVar(VE_VAR_CROSS_COMPIL_PREFIX, "i686-w64-mingw32");
 	}else if(m_szTargetPlatform == "linux-mingw-gcc-64"){
         if (QFile::exists("/usr/bin/x86_64-linux-gnu-gcc")) {
             env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/x86_64-linux-gnu-gcc");
+            env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, "/usr/x86_64-w64-mingw32/lib/pkgconfig");
         } else {
             env.setEnvVar(VE_VAR_COMPILER, "x86_64-linux-gnu-gcc");
         }
-        env.setEnvVar(VE_VAR_CROSS_COMPILER_PREFIX, "x86_64-linux-gnu");
+        env.setEnvVar(VE_VAR_CROSS_COMPIL_PREFIX, "x86_64-linux-gnu");
 	}else {
         if (QFile::exists("/usr/bin/gcc")) {
             env.setEnvVar(VE_VAR_COMPILER, "/usr/bin/gcc");

@@ -30,6 +30,16 @@ AbstractCommandEnvironment* AbstractCommand::getCommandEnvironment() const
 	return m_pCommandEnvironment;
 }
 
+Environment& AbstractCommand::getEnv()
+{
+    return m_pCommandEnvironment->getEnv();
+}
+
+const Environment& AbstractCommand::getEnv() const
+{
+    return m_pCommandEnvironment->getEnv();
+}
+
 const QDir& AbstractCommand::getVirtualEnvironmentPath() const
 {
 	return getCommandEnvironment()->getVirtualEnvironmentPath();
@@ -61,6 +71,10 @@ bool AbstractCommand::doProcessArgument(int i, const QString& szArg)
 bool AbstractCommand::execute()
 {
 	bool bRes;
+
+    const Environment& env = getEnv();
+
+	m_shell.setEnvironmentVariableList(env.getVars());
 
 	bRes = doExecute();
 

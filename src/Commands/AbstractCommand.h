@@ -27,6 +27,9 @@ public:
 	void setCommandEnvironment(AbstractCommandEnvironment* pCmdEnd);
 	AbstractCommandEnvironment* getCommandEnvironment() const;
 
+    Environment& getEnv();
+    const Environment& getEnv() const;
+
 	const QDir& getVirtualEnvironmentPath() const;
 
 	bool init(int argc, char**argv);

@@ -13,8 +13,9 @@
 #include <QMap>
 
 #include "Platform/Platform.h"
+#include "Variable/VariableList.h"
 
-typedef	QMap<QString, QString> EnvironmentVars;
+typedef	VariableList EnvironmentVars;
 
 class Environment {
 public:
