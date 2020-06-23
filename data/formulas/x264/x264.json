@@ -1,0 +1,38 @@
+{
+	"name": "x264",
+	"homepage": "http://www.videolan.org/developers/x264.html",
+	"scm": {
+        "type": "git",
+        "url": "https://code.videolan.org/videolan/x264.git"
+    },
+    "options": {
+        "debug" : {
+            "vars": {
+                "OPTIONS::DEBUG":"--enable-debug"
+            }
+        },
+        "static" : {
+            "vars": {
+                "OPTIONS::STATIC":"--enable-static"
+            }
+        },
+        "shared" : {
+            "vars": {
+                "OPTIONS::SHARED":"--enable-shared"
+            }
+        }
+    },
+    "recipes": {
+        "linux-gcc-64": {
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure ${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} "
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install"
+            ]
+        }
+    }
+}

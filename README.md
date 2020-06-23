@@ -126,9 +126,9 @@ You can use the following OPTIONS:
 
 Package are described in a JSON file called formula.
 
-* TOOL::GIT
-* TOOL::MAKE
-* TOOL::RSYNC
+* GIT
+* MAKE
+* RSYNC
 
 ## Supported package
 
