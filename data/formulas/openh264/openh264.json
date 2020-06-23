@@ -30,10 +30,10 @@
                 "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
             ],
             "build": [
-                "${MAKE} ARCH=i386 OS=mingw_nt CC=${CROSS_COMPIL_PREFIX}-gcc CXX=${CROSS_COMPIL_PREFIX}-g++ AR=${CROSS_COMPIL_PREFIX}-ar ${OPTIONS::DEBUG}"
+                "${MAKE} ARCH=i386 OS=mingw_nt CC=${CROSS_COMPIL_PREFIX}-gcc CXX=${CROSS_COMPIL_PREFIX}-g++ AR=${CROSS_COMPIL_PREFIX}-ar LD=${CROSS_COMPIL_PREFIX}-ld ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}"
             ],
             "install": [
-                "${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}",
+                "${MAKE} install ARCH=i386 OS=mingw_nt CC=${CROSS_COMPIL_PREFIX}-gcc CXX=${CROSS_COMPIL_PREFIX}-g++ AR=${CROSS_COMPIL_PREFIX}-ar LD=${CROSS_COMPIL_PREFIX}-ld ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}",
                 "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         },
@@ -42,10 +42,10 @@
                 "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
             ],
             "build": [
-                "${MAKE} ARCH=x86_64 OS=mingw_nt ${OPTIONS::DEBUG}"
+                "${MAKE} ARCH=x86_64 OS=mingw_nt ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}"
             ],
             "install": [
-                "${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}",
+                "${MAKE} install RCH=x86_64 OS=mingw_nt ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}",
                 "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         }
