@@ -244,15 +244,16 @@ bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& 
 
     QList<QString> listVersions;
     bRes = findPackageVersions(szDependencyPackage, FindRelease, listVersions);
-
-    QList<QString>::const_iterator iter;
-    for(iter = listVersions.constBegin(); iter != listVersions.constEnd(); ++iter)
-    {
-        const QString& szVersion = (*iter);
-        if(VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())){
-            bRes = true;
-            pathOut = getReleasePackageDir(dependency.getPackage(), szVersion);
-            szOutVersion = szVersion;
+    if(bRes) {
+        bRes = false;
+        QList<QString>::const_iterator iter;
+        for (iter = listVersions.constBegin(); iter != listVersions.constEnd(); ++iter) {
+            const QString &szVersion = (*iter);
+            if (VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())) {
+                bRes = true;
+                pathOut = getReleasePackageDir(dependency.getPackage(), szVersion);
+                szOutVersion = szVersion;
+            }
         }
     }
 
