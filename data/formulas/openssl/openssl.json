@@ -51,12 +51,14 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${PKG_CONFIG_LIBDIR}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libcrypto.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libssl.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openssl.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/fribidi.pc"
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libcrypto.pc ${PKG_CONFIG_LIBDIR}/libssl.pc ${PKG_CONFIG_LIBDIR}/openssl.pc"
         }
     ]
 }
