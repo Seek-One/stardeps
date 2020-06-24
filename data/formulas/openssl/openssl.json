@@ -12,62 +12,51 @@
             }
         }
     },
-    "recipes": {
-        "linux-gcc-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/config ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
+    "vars":{
+        "CONFIGURE_OPTIONS":"${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--cross-compile-prefix=${CROSS_COMPIL_PREFIX}-"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/config ${CONFIGURE_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":"${PACKAGE_SRC_PATH}/Configure mingw ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/Configure mingw64 ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"darwin-clang-64",
+            "cmd":"${PACKAGE_SRC_PATH}/Configure darwin64-x86_64-cc ${CONFIGURE_OPTIONS}"
+        },
+        {
+            "step":"build",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":"${MAKE} CC=${CROSS_COMPIL_PREFIX}-gcc"
+        },
+        {
+            "step":"build",
+            "platforms":"linux-mingw-gcc-64,linux-gcc-64,darwin-clang-64",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
-        "linux-mingw-gcc-32": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/Configure mingw --cross-compile-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
-        },
-        "linux-mingw-gcc-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/Configure mingw64 --cross-compile-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
-        },
-        "win32-gcc": {
-            "host":"linux",
-            "configure": [
-                "${PACKAGE_SRC_PATH}/config --prefix=${PACKAGE_PREFIX_PATH} ${OPTIONS::SHARED} --openssldir=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
-        },
-        "darwin-clang-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/Configure darwin64-x86_64-cc ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/fribidi.pc"
         }
-    }
+    ]
 }
