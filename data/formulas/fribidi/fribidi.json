@@ -20,26 +20,35 @@
     "vars":{
         "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED}"
     },
-    "recipe": [{
-        "configure": {
+    "recipe": [
+        {
+            "step":"configure",
             "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
-        }},{
-        "configure": {
+        },
+        {
+            "step":"configure",
             "platforms":"linux-gcc-64",
             "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
-        }},{
-        "configure": {
+        },
+        {
+            "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
             "cmd":"${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
-        }},{
-        "build": {
+        },
+        {
+            "step":"build",
             "cmd":"${MAKE}"
-        }},{
-        "install": {
-            "cmd":[
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${PKG_CONFIG_LIBDIR}/"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
-        }}
+        },
+        {
+            "step":"clean",
+            "cmd":"rm ${PKG_CONFIG_LIBDIR}/fribidi.pc"
+        }
     ]
 }
