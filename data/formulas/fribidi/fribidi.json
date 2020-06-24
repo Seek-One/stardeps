@@ -18,7 +18,8 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED}"
+        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
     },
     "recipe": [
         {
@@ -28,12 +29,15 @@
         {
             "step":"configure",
             "platforms":"linux-gcc-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
         },
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+            "cmd":[
+                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}",
+                "bash -c \"\"sed -i 's/$(AM_V_GEN)/$(AM_V_GEN) wine/g' ${PACKAGE_BUILD_PATH}/gen.tab/Makefile\"\""
+            ]
         },
         {
             "step":"build",
