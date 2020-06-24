@@ -23,53 +23,37 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED} --disable-fribidi"
+        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED}"
     },
-    "recipes": {
-        "linux-gcc-64": {
-            "prepare": [
-                "${PACKAGE_SRC_PATH}/autogen.sh "
-            ],
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
+    "recipe": [
+        {
+            "step":"configure",
+            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libass.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
-        "linux-mingw-gcc-32": {
-            "prepare": [
-                "${PACKAGE_SRC_PATH}/autogen.sh "
-            ],
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
-        },
-        "linux-mingw-gcc-64": {
-            "prepare": [
-                "${PACKAGE_SRC_PATH}/autogen.sh "
-            ],
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libass.pc"
         }
-    }
+    ]
 }
