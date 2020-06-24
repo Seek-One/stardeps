@@ -1,0 +1,45 @@
+{
+	"name": "fribidi",
+	"homepage": "https://github.com/fribidi/fribidi",
+	"scm": {
+        "type": "git",
+        "url": "https://github.com/fribidi/fribidi.git"
+    },
+    "options": {
+        "static" : {
+            "vars": {
+                "OPTIONS::STATIC":"--enable-static"
+            }
+        },
+        "shared" : {
+            "vars": {
+                "OPTIONS::SHARED":"--enable-shared"
+            }
+        }
+    },
+    "vars":{
+        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED}"
+    },
+    "recipe": [{
+        "configure": {
+            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
+        }},{
+        "configure": {
+            "platforms":"linux-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+        }},{
+        "configure": {
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+        }},{
+        "build": {
+            "cmd":"${MAKE}"
+        }},{
+        "install": {
+            "cmd":[
+                "${MAKE} install",
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${PKG_CONFIG_LIBDIR}/"
+            ]
+        }}
+    ]
+}
