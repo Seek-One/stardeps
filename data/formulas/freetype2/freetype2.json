@@ -1,0 +1,70 @@
+{
+	"name": "freetype2",
+	"homepage": "https://www.freetype.org/",
+	"scm": {
+        "type": "git",
+        "url": "https://git.savannah.gnu.org/git/freetype/freetype2.git"
+    },
+    "options": {
+        "static" : {
+            "vars": {
+                "OPTIONS::STATIC":"--enable-static"
+            }
+        },
+        "shared" : {
+            "vars": {
+                "OPTIONS::SHARED":"--enable-shared"
+            }
+        }
+    },
+    "vars":{
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED}"
+    },
+    "recipes": {
+        "linux-gcc-64": {
+            "prepare": [
+                "${PACKAGE_SRC_PATH}/autogen.sh "
+            ],
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install",
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
+            ]
+        },
+        "linux-mingw-gcc-32": {
+            "prepare": [
+                "${PACKAGE_SRC_PATH}/autogen.sh "
+            ],
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install",
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
+            ]
+        },
+        "linux-mingw-gcc-64": {
+            "prepare": [
+                "${PACKAGE_SRC_PATH}/autogen.sh "
+            ],
+            "configure": [
+                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
+            ],
+            "build": [
+                "${MAKE}"
+            ],
+            "install": [
+                "${MAKE} install",
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
+            ]
+        }
+    }
+}

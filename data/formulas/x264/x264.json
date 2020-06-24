@@ -32,7 +32,7 @@
             ],
             "install": [
                 "${MAKE} install",
-                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         },
         "linux-mingw-gcc-32": {
@@ -44,7 +44,7 @@
             ],
             "install": [
                 "${MAKE} install",
-                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         },
         "linux-mingw-gcc-64": {
@@ -56,7 +56,7 @@
             ],
             "install": [
                 "${MAKE} install",
-                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         }
     }

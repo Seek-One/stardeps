@@ -22,7 +22,7 @@
             ],
             "install": [
                 "${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}",
-                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         },
         "linux-mingw-gcc-32": {
@@ -34,7 +34,7 @@
             ],
             "install": [
                 "${MAKE} install ARCH=i386 OS=mingw_nt CC=${CROSS_COMPIL_PREFIX}-gcc CXX=${CROSS_COMPIL_PREFIX}-g++ AR=${CROSS_COMPIL_PREFIX}-ar LD=${CROSS_COMPIL_PREFIX}-ld ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}",
-                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         },
         "linux-mingw-gcc-64": {
@@ -46,7 +46,7 @@
             ],
             "install": [
                 "${MAKE} install RCH=x86_64 OS=mingw_nt ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}",
-                "ln -sf ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
+                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
             ]
         }
     }
