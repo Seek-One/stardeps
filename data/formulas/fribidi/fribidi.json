@@ -48,7 +48,7 @@
         },
         {
             "step":"clean",
-            "cmd":"rm ${PKG_CONFIG_LIBDIR}/fribidi.pc"
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/fribidi.pc"
         }
     ]
 }

@@ -14,6 +14,7 @@
 #include "Commands/CommandConfigure.h"
 #include "Commands/CommandBuild.h"
 #include "Commands/CommandInstall.h"
+#include "Commands/CommandClean.h"
 
 #include "CommandsExecutor.h"
 
@@ -59,6 +60,9 @@ bool CommandsExecutor::prepareCommands(const QString& szCommand, int argc, char*
     }else if(szCommand == "install"){
 		pCommand = new CommandInstall();
 		bPackageCommand = true;
+    }else if(szCommand == "clean"){
+        pCommand = new CommandClean();
+        bPackageCommand = true;
     }
 
 	if(pCommand){

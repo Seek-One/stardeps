@@ -174,6 +174,8 @@ set(APPLICATION_SOURCES
     src/Commands/AbstractPackageCommand.h
     src/Commands/CommandBuild.cpp
     src/Commands/CommandBuild.h
+    src/Commands/CommandClean.cpp
+    src/Commands/CommandClean.h
     src/Commands/CommandConfigure.cpp
     src/Commands/CommandConfigure.h
     src/Commands/CommandCreateEnv.cpp
