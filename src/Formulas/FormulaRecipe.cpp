@@ -47,26 +47,9 @@ FormulaStepActionList FormulaRecipe::getFormulaStepActionList(const QString& szS
             bAcceptStep = formulaStep.acceptPlatform(szPlatform);
         }
 
+        // Add steps to the list
         if(bAcceptStep){
-
-            const FormulaStepActionList& formulaStepActionList = formulaStep.getFormulaStepActionList();
-
-            FormulaStepActionList::const_iterator iter_action;
-            for(iter_action = formulaStepActionList.constBegin(); iter_action != formulaStepActionList.constEnd(); ++iter_action)
-            {
-                const FormulaStepAction& formulaStepAction = (*iter_action);
-
-                bool bAccept = true;
-
-                // Don't include platforms step
-                if(formulaStepAction.getActionType() == FormulaStepAction::ActionPlatforms){
-                    bAccept = false;
-                }
-
-                if(bAccept) {
-                    listFormulaStepActionResult.append(formulaStepAction);
-                }
-            }
+            listFormulaStepActionResult.append(formulaStep.getFormulaStepActionList());
         }
     }
 

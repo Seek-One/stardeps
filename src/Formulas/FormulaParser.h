@@ -13,6 +13,8 @@
 
 class Formula;
 class FormulaStep;
+class FormulaStepAction;
+class FormulaStepActionList;
 class FormulaCommands;
 class FormulaDependenciesList;
 class FormulaVariableList;
@@ -34,6 +36,8 @@ private:
 	bool parseRecipes(const QJsonObject& objectRoot);
 	bool parseRecipe(const QJsonArray& objectRoot);
     bool parseStep(const QJsonObject& objectRoot, FormulaStep& formulaStep);
+    bool parseStepActions(const QJsonObject& objectRoot, FormulaStepActionList& formulaStepActionList);
+	bool parseStepAction(const QString& szCmd, const QJsonValue& value, FormulaStepAction& formulaStepAction);
 	bool parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands);
 	bool parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable);
 
