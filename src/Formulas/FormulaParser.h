@@ -12,6 +12,7 @@
 #include <QSharedPointer>
 
 class Formula;
+class FormulaStep;
 class FormulaCommands;
 class FormulaDependenciesList;
 class FormulaVariableList;
@@ -30,7 +31,9 @@ private:
 	bool parseSCM(const QJsonObject& objectRoot);
 	bool parseDependencies(const QJsonObject& objectRoot, FormulaDependenciesList& listDependencies);
 	bool parseOptions(const QJsonObject& objectRoot);
-	bool parseRecipe(const QJsonObject& objectRoot);
+	bool parseRecipes(const QJsonObject& objectRoot);
+	bool parseRecipe(const QJsonArray& objectRoot);
+    bool parseStep(const QJsonObject& objectRoot, FormulaStep& formulaStep);
 	bool parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands);
 	bool parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable);
 

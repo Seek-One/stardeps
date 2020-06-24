@@ -124,7 +124,49 @@ bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirW
 	return bRes;
 }
 
-bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars) {
+bool AbstractPackageCommand::doRunCommands(const QStringList& listCmd, const QDir& dirWorkingDirectory)
+{
+    bool bRes = true;
+
+    QStringList::const_iterator iter;
+    for(iter = listCmd.constBegin(); iter != listCmd.constEnd(); ++iter)
+    {
+        bRes = doRunCommand(*iter, dirWorkingDirectory);
+    }
+
+    return bRes;
+}
+
+bool AbstractPackageCommand::doExecuteStep(const QString& szStep, const QDir& dirWorkingDirectory)
+{
+    bool bRes = true;
+
+    Environment &env = getEnv();
+
+    const QSharedPointer<Formula>& pFormula = getFormula();
+    const QString& szPlatform = env.getPlatformTypeName();
+    const FormulaRecipeList& listFormulaRecipes = pFormula->getRecipeList();
+
+    if(listFormulaRecipes.contains(QString())){
+        const FormulaRecipe& formulaRecipe = listFormulaRecipes.value(QString());
+        FormulaStepActionList listFormulaStepAction;
+        listFormulaStepAction = formulaRecipe.getFormulaStepActionList(szStep, szPlatform);
+
+        FormulaStepActionList::const_iterator iter_action;
+        for(iter_action = listFormulaStepAction.constBegin(); iter_action != listFormulaStepAction.constEnd(); ++iter_action)
+        {
+            const FormulaStepAction& formulaStepAction = (*iter_action);
+            if(formulaStepAction.getActionType() == FormulaStepAction::ActionCommand){
+                bRes = doRunCommands(formulaStepAction.getCommandList(), dirWorkingDirectory);
+            }
+        }
+    }
+
+    return bRes;
+}
+
+bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
+{
     Environment &env = getEnv();
 
     const QSharedPointer<Formula> &pFormula = getFormula();

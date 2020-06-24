@@ -13,6 +13,7 @@
 #include <QList>
 #include <QMap>
 
+#include "FormulaStep.h"
 #include "FormulaCommands.h"
 
 class FormulaRecipe;
@@ -21,6 +22,11 @@ class FormulaRecipe {
 public:
 	FormulaRecipe();
 	virtual ~FormulaRecipe();
+
+    void setFormulaSteps(const FormulaStepList& listStep);
+    const FormulaStepList& getFormulaSteps() const;
+
+    FormulaStepActionList getFormulaStepActionList(const QString& szStep, const QString& szPlatform) const;
 
 	void setPrepareCommands(const FormulaCommands& listCommands);
 	const FormulaCommands& getPrepareCommands() const;
@@ -32,6 +38,7 @@ public:
 	const FormulaCommands& getInstallCommands() const;
 
 private:
+    FormulaStepList m_listStep;
 	FormulaCommands m_listPrepareCommands;
 	FormulaCommands m_listConfigureCommands;
 	FormulaCommands m_listBuildCommands;

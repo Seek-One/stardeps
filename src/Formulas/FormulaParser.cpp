@@ -108,8 +108,13 @@ bool FormulaParser::parse(const QString& szFilePath)
 
 		// Recipes
 		if(bRes && mainObject.contains("recipes")){
-			bRes = parseRecipe(mainObject.value("recipes").toObject());
+			bRes = parseRecipes(mainObject.value("recipes").toObject());
 		}
+
+        // Recipe (new method)
+        if(bRes && mainObject.contains("recipe")){
+            bRes = parseRecipe(mainObject.value("recipe").toArray());
+        }
 	}
 
 	return bRes;
@@ -229,7 +234,7 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDepe
 	return bRes;
 }
 
-bool FormulaParser::parseRecipe(const QJsonObject& objectRoot)
+bool FormulaParser::parseRecipes(const QJsonObject& objectRoot)
 {
 	bool bRes = true;
 
@@ -271,6 +276,77 @@ bool FormulaParser::parseRecipe(const QJsonObject& objectRoot)
 	}
 
 	return true;
+}
+
+bool FormulaParser::parseRecipe(const QJsonArray& arrayRoot)
+{
+    bool bRes = true;
+
+    QJsonArray::const_iterator iter_obj;
+
+    FormulaRecipe formulaRecipe;
+    FormulaStepList formulaStepList;
+
+    for(iter_obj = arrayRoot.constBegin(); iter_obj != arrayRoot.constEnd(); ++iter_obj)
+    {
+        QJsonObject object = iter_obj->toObject();
+        QJsonObject::const_iterator iter_prop;
+
+        for(iter_prop = object.constBegin(); iter_prop != object.constEnd(); ++iter_prop)
+        {
+            FormulaStep formulaStep;
+
+            // Target platform
+            QString szStep = iter_prop.key();
+            formulaStep.setStep(szStep);
+
+            QJsonValue value = iter_prop.value();
+            QJsonObject objectStep = value.toObject();
+            bRes = parseStep(objectStep, formulaStep);
+
+            formulaStepList.append(formulaStep);
+        }
+    }
+
+    formulaRecipe.setFormulaSteps(formulaStepList);
+
+    m_pFormula->addRecipe(QString(), formulaRecipe);
+
+    return bRes;
+}
+
+bool FormulaParser::parseStep(const QJsonObject& objectRoot, FormulaStep& formulaStep)
+{
+    FormulaStepActionList formulaStepActionList;
+
+    QJsonObject::const_iterator iter_prop;
+    for(iter_prop = objectRoot.constBegin(); iter_prop != objectRoot.constEnd(); ++iter_prop)
+    {
+        FormulaStepAction formulaStepAction;
+
+        // Target platform
+        QString szActionType = iter_prop.key();
+        if(iter_prop.value().isArray()){
+            QJsonArray actionArray = iter_prop.value().toArray();
+            QStringList listAction;
+
+            QJsonArray::const_iterator iter_action;
+            for(iter_action = actionArray.constBegin(); iter_action != actionArray.constEnd(); ++iter_action) {
+                listAction.append((*iter_action).toString());
+            }
+
+            formulaStepAction.setAction(szActionType, listAction);
+        }else{
+            QString szAction = iter_prop.value().toString();
+            formulaStepAction.setAction(szActionType, szAction);
+        }
+
+        formulaStepActionList.append(formulaStepAction);
+    }
+
+    formulaStep.setFormulaStepActionList(formulaStepActionList);
+
+    return true;
 }
 
 bool FormulaParser::parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands)

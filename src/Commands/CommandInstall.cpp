@@ -21,6 +21,11 @@ bool CommandInstall::doExecute()
 {
 	bool bRes = true;
 
+    // Execute steps
+    if(bRes){
+        bRes = doExecuteStep("install", getBuildPackageDir());
+    }
+
 	// Execute commands
 	if(bRes){
 		const FormulaRecipeList& listRecipes = getFormula()->getRecipeList();

@@ -21,6 +21,11 @@ bool CommandBuild::doExecute()
 {
 	bool bRes = true;
 
+    // Execute steps
+    if(bRes){
+        bRes = doExecuteStep("build", getBuildPackageDir());
+    }
+
 	// Execute commands
 	if(bRes){
 		const FormulaRecipeList& listRecipes = getFormula()->getRecipeList();

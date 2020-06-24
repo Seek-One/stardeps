@@ -61,6 +61,11 @@ bool CommandPrepare::doExecute()
 		bRes = configureVersion(pFormula, dirSrcPackage);
 	}
 
+	// Execute steps
+	if(bRes){
+	    bRes = doExecuteStep("prepare", getSourcePackageDir());
+	}
+
     // Execute commands
     if(bRes){
         const FormulaRecipeList& listRecipes = getFormula()->getRecipeList();

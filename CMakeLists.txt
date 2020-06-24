@@ -204,6 +204,10 @@ set(APPLICATION_SOURCES
     src/Formulas/FormulaParser.h
     src/Formulas/FormulaRecipe.cpp
     src/Formulas/FormulaRecipe.h
+    src/Formulas/FormulaStep.cpp
+    src/Formulas/FormulaStep.h
+    src/Formulas/FormulaStepAction.cpp
+    src/Formulas/FormulaStepAction.h
     src/Formulas/FormulaVariableList.cpp
     src/Formulas/FormulaVariableList.h
     src/Global/QApplicationSettings.cpp
