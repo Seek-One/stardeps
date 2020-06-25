@@ -18,53 +18,40 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED}"
+        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
     },
-    "recipes": {
-        "linux-gcc-64": {
-            "prepare": [
-                "${PACKAGE_SRC_PATH}/autogen.sh "
-            ],
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
+    "recipe": [
+        {
+            "step":"prepare",
+            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd":[
+                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
             ]
         },
-        "linux-mingw-gcc-32": {
-            "prepare": [
-                "${PACKAGE_SRC_PATH}/autogen.sh "
-            ],
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
-        "linux-mingw-gcc-64": {
-            "prepare": [
-                "${PACKAGE_SRC_PATH}/autogen.sh "
-            ],
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/freetype2.pc"
         }
-    }
+    ]
 }
