@@ -24,30 +24,34 @@
             }
         }
     },
-    "recipes": {
-        "linux-gcc-64": {
-            "prepare": [
-                "chmod -R u+rw ${PACKAGE_SRC_PATH}"
-            ],
-            "configure": [
-                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
+    "vars":{
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SSL} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
+    },
+    "recipe": [
+        {
+            "step":"prepare",
+            "cmd":"chmod -R u+rw ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"configure",
+            "cmd":[
+                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
+            ]
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":[
                 "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> config.linux${OPTIONS::NOOPENSSL}\"\"",
                 "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> config.linux${OPTIONS::NOOPENSSL}\"\"",
                 "${PACKAGE_BUILD_PATH}/genMakefiles linux${OPTIONS::NOOPENSSL}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}"
             ]
         },
-        "linux-mingw-gcc-32": {
-            "prepare": [
-                "chmod -R u+rw ${PACKAGE_SRC_PATH}"
-            ],
-            "configure": [
-                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd":[
                 "bash -c \"\"echo 'CC = ${CROSS_COMPIL_PREFIX}-gcc' >> config.mingw\"\"",
                 "bash -c \"\"echo 'CXX = ${CROSS_COMPIL_PREFIX}-g++' >> config.mingw\"\"",
                 "bash -c \"\"echo 'LD = ${CROSS_COMPIL_PREFIX}-ld' >> config.mingw\"\"",
@@ -58,56 +62,26 @@
                 "bash -c \"\"sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.mingw\"\"",
                 "bash -c \"\"sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.mingw\"\"",
                 "${PACKAGE_BUILD_PATH}/genMakefiles mingw"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
             ]
         },
-        "linux-mingw-gcc-64": {
-            "prepare": [
-                "chmod -R u+rw ${PACKAGE_SRC_PATH}"
-            ],
-            "configure": [
-                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
-                "bash -c \"\"echo 'CC = ${CROSS_COMPIL_PREFIX}-gcc' >> config.mingw\"\"",
-                "bash -c \"\"echo 'CXX = ${CROSS_COMPIL_PREFIX}-g++' >> config.mingw\"\"",
-                "bash -c \"\"echo 'LD = ${CROSS_COMPIL_PREFIX}-ld' >> config.mingw\"\"",
-                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> config.mingw\"\"",
-                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> config.mingw\"\"",
-                "bash -c \"\"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> config.mingw\"\"",
-                "bash -c \"\"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> config.mingw\"\"",
-                "bash -c \"\"sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.mingw\"\"",
-                "bash -c \"\"sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.mingw\"\"",
-
-
-                "${PACKAGE_BUILD_PATH}/genMakefiles mingw"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
-        },
-        "darwin-clang-64": {
-            "prepare": [
-                "chmod -R u+rw ${PACKAGE_SRC_PATH}"
-            ],
-            "configure": [
-                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}",
+        {
+            "step":"configure",
+            "platforms":"darwin-clang-64",
+            "cmd":[
                 "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
                 "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
                 "${PACKAGE_BUILD_PATH}/genMakefiles macosx${OPTIONS::NOOPENSSL}"
-            ],
-            "build": [
-                "bash -c \"\"cd ${PACKAGE_SRC_PATH} && ${MAKE}\"\""
-            ],
-            "install": [
-                "bash -c \"\"cd ${PACKAGE_SRC_PATH} && ${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}\"\""
+            ]
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}"}
             ]
         }
-    }
+    ]
 }
