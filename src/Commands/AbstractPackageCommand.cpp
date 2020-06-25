@@ -118,7 +118,9 @@ bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirW
 			qDebug("[%s] create directory: %s", qPrintable(m_szLabel), qPrintable(dirWorkingDirectory.path()));
 			bRes = dirWorkingDirectory.mkpath(".");
 		}
-		bRes = m_shell.runCommand(tokens[0], listArgs, dirWorkingDirectory);
+		if(bRes) {
+            bRes = m_shell.runCommand(tokens[0], listArgs, dirWorkingDirectory);
+        }
 	}
 
 	return bRes;

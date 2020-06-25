@@ -87,7 +87,7 @@ bool AbstractCommandEnvironment::load()
 		bRes = doLoad();
 	}
 
-	m_listCmdEnvVars.print();
+	//m_listCmdEnvVars.print();
 
 	return bRes;
 }
