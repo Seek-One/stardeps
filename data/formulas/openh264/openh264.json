@@ -12,42 +12,52 @@
             }
         }
     },
-    "recipes": {
-        "linux-gcc-64": {
-            "configure": [
-                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
-            ],
-            "build": [
-                "${MAKE} ${OPTIONS::DEBUG}"
-            ],
-            "install": [
-                "${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
+    "vars":{
+        "MAKE_OPTIONS":"${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}",
+        "MAKE_CROSS_OPTIONS":"CC=${CROSS_COMPIL_PREFIX}-gcc CXX=${CROSS_COMPIL_PREFIX}-g++ AR=${CROSS_COMPIL_PREFIX}-ar LD=${CROSS_COMPIL_PREFIX}-ld"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "cmd":"${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
         },
-        "linux-mingw-gcc-32": {
-            "configure": [
-                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
-            ],
-            "build": [
-                "${MAKE} ARCH=i386 OS=mingw_nt CC=${CROSS_COMPIL_PREFIX}-gcc CXX=${CROSS_COMPIL_PREFIX}-g++ AR=${CROSS_COMPIL_PREFIX}-ar LD=${CROSS_COMPIL_PREFIX}-ld ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}"
-            ],
-            "install": [
-                "${MAKE} install ARCH=i386 OS=mingw_nt CC=${CROSS_COMPIL_PREFIX}-gcc CXX=${CROSS_COMPIL_PREFIX}-g++ AR=${CROSS_COMPIL_PREFIX}-ar LD=${CROSS_COMPIL_PREFIX}-ld ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
+        {
+            "step":"build",
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"${MAKE} ${OPTIONS::DEBUG}"
         },
-        "linux-mingw-gcc-64": {
-            "configure": [
-                "${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
-            ],
-            "build": [
-                "${MAKE} ARCH=x86_64 OS=mingw_nt ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}"
-            ],
-            "install": [
-                "${MAKE} install RCH=x86_64 OS=mingw_nt ${OPTIONS::DEBUG} PREFIX=${PACKAGE_PREFIX_PATH}",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
+        {
+            "step":"build",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":"${MAKE} ARCH=i386 OS=mingw_nt ${MAKE_OPTIONS} ${MAKE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"build",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":"${MAKE}  ARCH=x86_64 OS=mingw_nt ${MAKE_OPTIONS} ${MAKE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"install",
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"${MAKE} install ${MAKE_OPTIONS}"
+        },
+        {
+            "step":"install",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":"${MAKE} install ARCH=i386 OS=mingw_nt ${MAKE_OPTIONS} ${MAKE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"install",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":"${MAKE} install ARCH=x86_64 OS=mingw_nt ${MAKE_OPTIONS} ${MAKE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"install",
+            "cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
+        },
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/openh264.pc"
         }
-    }
+    ]
 }
