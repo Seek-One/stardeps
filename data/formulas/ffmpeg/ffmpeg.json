@@ -111,12 +111,27 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libass.pc ${PKG_CONFIG_LIBDIR}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libavcodec.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libavdevice.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libavfilter.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libavformat.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libavutil.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libswresample.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libswscale.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libass.pc"
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavcodec.pc"},
+                {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavdevice.pc"},
+                {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavfilter.pc"},
+                {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavformat.pc"},
+                {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavutil.pc"},
+                {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libswresample.pc"},
+                {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libswscale.pc"}
+            ]
         }
     ]
 }
