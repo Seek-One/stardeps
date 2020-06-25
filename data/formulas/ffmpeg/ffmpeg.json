@@ -16,6 +16,11 @@
                 "OPTIONS::SHARED":"--enable-shared"
             }
         },
+        "commercial" : {
+            "vars": {
+                "OPTIONS::COMMERCIAL":"--enable-gpl --enable-nonfree"
+            }
+        },
         "openh264" : {
             "dependencies": {
                 "latest": {
@@ -78,52 +83,40 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"--enable-gpl --enable-nonfree ${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::OPENH264} ${OPTIONS::X264} ${OPTIONS::X265} ${OPTIONS::FDKAAC} ${OPTIONS::ASS} ${OPTIONS::FREETYPE}"
+        "CONFIGURE_DEPS":"${OPTIONS::OPENH264} ${OPTIONS::X264} ${OPTIONS::X265} ${OPTIONS::FDKAAC} ${OPTIONS::ASS} ${OPTIONS::FREETYPE}",
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::COMMERCIAL} ${OPTIONS::CONFIGURE_DEPS} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config"
     },
-    "recipes": {
-        "linux-gcc-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
+    "recipe": [
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":"${PACKAGE_SRC_PATH}/configure --arch=x86 --target-os=mingw32 ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure --arch=x86_64 --target-os=mingw64 ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libass.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
-        "linux-mingw-gcc-32": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure --arch=x86 --target-os=mingw32 --cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
-        },
-        "linux-mingw-gcc-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure -arch=x86_64 --target-os=mingw64 --cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
-        },
-        "darwin-clang-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install"
-            ]
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libass.pc"
         }
-    }
+    ]
 }
