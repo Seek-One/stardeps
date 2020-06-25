@@ -22,42 +22,39 @@
             }
         }
     },
-    "recipes": {
-        "linux-gcc-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure ${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
+    "vars":{
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX} --cross-prefix=${CROSS_COMPIL_PREFIX}-"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
-        "linux-mingw-gcc-32": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} --cross-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
-        },
-        "linux-mingw-gcc-64": {
-            "configure": [
-                "${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} --cross-prefix=${CROSS_COMPIL_PREFIX}- ${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} "
-            ],
-            "build": [
-                "${MAKE}"
-            ],
-            "install": [
-                "${MAKE} install",
-                "cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/x264.pc ${PKG_CONFIG_LIBDIR}/"
-            ]
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/x264.pc"
         }
-    }
+    ]
 }
