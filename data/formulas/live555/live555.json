@@ -24,10 +24,6 @@
             }
         }
     },
-    "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SSL} --prefix=${PACKAGE_PREFIX_PATH}",
-        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
-    },
     "recipe": [
         {
             "step":"prepare",
