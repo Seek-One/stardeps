@@ -66,6 +66,10 @@
             "cmd":[
                 "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
                 "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
+                "bash -c \"\"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
+                "bash -c \"\"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
+                "bash -c \"\"sed -i'.original' -e 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
+                "bash -c \"\"sed -i'.original' -e 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
                 "${PACKAGE_BUILD_PATH}/genMakefiles macosx${OPTIONS::NOOPENSSL}"
             ]
         },
