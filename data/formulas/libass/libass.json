@@ -7,7 +7,7 @@
     },
     "dependencies": {
         "latest": {
-            "fribidi"
+            "fribidi" : {"max":"latest"}
         }
     },
     "options": {
@@ -23,22 +23,23 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED}"
+        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED} --disable-require-system-font-provider --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
     },
     "recipe": [
         {
-            "step":"configure",
+            "step":"prepare",
             "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
         },
         {
             "step":"configure",
             "platforms":"linux-gcc-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
         },
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure --host=${CROSS_COMPIL_PREFIX} ${CONFIGURE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
         },
         {
             "step":"build",
