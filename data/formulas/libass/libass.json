@@ -33,7 +33,7 @@
         },
         {
             "step":"configure",
-            "platforms":"linux-gcc-64",
+            "platforms":"linux-gcc-64,darwin-clang-64",
             "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
         },
         {
