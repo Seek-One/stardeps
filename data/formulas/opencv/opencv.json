@@ -1,0 +1,60 @@
+{
+	"name": "opencv",
+	"homepage": "https://opencv.org/",
+	"scm": {
+        "type": "git",
+        "url": "https://github.com/opencv/opencv.git"
+    },
+    "options": {
+        "debug" : {
+            "vars": {
+                "OPTIONS::DEBUG":"-DCMAKE_BUILD_TYPE=Debug"
+            }
+        },
+        "shared" : {
+            "vars": {
+                "OPTIONS::SHARED":"-DBUILD_SHARED_LIBS=ON"
+            }
+        },
+        "cuda" : {
+            "vars": {
+                "OPTIONS::CUDA":"-DWITH_CUDA=ON -DCUDA_NVCC_FLAGS='--expt-relaxed-constexpr'"
+            }
+        }
+    },
+    "vars":{
+        "CMAKE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_EXAMPLES=OFF ${OPTIONS::CUDA} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH}",
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}"
+            ]
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}"
+            ]
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"}
+            ]
+        }
+    ]
+}
