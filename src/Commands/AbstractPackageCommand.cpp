@@ -279,26 +279,53 @@ Environment& AbstractPackageCommand::getEnv() const
 	return m_pCommandEnvironment->getEnv();
 }
 
-void AbstractPackageCommand::parseCommand(const QString& szCmd, QStringList& outTokens) const
+enum ParseCommandState { Idle, Arg, QuotedArg };
+
+void AbstractPackageCommand::parseCommand(const QString& szCmd, QStringList& listOutTokens) const
 {
-    QString szTmp;
-    QStringList list = szCmd.split(' ');
-    QStringList::const_iterator iter = list.constBegin();
-    for(; iter != list.constEnd(); ++iter){
-        if(!iter->startsWith("\"") && szTmp.isEmpty()){
-            outTokens.append(*iter);
+    QString szArg;
+    bool bEscape = false;
+    ParseCommandState iState = Idle;
+
+    QString::const_iterator iter;
+    for(iter = szCmd.constBegin(); iter != szCmd.constEnd(); ++iter){
+        const QChar& c = (*iter);
+
+        if (!bEscape && c == '\\') {
+            bEscape = true;
             continue;
-        }else{
-            if(szTmp.isEmpty()){
-                szTmp = *iter;
-            }else{
-                szTmp += " " + *iter;
-            }
         }
-        
-        if(iter->endsWith("\"")){
-            outTokens.append(szTmp);
-            szTmp = QString();
+
+        switch (iState) {
+            case Idle:
+                if (!bEscape && c == '"'){
+                    iState = QuotedArg;
+                } else if (bEscape || !c.isSpace()) {
+                    szArg += c; iState = Arg;
+                }
+                break;
+            case Arg:
+                if (!bEscape && c == '"'){
+                    iState = QuotedArg;
+                } else if (bEscape || !c.isSpace()){
+                    szArg += c;
+                } else {
+                    listOutTokens << szArg;
+                    szArg.clear();
+                    iState = Idle;
+                }
+                break;
+            case QuotedArg:
+                if (!bEscape && c == '"'){
+                    iState = (szArg.isEmpty() ? Idle : Arg);
+                } else {
+                    szArg += c;
+                }
+                break;
         }
+        bEscape = false;
+    }
+    if (!szArg.isEmpty()){
+        listOutTokens << szArg;
     }
 }

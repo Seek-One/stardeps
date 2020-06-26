@@ -50,7 +50,7 @@ protected:
 	Environment& getEnv() const;
     
 private:
-    void parseCommand(const QString& szCmd, QStringList& tokens) const;
+    void parseCommand(const QString& szCmd, QStringList& listOutTokens) const;
 };
 
 #endif /* SRC_COMMANDS_ABSTRACTPACKAGECOMMAND_H_ */
