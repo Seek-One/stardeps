@@ -33,7 +33,7 @@
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
         "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} -prefix ${PACKAGE_PREFIX_PATH}",
-        "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=${CROSS_COMPIL_PREFIX}-"
+        "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}-"
     },
     "recipe": [
         {
@@ -47,17 +47,8 @@
         },
         {
             "step":"configure",
-            "platforms":"linux-mingw-gcc-32",
-            "cmd":[
-                "${PACKAGE_SRC_PATH}/configure -xplatform win32-g++ ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
-            ]
-        },
-        {
-            "step":"configure",
-            "platforms":"linux-mingw-gcc-64",
-            "cmd":[
-                "${PACKAGE_SRC_PATH}/configure -xplatform win64-g++ ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
-            ]
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure -xplatform win32-g++ ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
         },
         {
             "step":"build",
@@ -66,13 +57,8 @@
         {
             "step":"install",
             "actions":[
-                {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${PKG_CONFIG_LIBDIR}/"}
+                {"cmd":"${MAKE} install"}
             ]
-        },
-        {
-            "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/fribidi.pc"
         }
     ]
 }
