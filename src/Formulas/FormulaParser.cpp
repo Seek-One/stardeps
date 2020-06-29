@@ -149,7 +149,6 @@ bool FormulaParser::parseSCM(const QJsonObject& objectRoot)
     if(objectRoot.contains("default-branch")){
         value = objectRoot.value("default-branch");
         m_pFormula->setSCMDefaultBranch(value.toString());
-        qDebug("branch");
     }
 
 	return true;
