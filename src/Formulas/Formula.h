@@ -42,6 +42,9 @@ public:
 	void setSCMURL(const QString& szSCMURL);
 	QString getSCMURL() const;
 
+    void setSCMDefaultBranch(const QString& szDefaultBranch);
+    QString getSCMDefaultBranch() const;
+
 	void addDependencies(const QString& szVersion, const FormulaDependencies& dependencies);
 	void setDependenciesList(const FormulaDependenciesList& listDependencies);
 	const FormulaDependenciesList& getDependenciesList() const;
@@ -63,6 +66,7 @@ private:
 
 	TypeSCM m_iTypeSCM;
 	QString m_szSCMURL;
+	QString m_szDefaultBranch;
 
 	FormulaDependenciesList m_listDependencies;
 	FormulaOptionList m_listOptions;

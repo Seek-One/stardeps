@@ -3,7 +3,8 @@
 	"homepage": "https://ffmpeg.org/",
 	"scm": {
         "type": "git",
-        "url": "https://github.com/qt/qt5.git"
+        "url": "https://github.com/qt/qt5.git",
+        "default-branch": "dev"
     },
     "options": {
         "debug" : {

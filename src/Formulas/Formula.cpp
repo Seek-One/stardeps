@@ -57,6 +57,16 @@ QString Formula::getSCMURL() const
 	return m_szSCMURL;
 }
 
+void Formula::setSCMDefaultBranch(const QString& szDefaultBranch)
+{
+    m_szDefaultBranch = szDefaultBranch;
+}
+
+QString Formula::getSCMDefaultBranch() const
+{
+    return m_szDefaultBranch;
+}
+
 void Formula::addDependencies(const QString& szVersion, const FormulaDependencies& dependencies)
 {
 	m_listDependencies.insert(szVersion, dependencies);

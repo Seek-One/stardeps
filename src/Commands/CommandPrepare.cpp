@@ -97,7 +97,11 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
 	{
 		ConnectorGit connector(getEnv());
 		if(dirWorkingCopy.exists()){
-			bRes = connector.git_checkout("master", dirWorkingCopy);
+		    QString szBranch = "master";
+		    if(!pFormula->getSCMDefaultBranch().isEmpty()){
+                szBranch = pFormula->getSCMDefaultBranch();
+		    }
+			bRes = connector.git_checkout(szBranch, dirWorkingCopy);
 			bRes = connector.git_pull(dirWorkingCopy);
 		}else{
 			bRes = connector.git_clone(pFormula->getSCMURL(), dirWorkingCopy);
