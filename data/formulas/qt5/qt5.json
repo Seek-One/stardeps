@@ -39,7 +39,7 @@
     "recipe": [
         {
             "step":"prepare",
-            "cmd":"${PACKAGE_SRC_PATH}/init-repository ${QT_MODULES}"
+            "cmd":"${PACKAGE_SRC_PATH}/init-repository -f ${QT_MODULES}"
         },
         {
             "step":"configure",
