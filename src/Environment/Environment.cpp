@@ -85,6 +85,11 @@ QString Environment::getGitExe() const
 	return getEnvVar(VE_VAR_GIT, "git");
 }
 
+QString Environment::getSVNExe() const
+{
+    return getEnvVar(VE_VAR_SVN, "svn");
+}
+
 void Environment::print()
 {
 	qDebug("[env] virtual environement path is: %s", qPrintable(m_dirVE.path()));

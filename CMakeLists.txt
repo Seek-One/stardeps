@@ -192,6 +192,8 @@ set(APPLICATION_SOURCES
     src/Connector/ConnectorArchive.h
     src/Connector/ConnectorGit.cpp
     src/Connector/ConnectorGit.h
+    src/Connector/ConnectorSVN.cpp
+    src/Connector/ConnectorSVN.h
     src/Environment/Environment.cpp
     src/Environment/Environment.h
     src/Environment/EnvironmentLoader.cpp

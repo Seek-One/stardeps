@@ -7,6 +7,7 @@
 
 #include "Connector/ConnectorArchive.h"
 #include "Connector/ConnectorGit.h"
+#include "Connector/ConnectorSVN.h"
 
 #include "CommandPrepare.h"
 
@@ -106,6 +107,24 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
 		}else{
 			bRes = connector.git_clone(pFormula->getSCMURL(), dirWorkingCopy);
 		}
+    }else if(pFormula->getTypeSCM() == Formula::SCM_Svn)
+    {
+        ConnectorSVN connector(getEnv());
+        if(!dirWorkingCopy.exists()) {
+            QString szBranch = "trunk";
+            if (!pFormula->getSCMDefaultBranch().isEmpty()) {
+                szBranch = pFormula->getSCMDefaultBranch();
+            }
+            if (!m_szScmBranchVersion.isEmpty()) {
+                szBranch = "branch/" + m_szScmBranchVersion;
+            }
+            if (!m_szScmTagVersion.isEmpty()) {
+                szBranch = "tags/" + m_szScmTagVersion;
+            }
+            bRes = connector.svn_checkout(pFormula->getSCMURL() + "/" + szBranch, dirWorkingCopy);
+        }else{
+            bRes = connector.svn_update(dirWorkingCopy);
+        }
     }else if(pFormula->getTypeSCM() == Formula::SCM_Archive)
     {
         ConnectorArchive conector(getEnv());

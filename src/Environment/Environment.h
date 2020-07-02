@@ -44,6 +44,7 @@ public:
 
 	// Get some var
 	QString getGitExe() const;
+    QString getSVNExe() const;
 
 	void print();
 
