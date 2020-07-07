@@ -287,6 +287,8 @@ void AbstractPackageCommand::parseCommand(const QString& szCmd, QStringList& lis
     bool bEscape = false;
     ParseCommandState iState = Idle;
 
+    QChar curArgQuote;
+
     QString::const_iterator iter;
     for(iter = szCmd.constBegin(); iter != szCmd.constEnd(); ++iter){
         const QChar& c = (*iter);
@@ -298,15 +300,17 @@ void AbstractPackageCommand::parseCommand(const QString& szCmd, QStringList& lis
 
         switch (iState) {
             case Idle:
-                if (!bEscape && c == '"'){
+                if (!bEscape && (c == '"' || c == '\'')){
                     iState = QuotedArg;
+                    curArgQuote = c;
                 } else if (bEscape || !c.isSpace()) {
                     szArg += c; iState = Arg;
                 }
                 break;
             case Arg:
-                if (!bEscape && c == '"'){
+                if (!bEscape && (c == '"' || c == '\'')){
                     iState = QuotedArg;
+                    curArgQuote = c;
                 } else if (bEscape || !c.isSpace()){
                     szArg += c;
                 } else {
@@ -316,8 +320,9 @@ void AbstractPackageCommand::parseCommand(const QString& szCmd, QStringList& lis
                 }
                 break;
             case QuotedArg:
-                if (!bEscape && c == '"'){
+                if (!bEscape && (c == curArgQuote)){
                     iState = (szArg.isEmpty() ? Idle : Arg);
+                    curArgQuote = QChar();
                 } else {
                     szArg += c;
                 }

@@ -48,15 +48,15 @@
             "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
             "cmd":[
-                "bash -c \"\"echo 'CC = ${CROSS_COMPIL_PREFIX}-gcc' >> config.mingw\"\"",
-                "bash -c \"\"echo 'CXX = ${CROSS_COMPIL_PREFIX}-g++' >> config.mingw\"\"",
-                "bash -c \"\"echo 'LD = ${CROSS_COMPIL_PREFIX}-ld' >> config.mingw\"\"",
-                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> config.mingw\"\"",
-                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> config.mingw\"\"",
-                "bash -c \"\"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> config.mingw\"\"",
-                "bash -c \"\"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> config.mingw\"\"",
-                "bash -c \"\"sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.mingw\"\"",
-                "bash -c \"\"sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.mingw\"\"",
+                "bash -c \"echo 'CC = ${CROSS_COMPIL_PREFIX}-gcc' >> config.mingw\"",
+                "bash -c \"echo 'CXX = ${CROSS_COMPIL_PREFIX}-g++' >> config.mingw\"",
+                "bash -c \"echo 'LD = ${CROSS_COMPIL_PREFIX}-ld' >> config.mingw\"",
+                "bash -c \"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> config.mingw\"",
+                "bash -c \"echo 'LIBDIR = $(PREFIX)/lib' >> config.mingw\"",
+                "bash -c \"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> config.mingw\"",
+                "bash -c \"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> config.mingw\"",
+                "sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.mingw",
+                "sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.mingw",
                 "${PACKAGE_BUILD_PATH}/genMakefiles mingw"
             ]
         },
@@ -64,12 +64,12 @@
             "step":"configure",
             "platforms":"darwin-clang-64",
             "cmd":[
-                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
-                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
-                "bash -c \"\"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
-                "bash -c \"\"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
-                "bash -c \"\"sed -i'.original' -e 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
-                "bash -c \"\"sed -i'.original' -e 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"\"",
+                "bash -c \"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"",
+                "bash -c \"echo 'LIBDIR = $(PREFIX)/lib' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"",
+                "bash -c \"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"",
+                "bash -c \"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}\"",
+                "sed -i'.original' -e 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}",
+                "sed -i'.original' -e 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' ${PACKAGE_BUILD_PATH}/config.macosx${OPTIONS::NOOPENSSL}",
                 "${PACKAGE_BUILD_PATH}/genMakefiles macosx${OPTIONS::NOOPENSSL}"
             ]
         },
