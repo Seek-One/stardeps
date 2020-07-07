@@ -25,11 +25,7 @@ CommandsExecutor::CommandsExecutor()
 
 CommandsExecutor::~CommandsExecutor()
 {
-	AbstractCommand* pCommand;
-	while(!m_listCommands.isEmpty()){
-		pCommand = m_listCommands.takeFirst();
-		delete pCommand;
-	}
+	doClearCommands();
 
 	if(m_pCommandEnv){
 		delete m_pCommandEnv;
@@ -37,35 +33,66 @@ CommandsExecutor::~CommandsExecutor()
 	}
 }
 
+void CommandsExecutor::doClearCommands()
+{
+	AbstractCommand* pCommand;
+	while(!m_listCommands.isEmpty()){
+		pCommand = m_listCommands.takeFirst();
+		delete pCommand;
+	}
+}
+
 bool CommandsExecutor::prepareCommands(const QString& szCommand, int argc, char** argv)
 {
 	bool bRes = false;
 
-	AbstractCommand* pCommand = NULL;
-
 	bool bPackageCommand = false;
 
-	// Check command
-	if(szCommand == "createenv"){
-		pCommand = new CommandCreateEnv();
-    }else if(szCommand == "prepare"){
-		pCommand = new CommandPrepare();
-		bPackageCommand = true;
-    }else if(szCommand == "configure"){
-		pCommand = new CommandConfigure();
-		bPackageCommand = true;
-    }else if(szCommand == "build"){
-		pCommand = new CommandBuild();
-		bPackageCommand = true;
-    }else if(szCommand == "install"){
-		pCommand = new CommandInstall();
-		bPackageCommand = true;
-    }else if(szCommand == "clean"){
-        pCommand = new CommandClean();
-        bPackageCommand = true;
-    }
+	bool bPreviousStep = false;
 
-	if(pCommand){
+	QString szArg;
+	for(int i=0; i<argc; i++)
+	{
+		szArg = argv[i];
+		if(szArg == "--previous-steps"){
+			bPreviousStep = true;
+		}
+	}
+
+	// Fill the list of commands
+	if(szCommand == "createenv"){
+		m_listCommands.append(new CommandCreateEnv());
+	}else if(szCommand == "prepare"){
+		m_listCommands.append(new CommandPrepare());
+		bPackageCommand = true;
+	}else if(szCommand == "configure"){
+		if(bPreviousStep){
+			m_listCommands.append(new CommandPrepare());
+		}
+		m_listCommands.append(new CommandConfigure());
+		bPackageCommand = true;
+	}else if(szCommand == "build"){
+		if(bPreviousStep){
+			m_listCommands.append(new CommandPrepare());
+			m_listCommands.append(new CommandConfigure());
+		}
+		m_listCommands.append(new CommandBuild());
+		bPackageCommand = true;
+	}else if(szCommand == "install"){
+		if(bPreviousStep){
+			m_listCommands.append(new CommandPrepare());
+			m_listCommands.append(new CommandConfigure());
+			m_listCommands.append(new CommandBuild());
+		}
+		m_listCommands.append(new CommandInstall());
+		bPackageCommand = true;
+	}else if(szCommand == "clean"){
+		m_listCommands.append(new CommandClean());
+		bPackageCommand = true;
+	}
+
+	// Prepare command environment
+	if(!m_listCommands.isEmpty()){
 		bRes = true;
 
 		// Initialize commands env
@@ -81,19 +108,22 @@ bool CommandsExecutor::prepareCommands(const QString& szCommand, int argc, char*
 
 	// Prepare the commands
 	if(bRes){
-		pCommand->setCommandEnvironment(m_pCommandEnv);
+		QList<AbstractCommand *>::iterator iter;
+		for(iter = m_listCommands.begin(); iter != m_listCommands.end(); ++iter)
+		{
+			AbstractCommand* pCommand = (*iter);
+			pCommand->setCommandEnvironment(m_pCommandEnv);
 
-		bRes = pCommand->init(argc, argv);
+			bRes = pCommand->init(argc, argv);
+			if(!bRes){
+				break;
+			}
+		}
 	}
 
-	// Append commands to the list
-	if(bRes){
-		m_listCommands.append(pCommand);
-	}
-
-	if(!bRes && pCommand){
-		delete pCommand;
-		pCommand = NULL;
+	// Clear commands on fail
+	if(!bRes){
+		doClearCommands();
 	}
 
 	return bRes;

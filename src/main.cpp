@@ -131,6 +131,8 @@ int main(int argc, char **argv)
         qDebug("  LIST OF ARGUMENTS FOR PACKAGE COMMANDS");
         qDebug("       --formulas-dir=DIR");
         qDebug("             set DIR as formula dir.");
+		qDebug("       --previous-steps");
+		qDebug("             execute all previous commands steps.");
         qDebug(" ");
         qDebug("       --pkg-version=VERSION");
         qDebug("             define the version of the package to build.");

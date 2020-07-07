@@ -24,6 +24,9 @@ public:
 	bool executeCommands();
 
 private:
+	void doClearCommands();
+
+private:
 	QList<AbstractCommand*> m_listCommands;
 
 	AbstractCommandEnvironment* m_pCommandEnv;
