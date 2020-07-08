@@ -123,7 +123,6 @@
         {
             "step":"clean",
             "actions":[
-                {"cmd":"${MAKE} install"},
                 {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavcodec.pc"},
                 {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavdevice.pc"},
                 {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavfilter.pc"},

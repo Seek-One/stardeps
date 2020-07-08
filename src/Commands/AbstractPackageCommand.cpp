@@ -235,7 +235,7 @@ bool AbstractPackageCommand::doReplaceVariable(const QString& szText, const Vari
 	}
 
 	// Last step, remove non-referenced optional values
-	szTextOut = szTextOut.remove(QRegExp("\\$\\{.*\\}"));
+	szTextOut = szTextOut.remove(QRegExp("\\$\\{[^\\}]+\\}"));
 
 	return true;
 }
@@ -250,7 +250,7 @@ bool AbstractPackageCommand::doPrepareCommand(const QString& szCmd, QString& szC
 
 	bRes = doInitDictVars(dictVars);
 
-    //dictVars.print();
+	//dictVars.print();
 
 	if(bRes){
 		bRes = doReplaceVariable(szCmd, dictVars, szCmdOut);
