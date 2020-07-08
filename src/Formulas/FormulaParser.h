@@ -22,7 +22,7 @@ class FormulaVariableList;
 class FormulaParser
 {
 public:
-	FormulaParser();
+	FormulaParser(const QString& szPlatformName);
 	virtual ~FormulaParser();
 
 	const QSharedPointer<Formula>& getFormula() const;
@@ -39,10 +39,12 @@ private:
     bool parseStepActions(const QJsonObject& objectRoot, FormulaStepActionList& formulaStepActionList);
 	bool parseStepAction(const QString& szCmd, const QJsonValue& value, FormulaStepAction& formulaStepAction);
 	bool parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands);
+    bool parseVars(const QJsonArray& arrayVars, FormulaVariableList& listCommands);
 	bool parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable);
 
 private:
 	QSharedPointer<Formula> m_pFormula;
+    QString m_szPlatformName;
 };
 
 #endif /* SRC_FORMULAS_FORMULAPARSER_H_ */

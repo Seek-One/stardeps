@@ -14,7 +14,8 @@
 
 #include "FormulaParser.h"
 
-FormulaParser::FormulaParser()
+FormulaParser::FormulaParser(const QString& szPlatformName)
+    : m_szPlatformName(szPlatformName)
 {
 
 }
@@ -182,7 +183,11 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 
 		if(objectOptionDataList.contains("vars")){
 			FormulaVariableList listVars;
-			bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
+            if(objectOptionDataList.value("vars").isArray()){
+                bRes = parseVars(objectOptionDataList.value("vars").toArray(), listVars);
+            }else{
+                bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
+            }
 			if(bRes){
 				formulaOption.setVariableList(listVars);
 			}
@@ -396,6 +401,40 @@ bool FormulaParser::parseCommands(const QJsonArray& arrayCommands, FormulaComman
 		listCommands.append((*iter_item).toString());
 	}
 	return true;
+}
+
+bool FormulaParser::parseVars(const QJsonArray& arrayVars, FormulaVariableList& listVariable)
+{
+    QString szValue;
+    
+    QJsonObject altValue;
+    QJsonArray arrayAltValues;
+    QJsonArray::const_iterator iter_altValue;
+    
+    QJsonObject object;
+    QJsonArray::const_iterator iter_item;
+    for(iter_item = arrayVars.constBegin(); iter_item != arrayVars.constEnd(); ++iter_item)
+    {
+        object = iter_item->toObject();
+        
+        szValue = object.value("default-value").toString();
+        if(object.contains("alternatives-values")){
+            arrayAltValues = object.value("alternatives-values").toArray();
+            iter_altValue = arrayAltValues.constBegin();
+            for(; iter_altValue != arrayAltValues.constEnd(); ++iter_altValue){
+                altValue = iter_altValue->toObject();
+                
+                if(altValue.contains("platforms")){
+                    if(altValue.value("platforms").toString() == m_szPlatformName){
+                        szValue = altValue.value("value").toString();
+                    }
+                }
+            }
+        }
+        
+        listVariable.insert(object.value("name").toString(), szValue);
+    }
+    return true;
 }
 
 bool FormulaParser::parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable)
