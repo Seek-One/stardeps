@@ -41,10 +41,14 @@ bool CommandClean::removeDir(const QString& szDirName)
         QFileInfoList::const_iterator iter;
         for(iter = fileInfoList.constBegin(); iter != fileInfoList.constEnd(); ++iter){
             const QFileInfo& fileInfo = (*iter);
-            if (fileInfo.isDir()) {
+			if (fileInfo.isSymLink()) {
+				bResult = QFile::remove(fileInfo.absoluteFilePath());
+				qCritical("[clean] Error while deleting symbolic link file: %s", qPrintable(fileInfo.absoluteFilePath()));
+			}else if (fileInfo.isDir()) {
                 bResult = removeDir(fileInfo.absoluteFilePath());
             }else{
                 bResult = QFile::remove(fileInfo.absoluteFilePath());
+				qCritical("[clean] Error while deleting file: %s", qPrintable(fileInfo.absoluteFilePath()));
             }
 
             if (!bResult) {
@@ -53,6 +57,9 @@ bool CommandClean::removeDir(const QString& szDirName)
         }
         qDebug("[clean] Cleaning directory %s", qPrintable(dir.path()));
         bResult = dir.rmdir(szDirName);
+        if(!bResult){
+			qCritical("[clean] Error while deleting directory: %s", qPrintable(szDirName));
+        }
     }
     return bResult;
 }
