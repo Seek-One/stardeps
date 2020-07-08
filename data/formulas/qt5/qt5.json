@@ -10,6 +10,10 @@
         "debug" : {
             "vars": {
                 "OPTIONS::DEBUG":"-debug",
+            }
+        },
+        "debug-and-release" : {
+            "vars": {
                 "OPTIONS::DEBUGANDRELEASE":"-debug-and-release"
             }
         },
@@ -33,7 +37,7 @@
         "QT_MODULES":"--module-subset=qtbase,qtscript,qtmultimedia,qttools,qttranslations",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
-        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} -prefix ${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} -prefix ${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
     },
     "recipe": [
