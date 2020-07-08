@@ -9,7 +9,7 @@
     "options": {
         "debug" : {
             "vars": {
-                "OPTIONS::DEBUG":"-debug",
+                "OPTIONS::DEBUG":"-debug"
             }
         },
         "debug-and-release" : {
