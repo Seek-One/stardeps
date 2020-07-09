@@ -335,6 +335,11 @@ bool FormulaParser::parseStep(const QJsonObject& objectRoot, FormulaStep& formul
         formulaStep.setPlaformList(listPlaforms);
     }
 
+	if(bRes && objectRoot.contains("options")){
+		QStringList listOptions = objectRoot.value("options").toString().split(',');
+		formulaStep.setOptionsList(listOptions);
+	}
+
     // Parse action
     if(bRes){
         bRes = parseStepActions(objectRoot, formulaStepActionList);

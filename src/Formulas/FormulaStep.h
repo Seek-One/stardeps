@@ -21,16 +21,23 @@ public:
     void setPlaformList(const QStringList& listPlatforms);
     const QStringList& getPlaformList() const;
 
+	void setOptionsList(const QStringList& listOptions);
+	const QStringList& getOptionsList() const;
+
     void setFormulaStepActionList(const FormulaStepActionList& listAction);
     const FormulaStepActionList& getFormulaStepActionList() const;
 
     bool acceptPlatform(const QString& szPlatform) const;
+	bool acceptOptions(const QStringList& listOptions) const;
 
 private:
     QString m_szStep;
 
     // Platforms filter
     QStringList m_listPlatforms;
+
+	// Options filter
+	QStringList m_listOptions;
 
     // List of actions
     FormulaStepActionList m_listStepAction;
