@@ -29,8 +29,8 @@
     "recipe": [
         {
             "step":"configure",
-            "platforms":"linux-gcc-64",
-            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${PACKAGE_SRC_PATH}"
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} -DWITH_FFMPEG=0 ${PACKAGE_SRC_PATH}"
         },
         {
             "step":"configure",
