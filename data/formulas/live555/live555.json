@@ -6,6 +6,11 @@
         "url": "http://www.live555.com/liveMedia/public/live555-latest.tar.gz"
     },
     "options": {
+        "shared" : {
+            "vars": {
+                "OPTIONS::SHARED":"-shared"
+            }
+        },
         "openssl" : {
             "dependencies": {
                 "latest": {
@@ -78,9 +83,27 @@
             "cmd":"${MAKE}"
         },
         {
+            "step":"build",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "options":"shared",
+            "cmd":"${CROSS_COMPIL_PREFIX}-gcc -shared -o livemedia.dll -Wl,--out-implib,liblivemedia.dll.a -Wl,--whole-archive ${PACKAGE_BUILD_PATH}/liveMedia/libliveMedia.a ${PACKAGE_BUILD_PATH}/UsageEnvironment/libUsageEnvironment.a ${PACKAGE_BUILD_PATH}/BasicUsageEnvironment/libBasicUsageEnvironment.a ${PACKAGE_BUILD_PATH}/groupsock/libgroupsock.a -Wl,--no-whole-archive ${OPTIONS::OPENSSL::LIBPATH} -lstdc++ -lws2_32 -lssl -lcrypto"
+        },
+        {
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install PREFIX=${PACKAGE_PREFIX_PATH}"}
+            ]
+        },
+        {
+            "step":"install",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "options":"shared",
+            "actions":[
+                {"cmd":[
+                    "cp ${PACKAGE_BUILD_PATH}/liblivemedia.dll.a ${PACKAGE_PREFIX_PATH}/lib",
+                    "cp ${PACKAGE_BUILD_PATH}/livemedia.dll ${PACKAGE_PREFIX_PATH}/bin"
+                    ]
+                }
             ]
         }
     ]
