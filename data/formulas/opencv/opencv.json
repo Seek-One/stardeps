@@ -20,6 +20,11 @@
             "vars": {
                 "OPTIONS::CUDA":"-DWITH_CUDA=ON -DCUDA_NVCC_FLAGS='--expt-relaxed-constexpr'"
             }
+        },
+        "noffmpeg" : {
+            "vars": {
+                "OPTIONS::NOFFMPEG":"-DWITH_FFMPEG=0"
+            }
         }
     },
     "vars":{
@@ -30,7 +35,7 @@
         {
             "step":"configure",
             "platforms":"linux-gcc-64,darwin-clang-64",
-            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} -DWITH_FFMPEG=0 ${PACKAGE_SRC_PATH}"
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${OPTIONS::NOFFMPEG} ${PACKAGE_SRC_PATH}"
         },
         {
             "step":"configure",
