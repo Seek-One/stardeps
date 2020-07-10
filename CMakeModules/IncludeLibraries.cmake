@@ -13,7 +13,7 @@ if(WITH_COMPILER_LIBRARIES)
     if(WIN32)
         if(CMAKE_COMPILER_IS_GNUCXX)
             set(TMP_DLL_PATH "")
-            # If libgmp is present we just need it-print-file-name=libstdc++-6.dll 
+            # If libgmp is present we just need it
             if(HOST_WIN32)
                 execute_process(COMMAND cmd.exe /c "${CMAKE_CURRENT_LIST_DIR}/find_file_in_path.bat libgmp-10.dll" OUTPUT_VARIABLE TMP_DLL_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
             endif()
