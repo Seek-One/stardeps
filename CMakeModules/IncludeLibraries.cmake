@@ -218,7 +218,11 @@ if(WITH_QT)
         endif()
 
         if (WIN32)
-            set(QT_DLL_DIR ${QT_BINARY_DIR})
+            # Find Qt dll directory
+            find_path(QT_DLL_DIR NAMES QtCore4.dll QtCored4.dll Qt5Core.dll Qt5Cored.dll PATHS ${QT_BINARY_DIR} {QT_LIBRARY_DIR})
+            if(NOT QT_DLL_DIR)
+                message(FATAL "Qt dll directory not found")
+            endif()
 
             # Common library
             if(CMAKE_COMPILER_IS_GNUCXX)
@@ -316,13 +320,9 @@ if(WITH_QT)
             string(TOLOWER ${TMP_MODULE} TMP_MODULE)
             
             if (WIN32)
+                # Qt5 only
                 if(QT_USE_VERSION LESS 5)
-                    INSTALL(FILES "${QT_PLUGINS_DIR}/platforms/${TMP_COMPONENT}${QT_VERSION_MAJOR}.dll"
-                        DESTINATION ${INSTALL_PATH_QTPLUGINS}/platforms CONFIGURATIONS Release
-                    )
-                    INSTALL(FILES "${QT_PLUGINS_DIR}/platforms/${TMP_COMPONENT}d${QT_VERSION_MAJOR}.dll"
-                        DESTINATION ${INSTALL_PATH_QTPLUGINS}/platforms CONFIGURATIONS Debug
-                    )
+                    
                 else()
                     INSTALL(FILES "${QT_PLUGINS_DIR}/platforms/${TMP_COMPONENT}.dll"
                         DESTINATION ${INSTALL_PATH_QTPLUGINS}/platforms CONFIGURATIONS Release
