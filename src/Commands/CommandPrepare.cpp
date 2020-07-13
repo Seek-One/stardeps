@@ -129,6 +129,10 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
     {
         ConnectorArchive conector(getEnv());
 
+		QString szSCMUrl = pFormula->getSCMURL();
+
+		szSCMUrl = szSCMUrl.replace("${VERSION}", getConfigureVersion());
+
         // Create archive directory
         QDir dirArchive = getSourceArchivePackageDir();
         if(!dirArchive.exists()){
@@ -142,7 +146,7 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
             if(pFormula->getSCMURL().endsWith("tar.gz")){
                 szFileName = getPackageNameVersion() + ".tar.gz";
             }
-            bRes = conector.archive_download(pFormula->getSCMURL(), dirArchive, szArchiveFile, szFileName);
+            bRes = conector.archive_download(szSCMUrl, dirArchive, szArchiveFile, szFileName);
         }
 
         // Extract archive directory
