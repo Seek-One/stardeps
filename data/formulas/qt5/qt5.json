@@ -53,12 +53,12 @@
                 }
             },
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql -I -I /windows/64bits/mysql-connector-c++/lib/include -L /windows/64bits/mysql-connector-c++/lib/libmysql"
+                "OPTIONS::MYSQL":"-plugin-sql-mysql -I ${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}/include -L ${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}/lib/libmysql"
             }
         },
         "mysql-linux-mingw64" : {
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql -I ${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}/include -L ${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}/lib/libmysql"
+                "OPTIONS::MYSQL":"-plugin-sql-mysql -I /windows/64bits/mysql-connector-c++/lib/include -L /windows/64bits/mysql-connector-c++/lib/libmysql"
             }
         }
     },
