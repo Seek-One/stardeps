@@ -45,6 +45,14 @@ const QDir& AbstractCommand::getVirtualEnvironmentPath() const
 	return getCommandEnvironment()->getVirtualEnvironmentPath();
 }
 
+const QDir& AbstractCommand::getWorkingDirectory(const QDir& dirDefault) const
+{
+	if(m_dirCurrentWorkingDirectory == QDir()){
+		return dirDefault;
+	}
+	return m_dirCurrentWorkingDirectory;
+}
+
 bool AbstractCommand::init(int argc, char**argv)
 {
 	bool bRes = true;

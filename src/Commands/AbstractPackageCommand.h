@@ -38,7 +38,8 @@ protected:
 	bool doReplaceVariable(const QString& szText, const VariableList& dictVars, QString& szTextOut);
 	bool doPrepareCommand(const QString& szCmd, QString& szCmdOut);
 	bool doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory);
-    bool doRunCommands(const QStringList& listCmd, const QDir& dirWorkingDirectory);
+	bool doRunCommands(const QStringList& listCmd, const QDir& dirWorkingDirectory);
+	bool doChangeDirectoryAction(const QString& szDirectory);
 
 	bool doExecuteStep(const QString& szStep, const QDir& dirWorkingDirectory);
 

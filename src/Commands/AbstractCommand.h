@@ -32,6 +32,8 @@ public:
 
 	const QDir& getVirtualEnvironmentPath() const;
 
+	const QDir& getWorkingDirectory(const QDir& dirDefault) const;
+
 	bool init(int argc, char**argv);
 
 	bool execute();
@@ -45,6 +47,7 @@ protected:
 
 	AbstractCommandEnvironment* m_pCommandEnvironment;
 
+	QDir m_dirCurrentWorkingDirectory;
 	ShellExecutor m_shell;
 };
 

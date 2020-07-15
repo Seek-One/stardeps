@@ -139,6 +139,20 @@ bool AbstractPackageCommand::doRunCommands(const QStringList& listCmd, const QDi
     return bRes;
 }
 
+bool AbstractPackageCommand::doChangeDirectoryAction(const QString& szDirectory)
+{
+	bool bRes = true;
+
+	QString szDirectoryBind;
+	bRes = doPrepareCommand(szDirectory, szDirectoryBind);
+	if(bRes){
+		qDebug("[%s] change current directory to %s", qPrintable(m_szLabel), qPrintable(szDirectoryBind));
+		m_dirCurrentWorkingDirectory = szDirectoryBind;
+	}
+
+	return bRes;
+}
+
 bool AbstractPackageCommand::doExecuteStep(const QString& szStep, const QDir& dirWorkingDirectory)
 {
     bool bRes = true;
@@ -157,10 +171,17 @@ bool AbstractPackageCommand::doExecuteStep(const QString& szStep, const QDir& di
         FormulaStepActionList::const_iterator iter_action;
         for(iter_action = listFormulaStepAction.constBegin(); iter_action != listFormulaStepAction.constEnd(); ++iter_action)
         {
-            const FormulaStepAction& formulaStepAction = (*iter_action);
-            if(formulaStepAction.getActionType() == FormulaStepAction::ActionCommand){
-                bRes = doRunCommands(formulaStepAction.getCommandList(), dirWorkingDirectory);
-            }
+        	QDir dirCurrentWorkingDirectory = getWorkingDirectory(dirWorkingDirectory);
+
+		const FormulaStepAction& formulaStepAction = (*iter_action);
+		if(formulaStepAction.getActionType() == FormulaStepAction::ActionCommand)
+		{
+		bRes = doRunCommands(formulaStepAction.getCommandList(), dirCurrentWorkingDirectory);
+		}
+		if(formulaStepAction.getActionType() == FormulaStepAction::ActionChangeDirectory)
+		{
+			bRes = doChangeDirectoryAction(formulaStepAction.getDirectory());
+		}
         }
     }
 

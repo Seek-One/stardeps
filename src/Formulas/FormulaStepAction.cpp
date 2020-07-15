@@ -34,12 +34,27 @@ const FormulaCommands& FormulaStepAction::getCommandList() const
     return m_listCommand;
 }
 
+
+void FormulaStepAction::setDirectory(const QString& szDirectory)
+{
+	m_szDirectory = szDirectory;
+}
+
+const QString& FormulaStepAction::getDirectory() const
+{
+	return m_szDirectory;
+}
+
 void FormulaStepAction::setAction(const QString& szActionType, const QString& szAction)
 {
     if(szActionType == "cmd"){
         setActionType(ActionCommand);
         m_listCommand.append(szAction);
     }
+	if(szActionType == "chdir"){
+		setActionType(ActionChangeDirectory);
+		m_szDirectory = szAction;
+	}
 }
 
 void FormulaStepAction::setAction(const QString& szActionType, const QStringList& listAction)
