@@ -35,7 +35,7 @@
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
-            "_comment": "We first compile with the host compiler to get protoc and save_linker_opts programs workings",
+            "_comment": "We first compile with the host compiler to get protoc and save_linker_opts programs workings (need libssl-dev)",
             "actions":[
                 {"cmd":"mkdir ${PACKAGE_BUILD_PATH}/host-build"},
                 {"chdir":"${PACKAGE_BUILD_PATH}/host-build"},
