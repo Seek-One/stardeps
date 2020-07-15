@@ -31,7 +31,7 @@
     },
     "vars":{
         "CMAKE_OPTIONS":"${OPTIONS::BUILDTYPE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH} -DOPENSSL_ROOT_DIR=${DEPENDENCY::OPENSSL::ROOTPATH}",
-        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc-posix -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++-posix -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++ -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
     },
     "recipe": [
         {
@@ -56,7 +56,20 @@
         {
             "step":"install",
             "actions":[
-                {"cmd":"${MAKE} install"}
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_core.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_extra.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_openssl.pc ${PKG_CONFIG_LIBDIR}/"}
+            ]
+        },
+        {
+            "step":"clean",
+            "cmd":[
+                "rm -f ${PKG_CONFIG_LIBDIR}/libevent.pc",
+                "rm -f ${PKG_CONFIG_LIBDIR}/libevent_core.pc",
+                "rm -f ${PKG_CONFIG_LIBDIR}/libevent_extra.pc",
+                "rm -f ${PKG_CONFIG_LIBDIR}/libevent_openssl.pc"
             ]
         }
     ]
