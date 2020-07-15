@@ -1,0 +1,63 @@
+{
+	"name": "libevent",
+	"homepage": "https://libevent.org/",
+	"scm": {
+        "type": "git",
+        "url": "https://github.com/libevent/libevent.git"
+    },
+    "dependencies": {
+        "latest": {
+            "openssl" : {"min":"1.1"}
+        }
+    },
+    "options": {
+        "debug" : {
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::BUILDTYPE":"-DCMAKE_BUILD_TYPE=Debug"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::BUILDTYPE":"-DCMAKE_BUILD_TYPE=Release"
+                    }
+                }
+            ]
+        }
+    },
+    "vars":{
+        "CMAKE_OPTIONS":"${OPTIONS::BUILDTYPE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH} -DOPENSSL_ROOT_DIR=${DEPENDENCY::OPENSSL::ROOTPATH}",
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc-posix -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++-posix -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":"cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":"cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"}
+            ]
+        }
+    ]
+}
