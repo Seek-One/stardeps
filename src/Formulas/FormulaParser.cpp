@@ -173,6 +173,10 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 		QJsonValue value = iter_prop.value();
 		QJsonObject objectOptionDataList = value.toObject();
 
+		if(objectOptionDataList.contains("default-state")){
+			formulaOption.setDefaultState(objectOptionDataList.value("default-state").toString() == "enabled");
+		}
+
 		if(objectOptionDataList.contains("dependencies")){
 			FormulaDependenciesList listDependencies;
 			bRes = parseDependencies(objectOptionDataList.value("dependencies").toObject(), listDependencies);
@@ -183,17 +187,68 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 
 		if(objectOptionDataList.contains("vars")){
 			FormulaVariableList listVars;
-            if(objectOptionDataList.value("vars").isArray()){
-                bRes = parseVars(objectOptionDataList.value("vars").toArray(), listVars);
-            }else{
-                bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
-            }
+			if(objectOptionDataList.value("vars").isArray()){
+				bRes = parseVars(objectOptionDataList.value("vars").toArray(), listVars);
+			}else{
+				bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
+			}
 			if(bRes){
-				formulaOption.setVariableList(listVars);
+				FormulaOptionRule formulaOptionRule;
+				formulaOptionRule.setVariableList(listVars);
+				formulaOption.addOptionRule(formulaOptionRule);
+			}
+		}
+
+		if(objectOptionDataList.contains("rules")){
+			QJsonArray objectArray = objectOptionDataList.value("rules").toArray();
+			QJsonArray::const_iterator iter_rule;
+			for(iter_rule = objectArray.constBegin(); iter_rule != objectArray.constEnd(); ++iter_rule)
+			{
+				bRes = parseOptionRule((*iter_rule).toObject(), formulaOption);
+				if(!bRes){
+					break;
+				}
 			}
 		}
 
 		m_pFormula->addOption(formulaOption);
+	}
+
+	return bRes;
+}
+
+bool FormulaParser::parseOptionRule(const QJsonObject& objectRoot, FormulaOption& formulaOption)
+{
+	bool bRes = true;
+
+	FormulaOptionRule formulaOptionRule;
+
+	if(objectRoot.contains("state")){
+		FormulaOptionRule::State iState = FormulaOptionRule::StateAll;
+		QString szState = objectRoot.value("state").toString();
+		if(szState == "enabled"){
+			iState = FormulaOptionRule::StateEnabled;
+		}
+		if(szState == "disabled"){
+			iState = FormulaOptionRule::StateDisabled;
+		}
+		formulaOptionRule.setRuleState(iState);
+	}
+
+	if(objectRoot.contains("vars")){
+		FormulaVariableList listVars;
+		if(objectRoot.value("vars").isArray()){
+			bRes = parseVars(objectRoot.value("vars").toArray(), listVars);
+		}else{
+			bRes = parseVars(objectRoot.value("vars").toObject(), listVars);
+		}
+		if(bRes){
+			formulaOptionRule.setVariableList(listVars);
+		}
+	}
+
+	if(bRes){
+		formulaOption.addOptionRule(formulaOptionRule);
 	}
 
 	return bRes;

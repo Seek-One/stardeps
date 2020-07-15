@@ -15,6 +15,8 @@ class FormulaVariableList : public QMap<QString, QString> {
 public:
 	FormulaVariableList();
 	virtual ~FormulaVariableList();
+
+	void addVariableList(const FormulaVariableList& listVars);
 };
 
 #endif /* SRC_FORMULAS_FORMULAVARIABLELIST_H_ */

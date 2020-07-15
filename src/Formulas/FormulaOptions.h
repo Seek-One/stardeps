@@ -13,6 +13,35 @@
 #include <Formulas/FormulaVariableList.h>
 #include <Formulas/FormulaDependencies.h>
 
+class FormulaOptionRule
+{
+public:
+	enum State {
+		StateAll,
+		StateEnabled,
+		StateDisabled
+	};
+
+public:
+	FormulaOptionRule();
+	virtual ~FormulaOptionRule();
+
+	void setRuleState(State iState);
+	State getRuleState() const;
+
+	void setVariableList(const FormulaVariableList& listVariables);
+	const FormulaVariableList& getVariableList() const;
+
+	bool matchState(bool bState) const;
+
+private:
+	State m_iState;
+
+	FormulaVariableList m_listVars;
+};
+
+typedef QList<FormulaOptionRule> FormulaOptionRuleList;
+
 class FormulaOption {
 public:
 	FormulaOption();
@@ -23,21 +52,25 @@ public:
 	void setOptionName(const QString& szName);
 	const QString& getOptionName() const;
 
+	void setDefaultState(bool bDefaultState);
+	bool getDefaultState() const;
+
 	void setDependenciesList(const FormulaDependenciesList& listDependencies);
 	const FormulaDependenciesList& getDependenciesList() const;
 
-	void addVariable(const QString& szVarName, const QString& szVarValue);
-	QString getVariable(const QString& szVarName) const;
+	FormulaVariableList getVariableListForState(bool bState) const;
 
-	void setVariableList(const FormulaVariableList& listVariables);
-	const FormulaVariableList& getVariableList() const;
+	void addOptionRule(const FormulaOptionRule& formulaOptionRule);
+	const FormulaOptionRuleList& getOptionRuleList() const;
 
 private:
 	QString m_szOptionName;
 
+	bool m_bDefaultState;
+
 	FormulaDependenciesList m_listDependencies;
 
-	FormulaVariableList m_listVars;
+	FormulaOptionRuleList m_listRules;
 };
 
 class FormulaOptionList : public QList<FormulaOption>

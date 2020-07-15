@@ -7,9 +7,50 @@
 
 #include "FormulaOptions.h"
 
-FormulaOption::FormulaOption()
+FormulaOptionRule::FormulaOptionRule()
+{
+	m_iState = StateAll;
+}
+
+FormulaOptionRule::~FormulaOptionRule()
 {
 
+}
+
+void FormulaOptionRule::setRuleState(State iState)
+{
+	m_iState = iState;
+}
+
+FormulaOptionRule::State FormulaOptionRule::getRuleState() const
+{
+	return m_iState;
+}
+
+void FormulaOptionRule::setVariableList(const FormulaVariableList& listVariables)
+{
+	m_listVars = listVariables;
+}
+
+const FormulaVariableList& FormulaOptionRule::getVariableList() const
+{
+	return m_listVars;
+}
+
+bool FormulaOptionRule::matchState(bool bState) const
+{
+	if(m_iState == StateEnabled){
+		return bState;
+	}
+	if(m_iState == StateDisabled){
+		return !bState;
+	}
+	return true;
+}
+
+FormulaOption::FormulaOption()
+{
+	m_bDefaultState = false;
 }
 
 FormulaOption::~FormulaOption()
@@ -32,6 +73,16 @@ const QString& FormulaOption::getOptionName() const
 	return m_szOptionName;
 }
 
+void FormulaOption::setDefaultState(bool bDefaultState)
+{
+	m_bDefaultState = bDefaultState;
+}
+
+bool FormulaOption::getDefaultState() const
+{
+	return m_bDefaultState;
+}
+
 void FormulaOption::setDependenciesList(const FormulaDependenciesList& listDependencies)
 {
 	m_listDependencies = listDependencies;
@@ -42,24 +93,36 @@ const FormulaDependenciesList& FormulaOption::getDependenciesList() const
 	return m_listDependencies;
 }
 
-void FormulaOption::addVariable(const QString& szVarName, const QString& szVarValue)
+FormulaVariableList FormulaOption::getVariableListForState(bool bState) const
 {
-	m_listVars.insert(szVarName, szVarValue);
+	FormulaVariableList listVars;
+
+	FormulaOptionRuleList::const_iterator iter;
+
+	qDebug("%s : %d", qPrintable(m_szOptionName), bState);
+
+	for(iter = m_listRules.constBegin(); iter != m_listRules.constEnd(); ++iter)
+	{
+		const FormulaOptionRule& formulaOptionRule = (*iter);
+		qDebug("  rule: %d", formulaOptionRule.getRuleState());
+		if(formulaOptionRule.matchState(bState))
+		{
+			qDebug("match");
+			listVars.addVariableList(formulaOptionRule.getVariableList());
+		}
+	}
+
+	return listVars;
 }
 
-QString FormulaOption::getVariable(const QString& szVarName) const
+void FormulaOption::addOptionRule(const FormulaOptionRule& formulaOptionRule)
 {
-	return m_listVars.value(szVarName, QString());
+	m_listRules.append(formulaOptionRule);
 }
 
-void FormulaOption::setVariableList(const FormulaVariableList& listVariables)
+const FormulaOptionRuleList& FormulaOption::getOptionRuleList() const
 {
-	m_listVars = listVariables;
-}
-
-const FormulaVariableList& FormulaOption::getVariableList() const
-{
-	return m_listVars;
+	return m_listRules;
 }
 
 FormulaOptionList::FormulaOptionList()
