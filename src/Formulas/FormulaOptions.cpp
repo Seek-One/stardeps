@@ -99,15 +99,11 @@ FormulaVariableList FormulaOption::getVariableListForState(bool bState) const
 
 	FormulaOptionRuleList::const_iterator iter;
 
-	qDebug("%s : %d", qPrintable(m_szOptionName), bState);
-
 	for(iter = m_listRules.constBegin(); iter != m_listRules.constEnd(); ++iter)
 	{
 		const FormulaOptionRule& formulaOptionRule = (*iter);
-		qDebug("  rule: %d", formulaOptionRule.getRuleState());
 		if(formulaOptionRule.matchState(bState))
 		{
-			qDebug("match");
 			listVars.addVariableList(formulaOptionRule.getVariableList());
 		}
 	}
