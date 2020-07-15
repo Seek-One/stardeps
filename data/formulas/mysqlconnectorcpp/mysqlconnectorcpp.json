@@ -24,8 +24,7 @@
     },
     "vars":{
         "CMAKE_OPTIONS":"${OPTIONS::DEBUG} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH} -DWITH_SSL=${DEPENDENCY::OPENSSL::ROOTPATH}",
-        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc-posix -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++-posix -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres",
-        "CMAKE_WORKAROUND":"-DCMAKE_VERBOSE_MAKEFILE=ON"
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc-posix -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++-posix -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
     },
     "recipe": [
         {
@@ -36,6 +35,7 @@
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "_comment": "We first compile with the host compiler to get protoc and save_linker_opts programs workings",
             "actions":[
                 {"cmd":"mkdir ${PACKAGE_BUILD_PATH}/host-build"},
                 {"chdir":"${PACKAGE_BUILD_PATH}/host-build"},
@@ -49,7 +49,7 @@
                 {"cmd":"mkdir ${PACKAGE_BUILD_PATH}/target-build"},
                 {"chdir":"${PACKAGE_BUILD_PATH}/target-build"},
                 {"cmd":[
-                    "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_WORKAROUND} ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}",
+                    "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}",
                     "ln -s ${PACKAGE_BUILD_PATH}/host-build/save_linker_opts save_linker_opts",
                     "ln -s ${PACKAGE_BUILD_PATH}/host-build/cdk/protobuf/protoc cdk/protobuf/protoc",
                     "sed -i 's/protoc.exe/protoc/g' cdk/protocol/mysqlx/CMakeFiles/cdk_proto_mysqlx.dir/build.make"
@@ -70,38 +70,6 @@
                 {"cmd":"${MAKE}"},
                 {"chdir":"${PACKAGE_BUILD_PATH}/target-build"},
                 {"cmd":"${MAKE}"}
-            ]
-        },
-        {
-            "step":"configure",
-            "platforms":"linux-mingw-gcc-32-old",
-            "cmd":[
-                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_WORKAROUND} ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}",
-                "bash -c \"echo 'export PATH=$(dirname `${CROSS_COMPIL_PREFIX}-gcc-posix -print-file-name=libstdc++-6.dll`):$PATH' > save_linker_opts\"",
-                "bash -c \"echo 'wine save_linker_opts.exe' >> save_linker_opts\"",
-                "chmod a+x save_linker_opts",
-                "bash -c \"echo 'export PATH=$(dirname `${CROSS_COMPIL_PREFIX}-gcc-posix -print-file-name=libstdc++-6.dll`):$PATH' > cdk/protobuf/protoc\"",
-                "bash -c \"echo 'export PATH=$(dirname `${CROSS_COMPIL_PREFIX}-gcc-posix -print-file-name=libwinpthread-1.dll`):$PATH' >> cdk/protobuf/protoc\"",
-                "bash -c \"echo 'wine ${PACKAGE_BUILD_PATH}/cdk/protobuf/protoc.exe' >> cdk/protobuf/protoc\"",
-                "chmod a+x cdk/protobuf/protoc",
-                "sed -i 's/protoc.exe/protoc/g' cdk/protocol/mysqlx/CMakeFiles/cdk_proto_mysqlx.dir/build.make"
-            ]
-        },
-        {
-            "step":"configure",
-            "platforms":"linux-mingw-gcc-64-old",
-            "cmd":[
-                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_WORKAROUND} ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}",
-                "bash -c \"echo 'export PATH=$(dirname `${CROSS_COMPIL_PREFIX}-gcc-posix -print-file-name=libstdc++-6.dll`):$PATH' > save_linker_opts\"",
-                "bash -c \"echo 'wine64 save_linker_opts.exe' >> save_linker_opts\"",
-                "chmod a+x save_linker_opts",
-                "bash -c \"echo 'export PATH=$(dirname `${CROSS_COMPIL_PREFIX}-gcc-posix -print-file-name=libstdc++-6.dll`):$PATH' > cdk/protobuf/protoc\"",
-                "bash -c \"echo 'export PATH=$(dirname `${CROSS_COMPIL_PREFIX}-gcc-posix -print-file-name=libwinpthread-1.dll`):$PATH' >> cdk/protobuf/protoc\"",
-                "bash -c \"echo 'echo PATH=$PATH' >> cdk/protobuf/protoc\"",
-                "bash -c \"echo 'wine64 ${PACKAGE_BUILD_PATH}/cdk/protobuf/protoc.exe' >> cdk/protobuf/protoc\"",
-                "chmod a+x cdk/protobuf/protoc",
-                "bash -c \"cp `${CROSS_COMPIL_PREFIX}-gcc-posix -print-file-name=libwinpthread-1.dll` ${PACKAGE_BUILD_PATH}/cdk/protobuf\"",
-                "sed -i 's/protoc.exe/protoc/g' cdk/protocol/mysqlx/CMakeFiles/cdk_proto_mysqlx.dir/build.make"
             ]
         },
         {
