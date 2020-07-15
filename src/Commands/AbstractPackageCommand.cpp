@@ -134,6 +134,9 @@ bool AbstractPackageCommand::doRunCommands(const QStringList& listCmd, const QDi
     for(iter = listCmd.constBegin(); iter != listCmd.constEnd(); ++iter)
     {
         bRes = doRunCommand(*iter, dirWorkingDirectory);
+        if(!bRes){
+        	break;
+        }
     }
 
     return bRes;
@@ -155,37 +158,40 @@ bool AbstractPackageCommand::doChangeDirectoryAction(const QString& szDirectory)
 
 bool AbstractPackageCommand::doExecuteStep(const QString& szStep, const QDir& dirWorkingDirectory)
 {
-    bool bRes = true;
+	bool bRes = true;
 
-    Environment &env = getEnv();
+	Environment &env = getEnv();
 
-    const QSharedPointer<Formula>& pFormula = getFormula();
-    const QString& szPlatform = env.getPlatformTypeName();
-    const FormulaRecipeList& listFormulaRecipes = pFormula->getRecipeList();
+	const QSharedPointer<Formula>& pFormula = getFormula();
+	const QString& szPlatform = env.getPlatformTypeName();
+	const FormulaRecipeList& listFormulaRecipes = pFormula->getRecipeList();
 
-    if(listFormulaRecipes.contains(QString())){
-        const FormulaRecipe& formulaRecipe = listFormulaRecipes.value(QString());
-        FormulaStepActionList listFormulaStepAction;
-        listFormulaStepAction = formulaRecipe.getFormulaStepActionList(szStep, szPlatform, getPackageOptions());
+	if(listFormulaRecipes.contains(QString())){
+		const FormulaRecipe& formulaRecipe = listFormulaRecipes.value(QString());
+		FormulaStepActionList listFormulaStepAction;
+		listFormulaStepAction = formulaRecipe.getFormulaStepActionList(szStep, szPlatform, getPackageOptions());
 
-        FormulaStepActionList::const_iterator iter_action;
-        for(iter_action = listFormulaStepAction.constBegin(); iter_action != listFormulaStepAction.constEnd(); ++iter_action)
-        {
-        	QDir dirCurrentWorkingDirectory = getWorkingDirectory(dirWorkingDirectory);
-
-		const FormulaStepAction& formulaStepAction = (*iter_action);
-		if(formulaStepAction.getActionType() == FormulaStepAction::ActionCommand)
+		FormulaStepActionList::const_iterator iter_action;
+		for(iter_action = listFormulaStepAction.constBegin(); iter_action != listFormulaStepAction.constEnd(); ++iter_action)
 		{
-		bRes = doRunCommands(formulaStepAction.getCommandList(), dirCurrentWorkingDirectory);
-		}
-		if(formulaStepAction.getActionType() == FormulaStepAction::ActionChangeDirectory)
-		{
-			bRes = doChangeDirectoryAction(formulaStepAction.getDirectory());
-		}
-        }
-    }
+			QDir dirCurrentWorkingDirectory = getWorkingDirectory(dirWorkingDirectory);
 
-    return bRes;
+			const FormulaStepAction& formulaStepAction = (*iter_action);
+			if(formulaStepAction.getActionType() == FormulaStepAction::ActionCommand)
+			{
+				bRes = doRunCommands(formulaStepAction.getCommandList(), dirCurrentWorkingDirectory);
+			}
+			if(formulaStepAction.getActionType() == FormulaStepAction::ActionChangeDirectory)
+			{
+				bRes = doChangeDirectoryAction(formulaStepAction.getDirectory());
+			}
+			if(!bRes){
+				break;
+			}
+		}
+	}
+
+	return bRes;
 }
 
 bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
