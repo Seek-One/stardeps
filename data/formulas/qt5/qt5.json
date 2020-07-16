@@ -49,16 +49,26 @@
         "mysql" : {
             "dependencies": {
                 "latest": {
-                    "mysqlconnectorcpp" : {"min":"0.1"}
+                    "mysql" : "any",
                 }
             },
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql -I ${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}/include -L ${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}/lib/libmysql"
+                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}"
             }
         },
-        "mysql-linux-mingw64" : {
+        "mysql-custom" : {
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql -I /windows/64bits/mysql-connector-c++/lib/include -L /windows/64bits/mysql-connector-c++/lib/libmysql"
+                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${CUSTOM_MYSQL_PREFIX}"
+            }
+        },
+        "postgressql" : {
+            "vars": {
+                "OPTIONS::PSQL":"-plugin-sql-psql"
+            }
+        },
+        "postgressql-custom" : {
+            "vars": {
+                "OPTIONS::PSQL":"-plugin-sql-psql PSQL_PREFIX=${CUSTOM_PSQL_PREFIX}"
             }
         }
     },
@@ -66,7 +76,7 @@
         "QT_MODULES":"--module-subset=qtbase,qtscript,qtmultimedia,qttools,qttranslations,qtdeclarative",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
-        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} -prefix ${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
     },
     "recipe": [
