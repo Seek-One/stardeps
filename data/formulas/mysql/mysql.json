@@ -1,0 +1,68 @@
+{
+	"name": "MySQL Connector/C++",
+	"homepage": "https://www.mysql.com/",
+	"scm": {
+        "type": "git",
+        "url": "https://github.com/mysql/mysql-server.git"
+    },
+    "dependencies": {
+        "latest": {
+            "openssl" : {"min":"1.1"},
+            "libevent" : {"min":"0.1"}
+        }
+    },
+    "options": {
+        "debug" : {
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::BUILDTYPE":"-DCMAKE_BUILD_TYPE=Debug"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::BUILDTYPE":"-DCMAKE_BUILD_TYPE=Release"
+                    }
+                }
+            ]
+        },
+        "server" : {
+            "default-state":"disabled",
+            "vars": {
+                "OPTIONS::NOSERVER":"-DWITHOUT_SERVER:BOOL=ON -DWITH_AUTHENTICATION_LDAP=OFF"
+            }
+        }
+    },
+    "vars":{
+        "DEPS_BOOST":"-DDOWNLOAD_BOOST=1 -DWITH_BOOST=./boost",
+        "DEPS_LIBEVENT":"-DWITH_LIBEVENT=system -DLIBEVENT_INCLUDE_PATH=${DEPENDENCY::LIBEVENT::ROOTPATH}/include -DLIBEVENT_LIB_PATHS=${DEPENDENCY::LIBEVENT::ROOTPATH}/lib",
+        "DEPS_LIBEVENT_CROSS":"-DTEST_RUN_RESULT=2.1.0 -DTEST_RUN_RESULT__TRYRUN_OUTPUT=2.1.0",
+        "CMAKE_OPTIONS":"${OPTIONS::BUILDTYPE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH} -DWITH_SSL=${DEPENDENCY::OPENSSL::ROOTPATH} -DDOWNLOAD_BOOST=1 -DWITH_BOOST=./boost ${OPTIONS::NOSERVER} ",
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc-posix -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++-posix -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${DEPS_BOOST} ${DEPS_LIBEVENT} ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd": "echo Cross compilation not supported for mysql"
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"}
+            ]
+        }
+    ]
+}
