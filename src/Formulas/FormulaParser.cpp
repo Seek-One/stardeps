@@ -272,8 +272,7 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDepe
 		FormulaDependencies formulaDependencies;
 
 		QJsonObject::const_iterator iter_deps;
-		for(iter_deps = objectDepsList.constBegin(); iter_deps != objectDepsList.constEnd(); ++iter_deps)
-		{
+		for(iter_deps = objectDepsList.constBegin(); iter_deps != objectDepsList.constEnd(); ++iter_deps) {
 			// Package name
 			QString szPackageName = iter_deps.key();
 			QString szVersionMin;
@@ -281,14 +280,18 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDepe
 
 			// Attributes
 			QJsonValue value2 = iter_deps.value();
-			QJsonObject objectAttrsList = value2.toObject();
 
-			if(objectAttrsList.contains("min")){
-				szVersionMin = objectAttrsList.value("min").toString();
-			}
+			// If dependencies with attributes
+			if (value2.isObject()) {
+				QJsonObject objectAttrsList = value2.toObject();
 
-			if(objectAttrsList.contains("max")){
-				szVersionMax = objectAttrsList.value("max").toString();
+				if (objectAttrsList.contains("min")) {
+					szVersionMin = objectAttrsList.value("min").toString();
+				}
+
+				if (objectAttrsList.contains("max")) {
+					szVersionMax = objectAttrsList.value("max").toString();
+				}
 			}
 
 			formulaDependencies.addDependency(szPackageName, szVersionMin, szVersionMax);
