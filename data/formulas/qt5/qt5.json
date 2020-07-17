@@ -49,7 +49,7 @@
         "mysql" : {
             "dependencies": {
                 "latest": {
-                    "mysql" : "any",
+                    "mysql" : "any"
                 }
             },
             "vars": {
