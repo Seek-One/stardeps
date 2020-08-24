@@ -17,9 +17,21 @@
             }
         },
         "commercial" : {
-            "vars": {
-                "OPTIONS::COMMERCIAL":"--enable-gpl --enable-nonfree"
-            }
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::COMMERCIAL":""
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::COMMERCIAL":"--enable-gpl --enable-nonfree"
+                    }
+                }
+            ]
         },
         "openh264" : {
             "dependencies": {
@@ -84,7 +96,7 @@
     },
     "vars":{
         "CONFIGURE_DEPS":"${OPTIONS::OPENH264} ${OPTIONS::X264} ${OPTIONS::X265} ${OPTIONS::FDKAAC} ${OPTIONS::ASS} ${OPTIONS::FREETYPE}",
-        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::COMMERCIAL} ${OPTIONS::CONFIGURE_DEPS} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::COMMERCIAL} ${CONFIGURE_DEPS} --prefix=${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"--cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config"
     },
     "recipe": [

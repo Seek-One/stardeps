@@ -194,6 +194,7 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 			}
 			if(bRes){
 				FormulaOptionRule formulaOptionRule;
+				formulaOptionRule.setRuleState(FormulaOptionRule::StateEnabled);
 				formulaOptionRule.setVariableList(listVars);
 				formulaOption.addOptionRule(formulaOptionRule);
 			}
