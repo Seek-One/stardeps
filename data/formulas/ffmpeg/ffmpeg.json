@@ -113,6 +113,14 @@
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-64",
+            "cmd":[
+                "x86_64-w64-mingw32-pkg-config --help",
+                "x86_64-w64-mingw32-pkg-config --libs freetype2"
+            ]
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
             "cmd":"${PACKAGE_SRC_PATH}/configure --arch=x86_64 --target-os=mingw64 ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
         },
         {
