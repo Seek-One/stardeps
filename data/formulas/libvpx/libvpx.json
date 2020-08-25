@@ -55,7 +55,6 @@
         },
         {
             "step":"install",
-            "platforms":"linux-gcc-64,darwin-clang-64",
             "cmd":"${MAKE} install"
         },
         {
