@@ -1,0 +1,70 @@
+{
+	"name": "libvpx",
+	"homepage": "https://www.webmproject.org/code/",
+	"scm": {
+        "type": "git",
+        "url": "https://chromium.googlesource.com/webm/libvpx"
+    },
+    "options": {
+        "debug" : {
+            "vars": {
+                "OPTIONS::DEBUG":"--enable-debug --disable-optimizations"
+            }
+        },
+        "shared" : {
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::SHARED":"--enable-shared"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::SHARED":""
+                    }
+                }
+            ]
+        }
+    },
+    "vars":{
+        "COMPILE_OPTIONS":"--enable-pic --disable-install-bins --disable-install-srcs --size-limit=16384x16384 --enable-postproc --enable-multi-res-encoding --enable-temporal-denoising --enable-vp9-temporal-denoising --enable-vp9-postproc",
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::STATIC} ${COMPILE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --target=x86-win32-gcc"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --target=x86_64-win64-gcc"
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"${MAKE} install"
+        },
+        {
+            "step":"install",
+            "cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/vpx.pc ${PKG_CONFIG_LIBDIR}/"
+        },
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/vpx.pc"
+        }
+    ]
+}
