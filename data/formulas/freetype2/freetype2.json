@@ -5,6 +5,12 @@
         "type": "git",
         "url": "https://git.savannah.gnu.org/git/freetype/freetype2.git"
     },
+    "dependencies": {
+        "latest": {
+            "zlib" : "any",
+            "libpng" : "any"
+        }
+    },
     "options": {
         "static" : {
             "vars": {
@@ -18,7 +24,8 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_DEPS":"${OPTIONS::PNG}",
+        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED} ${CONFIGURE_DEPS} --prefix=${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
     },
     "recipe": [
