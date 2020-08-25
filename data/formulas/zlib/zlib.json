@@ -27,45 +27,39 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} --prefix=${PACKAGE_PREFIX_PATH}",
-        "MAKE_CROSS_OPTIONS":"-fwin32/Makefile.gcc ${OPTIONS::MAKE_SHARED_MODE} PREFIX=${CROSS_COMPIL_PREFIX}-",
-        "MAKE_CROSS_INSTALL_OPTIONS":"-fwin32/Makefile.gcc ${OPTIONS::MAKE_SHARED_MODE} BINARY_PATH=${PACKAGE_PREFIX_PATH}/bin INCLUDE_PATH=${PACKAGE_PREFIX_PATH}/include LIBRARY_PATH=${PACKAGE_PREFIX_PATH}/lib"
+        "CMAKE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::RELEASE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH}",
+        "CMAKE_DEPS":"-DCMAKE_FIND_ROOT_PATH=/usr/${CROSS_COMPIL_PREFIX};${DEPENDENCY::ZLIB::ROOTPATH}",
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++ -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
     },
     "recipe": [
         {
             "step":"configure",
-            "platforms":"linux-gcc-64,darwin-clang-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+            "platforms":"linux-gcc-64",
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
         },
         {
             "step":"configure",
-            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
-            "cmd":"${RSYNC} -a -v --delete-after ${PACKAGE_SRC_PATH}/ ${PACKAGE_BUILD_PATH}"
-        },
-        {
-            "step":"build",
-            "platforms":"linux-gcc-64,darwin-clang-64",
-            "cmd":"${MAKE}"
-        },
-        {
-            "step":"build",
-            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
-            "cmd":"${MAKE} ${MAKE_CROSS_OPTIONS}"
-        },
-        {
-            "step":"install",
-            "platforms":"linux-gcc-64,darwin-clang-64",
-            "actions":[
-                {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/zlib.pc ${PKG_CONFIG_LIBDIR}/"}
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
             ]
         },
         {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+            ]
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
             "step":"install",
-            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
             "actions":[
-                {"cmd":"${MAKE} install ${MAKE_CROSS_INSTALL_OPTIONS}"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/zlib.pc ${PKG_CONFIG_LIBDIR}/"}
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/share/pkgconfig/zlib.pc ${PKG_CONFIG_LIBDIR}/"}
             ]
         },
         {
