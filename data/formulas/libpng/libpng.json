@@ -1,0 +1,110 @@
+{
+	"name": "libpng",
+	"homepage": "https://libpng.sourceforge.io/",
+	"scm": {
+        "type": "git",
+        "url": "https://github.com/glennrp/libpng.git"
+    },
+    "dependencies": {
+        "latest": {
+            "zlib" : "any"
+        }
+    },
+    "options": {
+        "debug" : {
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::DEBUG":"--enable-maintainer-mode"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::DEBUG":"--enable-hardware-optimizations"
+                    }
+                }
+            ]
+        },
+        "shared" : {
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::SHARED":"--enable-shared=yes"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::SHARED":"--enable-shared=no"
+                    }
+                }
+            ]
+        },
+        "static" : {
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::SHARED":"--enable-static=yes"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::SHARED":"--enable-static=no"
+                    }
+                }
+            ]
+        }
+    },
+    "vars":{
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::STATIC} ${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} CFLAGS=-I${DEPENDENCY::ZLIB::ROOTPATH}/include LDFLAGS=${DEPENDENCY::ZLIB::ROOTPATH}/lib",
+        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}",
+        "CMAKE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::RELEASE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH}",
+        "CMAKE_DEPS":"-DCMAKE_FIND_ROOT_PATH=/usr/${CROSS_COMPIL_PREFIX};${DEPENDENCY::ZLIB::ROOTPATH}",
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++ -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+            ]
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+            ]
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libpng.pc ${PKG_CONFIG_LIBDIR}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libpng16.pc ${PKG_CONFIG_LIBDIR}/"}
+            ]
+        },
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libpng.pc ${PKG_CONFIG_LIBDIR}/libpng16.pc"
+        }
+    ]
+}
