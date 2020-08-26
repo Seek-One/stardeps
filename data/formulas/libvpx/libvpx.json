@@ -17,7 +17,7 @@
                 {
                     "state":"enabled",
                     "vars": {
-                        "OPTIONS::SHARED":"--enable-shared"
+                        "OPTIONS::SHARED":"--enable-pic --enable-shared"
                     }
                 },
                 {
@@ -30,8 +30,9 @@
         }
     },
     "vars":{
-        "COMPILE_OPTIONS":"--enable-pic --disable-install-bins --disable-install-srcs --size-limit=16384x16384 --enable-postproc --enable-multi-res-encoding --enable-temporal-denoising --enable-vp9-temporal-denoising --enable-vp9-postproc",
-        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::STATIC} ${COMPILE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}"
+        "COMPILE_OPTIONS":"--size-limit=16384x16384 --enable-postproc --enable-multi-res-encoding --enable-temporal-denoising --enable-vp9-temporal-denoising --enable-vp9-postproc",
+        "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::STATIC} ${COMPILE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--extra-cflags=-fno-asynchronous-unwind-tables --disable-unit-tests --disable-tools --disable-examples --disable-docs"
     },
     "recipe": [
         {
@@ -42,12 +43,12 @@
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-32",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --target=x86-win32-gcc"
+            "cmd":"CROSS=${CROSS_COMPIL_PREFIX}- ${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --target=x86-win32-gcc ${CONFIGURE_CROSS_OPTIONS}"
         },
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --target=x86_64-win64-gcc"
+            "cmd":"CROSS=${CROSS_COMPIL_PREFIX}- ${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} --target=x86_64-win64-gcc ${CONFIGURE_CROSS_OPTIONS}"
         },
         {
             "step":"build",
