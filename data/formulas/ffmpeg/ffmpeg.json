@@ -36,7 +36,7 @@
         "openh264" : {
             "dependencies": {
                 "latest": {
-                    "openh264" : {}
+                    "openh264" : "any"
                 }
             },
             "vars": {
@@ -46,7 +46,7 @@
         "x264" : {
             "dependencies": {
                 "latest": {
-                    "x264" : {}
+                    "x264" : "any"
                 }
             },
             "vars": {
@@ -56,17 +56,27 @@
         "x265" : {
             "dependencies": {
                 "latest": {
-                    "x265" : {}
+                    "x265" : "any"
                 }
             },
             "vars": {
                 "OPTIONS::X265":"--enable-libx265"
             }
         },
+        "vpx" : {
+            "dependencies": {
+                "latest": {
+                    "libvpx" : "any"
+                }
+            },
+            "vars": {
+                "OPTIONS::VPX":"--enable-libvpx --extra-libs=-lvpx --extra-libs=-lpthread --extra-cflags=\"-I ${DEPENDENCY::LIBVPX::ROOTPATH}/include\" --extra-ldflags=\"-L ${DEPENDENCY::LIBVPX::ROOTPATH}/lib/\""
+            }
+        },
         "fdk-aac" : {
             "dependencies": {
                 "latest": {
-                    "fdk-aac" : {}
+                    "fdk-aac" : "any"
                 }
             },
             "vars": {
@@ -76,7 +86,7 @@
         "ass" : {
             "dependencies": {
                 "latest": {
-                    "ass" : {}
+                    "ass" : "any"
                 }
             },
             "vars": {
@@ -86,16 +96,18 @@
         "freetype" : {
             "dependencies": {
                 "latest": {
-                    "freetype2" : {}
+                    "freetype2" : "any",
+                    "libpng" : "any",
+                    "zlib" : "any"
                 }
             },
             "vars": {
-                "OPTIONS::FREETYPE":"--enable-libfreetype"
+                "OPTIONS::FREETYPE":"--enable-libfreetype --enable-zlib --extra-libs=-lpng --extra-libs=-lzlib --extra-cflags=\"-I ${DEPENDENCY::ZLIB::ROOTPATH}/include\" --extra-ldflags=\"-L ${DEPENDENCY::LIBPNG::ROOTPATH}/lib -L ${DEPENDENCY::ZLIB::ROOTPATH}/lib\""
             }
         }
     },
     "vars":{
-        "CONFIGURE_DEPS":"${OPTIONS::OPENH264} ${OPTIONS::X264} ${OPTIONS::X265} ${OPTIONS::FDKAAC} ${OPTIONS::ASS} ${OPTIONS::FREETYPE}",
+        "CONFIGURE_DEPS":"${OPTIONS::OPENH264} ${OPTIONS::X264} ${OPTIONS::X265} ${OPTIONS::VPX} ${OPTIONS::FDKAAC} ${OPTIONS::ASS} ${OPTIONS::FREETYPE}",
         "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::COMMERCIAL} ${CONFIGURE_DEPS} --prefix=${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"--cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config"
     },

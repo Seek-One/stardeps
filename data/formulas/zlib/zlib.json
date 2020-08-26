@@ -63,6 +63,13 @@
             ]
         },
         {
+            "step":"install",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "actions":[
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/libzlib.dll.a ${PACKAGE_PREFIX_PATH}/lib/libz.dll.a"}
+            ]
+        },
+        {
             "step":"clean",
             "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/zlib.pc"
         }
