@@ -102,16 +102,24 @@ bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirW
         parseCommand(szCmdBind, tokens);
 
 		// Rebuild cmd
-		int i = 0;
+		QStringList listCmdEnvVars;
+		QString szCmdExecutable;
 		QStringList listArgs;
 		QStringList::const_iterator iter;
 		for(iter = tokens.constBegin(); iter != tokens.constEnd(); ++iter)
 		{
 			const QString& szArg = (*iter);
-			if(i > 0 && !szArg.isEmpty()){
+			if(!szCmdExecutable.isEmpty()){
 				listArgs.append(szArg);
+			}else{
+				// Support for command given with env variables
+				// CC=gcc configure
+				if(szArg.contains("=")){
+					listCmdEnvVars.append(szArg);
+				}else{
+					szCmdExecutable = szArg;
+				}
 			}
-			i++;
 		}
 
 		if(!dirWorkingDirectory.exists()){
@@ -119,7 +127,7 @@ bool AbstractPackageCommand::doRunCommand(const QString& szCmd, const QDir& dirW
 			bRes = dirWorkingDirectory.mkpath(".");
 		}
 		if(bRes) {
-            bRes = m_shell.runCommand(tokens[0], listArgs, dirWorkingDirectory);
+            bRes = m_shell.runCommand(szCmdExecutable, listArgs, listCmdEnvVars, dirWorkingDirectory);
         }
 	}
 

@@ -25,6 +25,7 @@ public:
 	void setEnvironmentVariableList(const VariableList& listVars);
 
 	bool runCommand(const QString& szCommand, const QStringList& listArgs, const QDir& dirWorkingDirectory = QDir());
+	bool runCommand(const QString& szCommand, const QStringList& listArgs, const QStringList& listCmdEnvVars, const QDir& dirWorkingDirectory = QDir());
 
 private slots:
 	void processFinished(int exitCode, QProcess::ExitStatus exitStatus);

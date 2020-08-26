@@ -26,7 +26,13 @@ void ShellExecutor::setEnvironmentVariableList(const VariableList& listVars)
     m_listEnvVars = listVars;
 }
 
-bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& listArgs, const QDir& dirWorkingDirectory) {
+bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& listArgs, const QDir& dirWorkingDirectory)
+{
+	return runCommand(szCommand, listArgs, QStringList(), dirWorkingDirectory);
+}
+
+bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& listArgs, const QStringList& listCmdEnvVars, const QDir& dirWorkingDirectory)
+{
     bool bRes = false;
 
     QProcess process;
@@ -41,14 +47,25 @@ bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& list
     for(iter_var = m_listEnvVars.constBegin(); iter_var != m_listEnvVars.constEnd(); ++iter_var){
         processEnvironment.insert(iter_var.key(), iter_var.value());
     }
+
+	QStringList::const_iterator iter_cmd_var;
+	for(iter_cmd_var = listCmdEnvVars.constBegin(); iter_cmd_var != listCmdEnvVars.constEnd(); ++iter_cmd_var){
+		const QString& szTmp = (*iter_cmd_var);
+		int iIdx = szTmp.indexOf("=");
+		if(iIdx != -1){
+			QString szVarName = szTmp.left(iIdx);
+			QString szVarValue = szTmp.mid(iIdx+1);
+			qDebug("[shell] Using command defined variable %s=%s", qPrintable(szVarName), qPrintable(szVarValue));
+			processEnvironment.insert(szVarName, szVarValue);
+		}
+	}
     process.setProcessEnvironment(processEnvironment);
-    /*
+
     QStringList listProcessEnv = processEnvironment.toStringList();
     QStringList::const_iterator iter;
     for(iter = listProcessEnv.constBegin(); iter != listProcessEnv.constEnd(); ++iter) {
-        qDebug("%s", qPrintable(*iter));
+        //qDebug("%s", qPrintable(*iter));
     }
-    */
 
     connect(&process, SIGNAL(readyReadStandardOutput()), this, SLOT(readCommandAllStandardOutput()));
     connect(&process, SIGNAL(readyReadStandardError()), this, SLOT(readCommandAllStandardError()));
