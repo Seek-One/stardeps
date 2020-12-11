@@ -23,6 +23,7 @@ public:
 		SCM_None,
 		SCM_Git,
 		SCM_Svn,
+		SCM_Mercurial,
         SCM_Archive
 	};
 

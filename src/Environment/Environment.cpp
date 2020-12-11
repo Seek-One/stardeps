@@ -85,6 +85,11 @@ QString Environment::getGitExe() const
 	return getEnvVar(VE_VAR_GIT, "git");
 }
 
+QString Environment::getHgExe() const
+{
+	return getEnvVar(VE_VAR_HG, "hg");
+}
+
 QString Environment::getSVNExe() const
 {
     return getEnvVar(VE_VAR_SVN, "svn");

@@ -8,6 +8,7 @@
 #include "Connector/ConnectorArchive.h"
 #include "Connector/ConnectorGit.h"
 #include "Connector/ConnectorSVN.h"
+#include "Connector/ConnectorMercurial.h"
 
 #include "CommandPrepare.h"
 
@@ -125,6 +126,19 @@ bool CommandPrepare::prepareSources(const QSharedPointer<Formula>& pFormula, con
         }else{
             bRes = connector.svn_update(dirWorkingCopy);
         }
+	}else if(pFormula->getTypeSCM() == Formula::SCM_Mercurial)
+	{
+		ConnectorMercurial connector(getEnv());
+		if(dirWorkingCopy.exists()){
+			QString szBranch = "default";
+			if(!pFormula->getSCMDefaultBranch().isEmpty()){
+				szBranch = pFormula->getSCMDefaultBranch();
+			}
+			bRes = connector.hg_checkout(szBranch, dirWorkingCopy);
+			bRes = connector.hg_update(dirWorkingCopy);
+		}else{
+			bRes = connector.hg_clone(pFormula->getSCMURL(), dirWorkingCopy);
+		}
     }else if(pFormula->getTypeSCM() == Formula::SCM_Archive)
     {
         ConnectorArchive conector(getEnv());
@@ -171,6 +185,11 @@ bool CommandPrepare::configureVersion(const QSharedPointer<Formula>& pFormula, c
 	{
 		ConnectorGit connector(getEnv());
 		bRes = connector.git_checkout(getConfigureVersion(), dirWorkingCopy);
+	}
+	if(pFormula->getTypeSCM() == Formula::SCM_Mercurial)
+	{
+		ConnectorMercurial connector(getEnv());
+		bRes = connector.hg_checkout(getConfigureVersion(), dirWorkingCopy);
 	}
 
 	return bRes;

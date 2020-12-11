@@ -26,6 +26,7 @@ protected:
 
 private:
 	bool findGit(Environment& env);
+	bool findMercurial(Environment& env);
 	bool findCompiler(Environment& env);
 	bool findMake(Environment& env);
 	bool findRSync(Environment& env);

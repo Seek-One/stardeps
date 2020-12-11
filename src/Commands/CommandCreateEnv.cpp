@@ -55,6 +55,9 @@ bool CommandCreateEnv::doExecute()
     if(bRes){
         bRes = findGit(env);
     }
+	if(bRes){
+		bRes = findMercurial(env);
+	}
     if(bRes){
         bRes = findMake(env);
     }
@@ -123,6 +126,24 @@ bool CommandCreateEnv::findGit(Environment& env)
     }
 #endif
     return true;
+}
+
+bool CommandCreateEnv::findMercurial(Environment& env)
+{
+#ifdef WIN32
+	if(QFile::exists("/usr/bin/hg")){
+		env.setEnvVar(VE_VAR_HG, "/usr/bin/hg");
+	}else{
+		qWarning("[env] hg is not found");
+	}
+#else
+	if(QFile::exists("/usr/bin/hg")){
+		env.setEnvVar(VE_VAR_HG, "/usr/bin/hg");
+	}else{
+		env.setEnvVar(VE_VAR_HG, "/usr/bin/hg");
+	}
+#endif
+	return true;
 }
 
 bool CommandCreateEnv::findCompiler(Environment& env)
