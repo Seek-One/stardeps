@@ -1,0 +1,47 @@
+{
+	"name": "libde265",
+	"homepage": "https://www.libde265.org/",
+	"scm": {
+        "type": "git",
+        "url": "https://github.com/strukturag/libde265"
+    },
+    "vars":{
+        "CMAKE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::RELEASE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH}",
+        "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc-posix -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++-posix"
+    },
+    "recipe": [
+        {
+            "step":"configure",
+            "cmd":"sed -i -e 's/^  de265-version.h$//g' ${PACKAGE_SRC_PATH}/libde265/CMakeLists.txt"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64",
+            "cmd":"cmake -G\"Unix Makefiles\" ${CMAKE_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+            ]
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-64",
+            "cmd":[
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+            ]
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"}
+            ]
+        }
+    ]
+}
