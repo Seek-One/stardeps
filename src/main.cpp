@@ -49,10 +49,10 @@ int main(int argc, char **argv)
 		dirApplicationData = QDir("./data");
 	}else{
 #ifdef WIN32
-		dirApplicationData = QCoreApplication::applicationDirPath();
+		dirApplicationData.setPath(QCoreApplication::applicationDirPath());
 #else
 		// For Linux in debug mode or not
-		dirApplicationData = QCoreApplication::applicationDirPath() + "/../share/" + APPLICATION_PACKAGE_NAME; // Add from the binary directory
+		dirApplicationData.setPath(QCoreApplication::applicationDirPath() + "/../share/" + APPLICATION_PACKAGE_NAME); // Add from the binary directory
 #endif
 	}
 	QApplicationSettings::setApplicationDataDir(dirApplicationData);

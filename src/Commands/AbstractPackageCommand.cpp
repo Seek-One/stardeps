@@ -158,7 +158,7 @@ bool AbstractPackageCommand::doChangeDirectoryAction(const QString& szDirectory)
 	bRes = doPrepareCommand(szDirectory, szDirectoryBind);
 	if(bRes){
 		qDebug("[%s] change current directory to %s", qPrintable(m_szLabel), qPrintable(szDirectoryBind));
-		m_dirCurrentWorkingDirectory = szDirectoryBind;
+		m_dirCurrentWorkingDirectory.setPath(szDirectoryBind);
 	}
 
 	return bRes;
