@@ -73,7 +73,7 @@
         }
     },
     "vars":{
-        "QT_MODULES":"--module-subset=qtbase,qtscript,qtmultimedia,qttools,qttranslations,qtdeclarative",
+        "QT_MODULES":"--module-subset=qtbase,qtscript,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
         "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
