@@ -65,6 +65,14 @@
         },
         {
             "step":"install",
+            "platforms":"linux-gcc-64",
+            "actions":[
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/libz.a ${PACKAGE_PREFIX_PATH}/lib/libzlib.a"},
+                {"cmd":"cp -L ${PACKAGE_PREFIX_PATH}/lib/libz.so ${PACKAGE_PREFIX_PATH}/lib/libzlib.so"}
+            ]
+        },
+        {
+            "step":"install",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
             "actions":[
                 {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/libzlib.dll.a ${PACKAGE_PREFIX_PATH}/lib/libz.dll.a"}
