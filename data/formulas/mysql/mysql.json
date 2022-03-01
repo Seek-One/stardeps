@@ -31,9 +31,20 @@
         },
         "server" : {
             "default-state":"disabled",
-            "vars": {
-                "OPTIONS::NOSERVER":"-DWITHOUT_SERVER:BOOL=ON -DWITH_AUTHENTICATION_LDAP=OFF"
-            }
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::NOSERVER":"-DWITHOUT_SERVER:BOOL=OFF -DWITH_AUTHENTICATION_LDAP=OFF"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::NOSERVER":"-DWITHOUT_SERVER:BOOL=ON -DWITH_AUTHENTICATION_LDAP=OFF"
+                    }
+                }
+            ]
         }
     },
     "vars":{
