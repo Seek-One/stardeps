@@ -28,7 +28,8 @@
     },
     "vars":{
         "CMAKE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::RELEASE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH}",
-        "CMAKE_DEPS":"-DCMAKE_FIND_ROOT_PATH=/usr/${CROSS_COMPIL_PREFIX};${DEPENDENCY::ZLIB::ROOTPATH}",
+        "CMAKE_DEPS":"",
+        "CMAKE_CROSS_DEPS":"-DCMAKE_FIND_ROOT_PATH=/usr/${CROSS_COMPIL_PREFIX}",
         "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++ -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
     },
     "recipe": [
@@ -41,14 +42,14 @@
             "step":"configure",
             "platforms":"linux-mingw-gcc-32",
             "cmd":[
-                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=X86 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_CROSS_DEPS} ${PACKAGE_SRC_PATH}"
             ]
         },
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-64",
             "cmd":[
-                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_DEPS} ${PACKAGE_SRC_PATH}"
+                "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${CMAKE_CROSS_DEPS} ${PACKAGE_SRC_PATH}"
             ]
         },
         {
