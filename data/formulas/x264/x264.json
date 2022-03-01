@@ -29,10 +29,6 @@
     "recipe": [
         {
             "step":"configure",
-            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
-        },
-        {
-            "step":"configure",
             "platforms":"linux-gcc-64,darwin-clang-64",
             "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
         },
