@@ -53,7 +53,7 @@
                 }
             },
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${DEPENDENCY::MYSQLCONNECTORCPP::ROOTPATH}"
+                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${DEPENDENCY::MYSQL::ROOTPATH}"
             }
         },
         "mysql-custom" : {
