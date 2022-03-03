@@ -31,7 +31,7 @@
     },
     "recipe": [
         {
-            "step":"prepare",
+            "step":"configure",
             "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
         },
         {
