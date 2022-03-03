@@ -3,7 +3,8 @@
 	"homepage": "https://www.freedesktop.org/wiki/Software/fontconfig/",
 	"scm": {
         "type": "git",
-        "url": "https://gitlab.freedesktop.org/fontconfig/fontconfig.git"
+        "url": "https://gitlab.freedesktop.org/fontconfig/fontconfig.git",
+        "default-branch": "main"
     },
     "dependencies": {
         "latest": {
