@@ -41,6 +41,11 @@
                 "OPTIONS::OPENSSL":"-openssl -I ${DEPENDENCY::OPENSSL::ROOTPATH}/include -L ${DEPENDENCY::OPENSSL::ROOTPATH}/lib"
             }
         },
+        "fontconfig" : {
+            "vars": {
+                "OPTIONS::SQLITE":"-I ${DEPENDENCY::FONTCONFIG::ROOTPATH}/include -L ${DEPENDENCY::FONTCONFIG::ROOTPATH}/lib"
+            }
+        },
         "sqlite" : {
             "vars": {
                 "OPTIONS::SQLITE":"-plugin-sql-sqlite"
