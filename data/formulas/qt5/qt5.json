@@ -49,7 +49,8 @@
                 }
             },
             "vars": {
-                "OPTIONS::FONTCONFIG":"-fontconfig -I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib -I ${DEPENDENCY::FONTCONFIG::ROOTPATH}/include -L ${DEPENDENCY::FONTCONFIG::ROOTPATH}/lib"
+                "OPTIONS::FREETYPE2":"-feature-freetype -system-freetype -I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include/freetype2 -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib",
+                "OPTIONS::FONTCONFIG":"-fontconfig -I ${DEPENDENCY::FONTCONFIG::ROOTPATH}/include -L ${DEPENDENCY::FONTCONFIG::ROOTPATH}/lib ${OPTIONS::FREETYPE2}"
             }
         },
         "sqlite" : {
@@ -87,7 +88,7 @@
         "QT_MODULES":"--module-subset=qtbase,qtscript,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
-        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::FONTCONFIG} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
     },
     "recipe": [
