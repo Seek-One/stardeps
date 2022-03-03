@@ -1,0 +1,64 @@
+{
+	"name": "fontconfig",
+	"homepage": "https://www.freedesktop.org/wiki/Software/fontconfig/",
+	"scm": {
+        "type": "git",
+        "url": "https://gitlab.freedesktop.org/fontconfig/fontconfig.git"
+    },
+    "dependencies": {
+        "latest": {
+            "zlib" : "any",
+            "libpng" : "any"
+        }
+    },
+    "options": {
+        "static" : {
+            "vars": {
+                "OPTIONS::STATIC":"--enable-static"
+            }
+        },
+        "shared" : {
+            "vars": {
+                "OPTIONS::SHARED":"--enable-shared"
+            }
+        }
+    },
+    "vars":{
+        "CONFIGURE_DEPS":"${OPTIONS::PNG}",
+        "CONFIGURE_OPTIONS":"${OPTIONS::STATIC} ${OPTIONS::SHARED} ${CONFIGURE_DEPS} --prefix=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
+    },
+    "recipe": [
+        {
+            "step":"prepare",
+            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-gcc-64,darwin-clang-64",
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+        },
+        {
+            "step":"configure",
+            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
+            "cmd":[
+                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+            ]
+        },
+        {
+            "step":"build",
+            "cmd":"${MAKE}"
+        },
+        {
+            "step":"install",
+            "actions":[
+                {"cmd":"${MAKE} install"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fontconfig.pc ${PKG_CONFIG_LIBDIR}/"}
+            ]
+        },
+        {
+            "step":"clean",
+            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/fontconfig.pc"
+        }
+    ]
+}
