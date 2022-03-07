@@ -476,36 +476,44 @@ bool FormulaParser::parseCommands(const QJsonArray& arrayCommands, FormulaComman
 	return true;
 }
 
+bool FormulaParser::parseVar(const QString& szName, const QJsonObject& object, FormulaVariableList& listVariable)
+{
+	QString szValue;
+
+	QJsonObject altValue;
+	QJsonArray arrayAltValues;
+	QJsonArray::const_iterator iter_altValue;
+
+	szValue = object.value("default-value").toString();
+	if(object.contains("alternatives-values")){
+		arrayAltValues = object.value("alternatives-values").toArray();
+		iter_altValue = arrayAltValues.constBegin();
+		for(; iter_altValue != arrayAltValues.constEnd(); ++iter_altValue){
+			altValue = iter_altValue->toObject();
+
+			if(altValue.contains("platforms")){
+				if(altValue.value("platforms").toString() == m_szPlatformName){
+					szValue = altValue.value("value").toString();
+				}
+			}
+		}
+	}
+	listVariable.insert(szName, szValue);
+
+	return true;
+}
+
 bool FormulaParser::parseVars(const QJsonArray& arrayVars, FormulaVariableList& listVariable)
 {
-    QString szValue;
-    
-    QJsonObject altValue;
-    QJsonArray arrayAltValues;
-    QJsonArray::const_iterator iter_altValue;
-    
+    QString szName;
     QJsonObject object;
+
     QJsonArray::const_iterator iter_item;
     for(iter_item = arrayVars.constBegin(); iter_item != arrayVars.constEnd(); ++iter_item)
     {
         object = iter_item->toObject();
-        
-        szValue = object.value("default-value").toString();
-        if(object.contains("alternatives-values")){
-            arrayAltValues = object.value("alternatives-values").toArray();
-            iter_altValue = arrayAltValues.constBegin();
-            for(; iter_altValue != arrayAltValues.constEnd(); ++iter_altValue){
-                altValue = iter_altValue->toObject();
-                
-                if(altValue.contains("platforms")){
-                    if(altValue.value("platforms").toString() == m_szPlatformName){
-                        szValue = altValue.value("value").toString();
-                    }
-                }
-            }
-        }
-        
-        listVariable.insert(object.value("name").toString(), szValue);
+        szName = object.value("name").toString();
+        parseVar(szName, object, listVariable);
     }
     return true;
 }
@@ -515,7 +523,11 @@ bool FormulaParser::parseVars(const QJsonObject& objectRoot, FormulaVariableList
 	QJsonObject::const_iterator iter_item;
 	for(iter_item = objectRoot.constBegin(); iter_item != objectRoot.constEnd(); ++iter_item)
 	{
-		listVariable.insert(iter_item.key(), iter_item.value().toString());
+		if(iter_item.value().isObject()){
+			parseVar(iter_item.key(), iter_item.value().toObject(), listVariable);
+		}else{
+			listVariable.insert(iter_item.key(), iter_item.value().toString());
+		}
 	}
 	return true;
 }

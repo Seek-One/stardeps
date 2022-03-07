@@ -37,11 +37,12 @@ private:
 	bool parseOptionRule(const QJsonObject& objectRoot, FormulaOption& formulaOption);
 	bool parseRecipes(const QJsonObject& objectRoot);
 	bool parseRecipe(const QJsonArray& objectRoot);
-    bool parseStep(const QJsonObject& objectRoot, FormulaStep& formulaStep);
-    bool parseStepActions(const QJsonObject& objectRoot, FormulaStepActionList& formulaStepActionList);
+	bool parseStep(const QJsonObject& objectRoot, FormulaStep& formulaStep);
+	bool parseStepActions(const QJsonObject& objectRoot, FormulaStepActionList& formulaStepActionList);
 	bool parseStepAction(const QString& szCmd, const QJsonValue& value, FormulaStepAction& formulaStepAction);
 	bool parseCommands(const QJsonArray& arrayCommands, FormulaCommands& listCommands);
-    bool parseVars(const QJsonArray& arrayVars, FormulaVariableList& listCommands);
+	bool parseVar(const QString& szName, const QJsonObject& object, FormulaVariableList& listVariable);
+	bool parseVars(const QJsonArray& arrayVars, FormulaVariableList& listCommands);
 	bool parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable);
 
 private:
