@@ -36,6 +36,7 @@ public:
 protected:
 	bool doInitDictVars(VariableList& dictVars);
 	bool doReplaceVariable(const QString& szText, const VariableList& dictVars, QString& szTextOut);
+	bool doReplaceVariable(const QString& szText, const VariableList& dictVars1, const VariableList& dictVars2, QString& szTextOut);
 	bool doPrepareCommand(const QString& szCmd, QString& szCmdOut);
 	bool doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory);
 	bool doRunCommands(const QStringList& listCmd, const QDir& dirWorkingDirectory);

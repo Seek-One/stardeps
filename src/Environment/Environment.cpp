@@ -66,13 +66,13 @@ QString Environment::getPlatformTypeName() const
 
 void Environment::setEnvVar(const QString& szName, const QString& szValue)
 {
-	m_listVars.insert(szName, szValue);
+	m_listVars.addVariable(szName, szValue);
 }
 
 
 QString Environment::getEnvVar(const QString& szName, const QString& szDefaultValue) const
 {
-	return m_listVars.value(szName, szDefaultValue);
+	return m_listVars.getValue(szName, szDefaultValue);
 }
 
 const EnvironmentVars& Environment::getVars() const
@@ -101,6 +101,6 @@ void Environment::print()
 	EnvironmentVars::const_iterator iter;
 	for(iter = m_listVars.constBegin(); iter != m_listVars.constEnd(); ++iter)
 	{
-		qDebug("[env] %s=%s", qPrintable(iter.key()), qPrintable(iter.value()));
+		qDebug("[env] %s=%s", qPrintable(iter->getName()), qPrintable(iter->getValue()));
 	}
 }

@@ -211,23 +211,17 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 
 	// Add envirnoment variable
 	const EnvironmentVars &environmentVars = env.getVars();
-	EnvironmentVars::const_iterator iter_env;
-	for (iter_env = environmentVars.constBegin(); iter_env != environmentVars.constEnd(); ++iter_env) {
-		dictVars.insert(iter_env.key(), iter_env.value());
-	}
+	dictVars.addVariableList(environmentVars);
 
 	// Get command environement variables
 	const VariableList &listCmdEndVars = getCommandEnvironment()->getVariableList();
-	VariableList::const_iterator iter_var;
-	for (iter_var = listCmdEndVars.constBegin(); iter_var != listCmdEndVars.constEnd(); ++iter_var) {
-		dictVars.insert(iter_var.key(), iter_var.value());
-	}
+	dictVars.addVariableList(listCmdEndVars);
 
 	// Package infos
-	dictVars.insert("PACKAGE_VERSION", getPackageNameVersion());
-	dictVars.insert("PACKAGE_SRC_PATH", getSourcePackageDir().absolutePath());
-	dictVars.insert("PACKAGE_BUILD_PATH", getBuildPackageDir().absolutePath());
-	dictVars.insert("PACKAGE_PREFIX_PATH", getReleasePackageDir().absolutePath());
+	dictVars.addVariable("PACKAGE_VERSION", getPackageNameVersion());
+	dictVars.addVariable("PACKAGE_SRC_PATH", getSourcePackageDir().absolutePath());
+	dictVars.addVariable("PACKAGE_BUILD_PATH", getBuildPackageDir().absolutePath());
+	dictVars.addVariable("PACKAGE_PREFIX_PATH", getReleasePackageDir().absolutePath());
 
 	// Formula options variable
 	const QStringList& listPackageOptions = getPackageOptions();
@@ -247,18 +241,19 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 		FormulaVariableList::const_iterator iter_var;
 		for (iter_var = listOptionsVars.constBegin(); iter_var != listOptionsVars.constEnd(); ++iter_var) {
 			QString szNewValue;
-			doReplaceVariable(iter_var.value(), dictVars, szNewValue);
-			dictVars.insert(iter_var.key(), szNewValue);
+			doReplaceVariable(iter_var->getValue(), dictVars, listOptionsVars, szNewValue);
+			dictVars.addVariable(iter_var->getName(), szNewValue);
 		}
 	}
 
 	// Global formulas vars
 	{
 		const FormulaVariableList &listGlobalVars = pFormula->getGlobalVariables();
+		FormulaVariableList::const_iterator iter_var;
 		for (iter_var = listGlobalVars.constBegin(); iter_var != listGlobalVars.constEnd(); ++iter_var) {
 			QString szNewValue;
-			doReplaceVariable(iter_var.value(), dictVars, szNewValue);
-			dictVars.insert(iter_var.key(), szNewValue);
+			doReplaceVariable(iter_var->getValue(), dictVars, listGlobalVars, szNewValue);
+			dictVars.addVariable(iter_var->getName(), szNewValue);
 		}
 	}
 
@@ -272,8 +267,34 @@ bool AbstractPackageCommand::doReplaceVariable(const QString& szText, const Vari
 	VariableList::const_iterator iter;
 	for(iter = dictVars.constBegin(); iter != dictVars.constEnd(); ++iter)
 	{
-		QString szKey = "${" + iter.key() + "}";
-		szTextOut = szTextOut.replace(szKey, iter.value());
+		QString szKey = "${" + iter->getName() + "}";
+		szTextOut = szTextOut.replace(szKey, iter->getValue());
+	}
+
+	// Last step, remove non-referenced optional values
+	szTextOut = szTextOut.remove(QRegExp("\\$\\{[^\\}]+\\}"));
+
+	return true;
+}
+
+bool AbstractPackageCommand::doReplaceVariable(const QString& szText, const VariableList& dictVars1, const VariableList& dictVars2, QString& szTextOut)
+{
+	szTextOut = szText;
+
+	VariableList::const_iterator iter;
+	
+	// Replace with the current dict first
+	for(iter = dictVars1.constBegin(); iter != dictVars1.constEnd(); ++iter)
+	{
+		QString szKey = "${" + iter->getName() + "}";
+		szTextOut = szTextOut.replace(szKey, iter->getValue());
+	}
+
+	// Replace with the current list
+	for(iter = dictVars2.constBegin(); iter != dictVars2.constEnd(); ++iter)
+	{
+		QString szKey = "${" + iter->getName() + "}";
+		szTextOut = szTextOut.replace(szKey, iter->getValue());
 	}
 
 	// Last step, remove non-referenced optional values

@@ -95,7 +95,7 @@ bool CommandCreateEnv::doExecute()
                 const EnvironmentVars &listVars = env.getVars();
                 EnvironmentVars::const_iterator iter;
                 for (iter = listVars.constBegin(); iter != listVars.constEnd(); ++iter) {
-                    szLine = QString("%0=%1\n").arg(iter.key()).arg(iter.value());
+                    szLine = QString("%0=%1\n").arg(iter->getName()).arg(iter->getValue());
                     file.write(szLine.toUtf8());
                 }
                 file.close();

@@ -16,12 +16,3 @@ FormulaVariableList::~FormulaVariableList()
 {
 
 }
-
-void FormulaVariableList::addVariableList(const FormulaVariableList& listVars)
-{
-	FormulaVariableList::const_iterator iter;
-	for(iter = listVars.constBegin(); iter != listVars.constEnd(); ++iter)
-	{
-		insert(iter.key(), iter.value());
-	}
-}

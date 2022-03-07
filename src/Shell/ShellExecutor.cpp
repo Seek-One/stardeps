@@ -45,7 +45,7 @@ bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& list
     QProcessEnvironment processEnvironment = QProcessEnvironment::systemEnvironment();
     VariableList::const_iterator iter_var;
     for(iter_var = m_listEnvVars.constBegin(); iter_var != m_listEnvVars.constEnd(); ++iter_var){
-        processEnvironment.insert(iter_var.key(), iter_var.value());
+        processEnvironment.insert(iter_var->getName(), iter_var->getName());
     }
 
 	QStringList::const_iterator iter_cmd_var;

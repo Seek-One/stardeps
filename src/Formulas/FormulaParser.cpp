@@ -98,7 +98,7 @@ bool FormulaParser::parse(const QString& szFilePath)
 			bRes = parseOptions(mainObject.value("options").toObject());
 		}
 
-        // Options
+        // Global variables
         if(bRes && mainObject.contains("vars")){
             FormulaVariableList listVars;
             bRes = parseVars(mainObject.value("vars").toObject(), listVars);
@@ -498,7 +498,8 @@ bool FormulaParser::parseVar(const QString& szName, const QJsonObject& object, F
 			}
 		}
 	}
-	listVariable.insert(szName, szValue);
+
+	listVariable.addVariable(szName, szValue);
 
 	return true;
 }
@@ -520,13 +521,16 @@ bool FormulaParser::parseVars(const QJsonArray& arrayVars, FormulaVariableList& 
 
 bool FormulaParser::parseVars(const QJsonObject& objectRoot, FormulaVariableList& listVariable)
 {
+	QString szName;
+
 	QJsonObject::const_iterator iter_item;
 	for(iter_item = objectRoot.constBegin(); iter_item != objectRoot.constEnd(); ++iter_item)
 	{
+		szName = iter_item.key();
 		if(iter_item.value().isObject()){
-			parseVar(iter_item.key(), iter_item.value().toObject(), listVariable);
+			parseVar(szName, iter_item.value().toObject(), listVariable);
 		}else{
-			listVariable.insert(iter_item.key(), iter_item.value().toString());
+			listVariable.addVariable(szName, iter_item.value().toString());
 		}
 	}
 	return true;

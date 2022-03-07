@@ -9,14 +9,14 @@
 #define SRC_FORMULAS_FORMULAVARIABLELIST_H_
 
 #include <QString>
-#include <QMap>
+#include <QList>
 
-class FormulaVariableList : public QMap<QString, QString> {
+#include "Variable/VariableList.h"
+
+class FormulaVariableList : public VariableList {
 public:
 	FormulaVariableList();
 	virtual ~FormulaVariableList();
-
-	void addVariableList(const FormulaVariableList& listVars);
 };
 
 #endif /* SRC_FORMULAS_FORMULAVARIABLELIST_H_ */

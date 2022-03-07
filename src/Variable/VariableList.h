@@ -11,7 +11,22 @@
 #include <QString>
 #include <QMap>
 
-class VariableList  : public QMap<QString, QString>
+class Variable
+{
+public:
+	Variable();
+	Variable(const QString& szName, const QString& szValue);
+	virtual ~Variable();
+
+	const QString& getName() const;
+	const QString& getValue() const;
+
+private:
+	QString m_szName;
+	QString m_szValue;
+};
+
+class VariableList  : public QList<Variable>
 {
 public:
 	VariableList();
@@ -19,6 +34,11 @@ public:
 
 public:
 	void print() const;
+
+	void addVariable(const QString& szName, const QString& szValue);
+	void addVariableList(const VariableList& listVars);
+
+	const QString& getValue(const QString& szName, const QString& szDefaultValue) const;
 };
 
 #endif /* SRC_VARIABLE_VARIABLELIST_H_ */

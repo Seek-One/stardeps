@@ -120,7 +120,7 @@ void AbstractCommandEnvironment::setNeedEnvVars(bool bNeed)
 
 void AbstractCommandEnvironment::addVariable(const QString& szName, const QString& szValue)
 {
-	m_listCmdEnvVars.insert(szName, szValue);
+	m_listCmdEnvVars.addVariable(szName, szValue);
 }
 
 const VariableList& AbstractCommandEnvironment::getVariableList() const
