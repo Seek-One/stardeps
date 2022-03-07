@@ -54,7 +54,7 @@ void VariableList::print() const
 
 void VariableList::addVariable(const QString& szKey, const QString& szValue)
 {
-	qDebug("%s=%s", qPrintable(szKey), qPrintable(szValue));
+	//qDebug("%s=%s", qPrintable(szKey), qPrintable(szValue));
 	append(Variable(szKey, szValue));
 }
 
