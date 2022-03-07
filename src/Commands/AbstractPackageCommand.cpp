@@ -241,7 +241,7 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 		FormulaVariableList::const_iterator iter_var;
 		for (iter_var = listOptionsVars.constBegin(); iter_var != listOptionsVars.constEnd(); ++iter_var) {
 			QString szNewValue;
-			doReplaceVariable(iter_var->getValue(), dictVars, listOptionsVars, szNewValue);
+			doReplaceVariable(iter_var->getValue(), dictVars, szNewValue);
 			dictVars.addVariable(iter_var->getName(), szNewValue);
 		}
 	}
@@ -252,10 +252,12 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 		FormulaVariableList::const_iterator iter_var;
 		for (iter_var = listGlobalVars.constBegin(); iter_var != listGlobalVars.constEnd(); ++iter_var) {
 			QString szNewValue;
-			doReplaceVariable(iter_var->getValue(), dictVars, listGlobalVars, szNewValue);
+			doReplaceVariable(iter_var->getValue(), dictVars, szNewValue);
 			dictVars.addVariable(iter_var->getName(), szNewValue);
 		}
 	}
+
+	//dictVars.print();
 
 	return true;
 }
