@@ -240,12 +240,13 @@ bool AbstractPackageCommand::doCopyFilesAction(const QDir& dirSource, const QStr
 		const QFileInfo& fileInfo = (*iter);
 		const QString szFilePath = fileInfo.filePath();
 
-		qDebug("[%s] copy files %s to %s", qPrintable(m_szLabel), qPrintable(szFilePath), qPrintable(dirDestination.path()));
-
 		QString szFileName = fileInfo.fileName();
 		if(fileInfo.isDir()){
+			qDebug("[%s] copy directory %s to %s", qPrintable(m_szLabel), qPrintable(szFilePath), qPrintable(dirDestination.path()));
 			bRes = doCopyFilesAction(QDir(fileInfo.path()), QString(), dirDestination.filePath(szFileName));
 		}else if(fileInfo.isSymLink()){
+			qDebug("[%s] copy symlink %s to %s", qPrintable(m_szLabel), qPrintable(szFilePath), qPrintable(dirDestination.path()));
+
 			QString szOutputPath = dirDestination.filePath(szFileName);
 			QFile fileSrc(szFilePath);
 			QFile fileDst(szOutputPath);
@@ -256,6 +257,8 @@ bool AbstractPackageCommand::doCopyFilesAction(const QDir& dirSource, const QStr
 				bRes = fileSrc.link(szOutputPath);
 			}
 		}else{
+			qDebug("[%s] copy files %s to %s", qPrintable(m_szLabel), qPrintable(szFilePath), qPrintable(dirDestination.path()));
+
 			QString szOutputPath = dirDestination.filePath(szFileName);
 			QFile fileSrc(szFilePath);
 			QFile fileDst(szOutputPath);
