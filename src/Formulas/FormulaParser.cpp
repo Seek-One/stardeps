@@ -443,6 +443,13 @@ bool FormulaParser::parseStepActions(const QJsonObject& objectRoot, FormulaStepA
 		formulaStepActionList.append(formulaStepAction);
 	}
 
+	if(bRes && objectRoot.contains("copy")){
+		FormulaStepAction formulaStepAction;
+		QJsonValue value = objectRoot.value("copy");
+		bRes = parseStepAction("copy", value, formulaStepAction);
+		formulaStepActionList.append(formulaStepAction);
+	}
+
     return bRes;
 }
 

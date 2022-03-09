@@ -45,6 +45,26 @@ const QString& FormulaStepAction::getDirectory() const
 	return m_szDirectory;
 }
 
+void FormulaStepAction::setSources(const QStringList& listSources)
+{
+	m_listSources = listSources;
+}
+
+const QStringList& FormulaStepAction::getSources() const
+{
+	return m_listSources;
+}
+
+void FormulaStepAction::setDestination(const QString& szDestination)
+{
+	m_szDestination = szDestination;
+}
+
+const QString& FormulaStepAction::getDestination() const
+{
+	return m_szDestination;
+}
+
 void FormulaStepAction::setAction(const QString& szActionType, const QString& szAction)
 {
     if(szActionType == "cmd"){
@@ -54,6 +74,15 @@ void FormulaStepAction::setAction(const QString& szActionType, const QString& sz
 	if(szActionType == "chdir"){
 		setActionType(ActionChangeDirectory);
 		m_szDirectory = szAction;
+	}
+	if(szActionType == "copy"){
+		setActionType(ActionCopy);
+		QStringList tokens = szAction.split(" ");
+		if(tokens.count() >= 2){
+			m_szDestination = tokens.last();
+			tokens.removeLast();
+			m_listSources = tokens;
+		}
 	}
 }
 

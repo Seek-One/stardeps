@@ -164,6 +164,116 @@ bool AbstractPackageCommand::doChangeDirectoryAction(const QString& szDirectory)
 	return bRes;
 }
 
+bool AbstractPackageCommand::doCopyFilesAction(const QStringList& listSources, const QString& szDestination)
+{
+	bool bRes = true;
+
+	QString szDestinationBind;
+	bRes = doPrepareCommand(szDestination, szDestinationBind);
+
+	QStringList::const_iterator iter;
+	if(bRes){
+		for(iter = listSources.constBegin(); iter != listSources.constEnd(); ++iter)
+		{
+			const QString& szSource = (*iter);
+			QString szSourceBind;
+			bRes = doPrepareCommand(szSource, szSourceBind);
+			if(bRes){
+				bRes = doCopyFilesAction(szSourceBind, szDestinationBind);
+			}
+			if(!bRes){
+				break;
+			}
+		}
+	}
+
+	return bRes;
+}
+
+bool AbstractPackageCommand::doCopyFilesAction(const QString& szSource, const QString& szDestination)
+{
+	bool bRes = true;
+
+	// Define sources file depending on pattern
+	QFileInfo fileInfoSource(szSource);
+	QDir dirSource;
+	QString szFileName;
+	if(fileInfoSource.isDir()){
+		dirSource.setPath(fileInfoSource.path());
+	}else{
+		dirSource = fileInfoSource.dir();
+		szFileName = fileInfoSource.fileName();
+	}
+
+	bRes = doCopyFilesAction(dirSource, szFileName, szDestination);
+
+	return bRes;
+}
+
+bool AbstractPackageCommand::doCopyFilesAction(const QDir& dirSource, const QString& szPattern, const QDir& dirDestination)
+{
+	bool bRes = true;
+
+	QDir::Filters filters = QDir::AllEntries | QDir::NoDotAndDotDot;
+
+	// Get file list in dir
+	QFileInfoList listFileInfo;
+	if(szPattern.isEmpty()){
+		listFileInfo = dirSource.entryInfoList(filters);
+	}else{
+		listFileInfo = dirSource.entryInfoList(QStringList() << szPattern, filters);
+	}
+
+	// Create directory
+	if(!dirDestination.exists()){
+		qDebug("[%s] creating directory %s", qPrintable(m_szLabel), qPrintable(dirDestination.path()));
+		bRes = dirDestination.mkdir(".");
+		if(!bRes){
+			return bRes;
+		}
+	}
+
+	// Copy each file
+	QFileInfoList::const_iterator iter;
+	for(iter = listFileInfo.constBegin(); iter != listFileInfo.constEnd(); ++iter)
+	{
+		const QFileInfo& fileInfo = (*iter);
+		const QString szFilePath = fileInfo.filePath();
+
+		qDebug("[%s] copy files %s to %s", qPrintable(m_szLabel), qPrintable(szFilePath), qPrintable(dirDestination.path()));
+
+		QString szFileName = fileInfo.fileName();
+		if(fileInfo.isDir()){
+			bRes = doCopyFilesAction(QDir(fileInfo.path()), QString(), dirDestination.filePath(szFileName));
+		}else if(fileInfo.isSymLink()){
+			QString szOutputPath = dirDestination.filePath(szFileName);
+			QFile fileSrc(szFilePath);
+			QFile fileDst(szOutputPath);
+			if(fileDst.exists()){
+				bRes = fileDst.remove();
+			}
+			if(bRes){
+				bRes = fileSrc.link(szOutputPath);
+			}
+		}else{
+			QString szOutputPath = dirDestination.filePath(szFileName);
+			QFile fileSrc(szFilePath);
+			QFile fileDst(szOutputPath);
+			if(fileDst.exists()){
+				bRes = fileDst.remove();
+			}
+			if(bRes){
+				bRes = fileSrc.copy(szOutputPath);
+			}
+		}
+		if(!bRes){
+			break;
+		}
+	}
+
+	return bRes;
+}
+
 bool AbstractPackageCommand::doExecuteStep(const QString& szStep, const QDir& dirWorkingDirectory)
 {
 	bool bRes = true;
@@ -192,6 +302,10 @@ bool AbstractPackageCommand::doExecuteStep(const QString& szStep, const QDir& di
 			if(formulaStepAction.getActionType() == FormulaStepAction::ActionChangeDirectory)
 			{
 				bRes = doChangeDirectoryAction(formulaStepAction.getDirectory());
+			}
+			if(formulaStepAction.getActionType() == FormulaStepAction::ActionCopy)
+			{
+				bRes = doCopyFilesAction(formulaStepAction.getSources(), formulaStepAction.getDestination());
 			}
 			if(!bRes){
 				break;

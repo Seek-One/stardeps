@@ -153,6 +153,55 @@
             ]
         },
         {
+            "step":"install",
+            "options": "openh264",
+            "actions":[
+                {"copy":"${DEPENDENCY::OPENH264::ROOTPATH}/lib/lib* ${PACKAGE_PREFIX_PATH}/lib/"}
+            ]
+        },
+        {
+            "step":"install",
+            "options": "x264",
+            "actions":[
+                {"copy":"${DEPENDENCY::X264::ROOTPATH}/lib/lib* ${PACKAGE_PREFIX_PATH}/lib/"}
+            ]
+        },
+        {
+            "step":"install",
+            "options": "x265",
+            "actions":[
+                {"copy":"${DEPENDENCY::X265::ROOTPATH}/lib/lib* ${PACKAGE_PREFIX_PATH}/lib/"}
+            ]
+        },
+        {
+            "step":"install",
+            "options": "vpx",
+            "actions":[
+                {"copy":"${DEPENDENCY::LIBVPX::ROOTPATH}/lib/lib* ${PACKAGE_PREFIX_PATH}/lib/"}
+            ]
+        },
+        {
+            "step":"install",
+            "options": "fdk-aac",
+            "actions":[
+                {"copy":"${DEPENDENCY::FDKAAC::ROOTPATH}/lib/lib* ${PACKAGE_PREFIX_PATH}/lib/"}
+            ]
+        },
+        {
+            "step":"install",
+            "options": "ass",
+            "actions":[
+                {"copy":"${DEPENDENCY::LIBASS::ROOTPATH}/lib/lib* ${PACKAGE_PREFIX_PATH}/lib/"}
+            ]
+        },
+        {
+            "step":"install",
+            "options": "freetype",
+            "actions":[
+                {"copy":"${DEPENDENCY::FREETYPE2::ROOTPATH}/lib/lib* ${PACKAGE_PREFIX_PATH}/lib/"}
+            ]
+        },
+        {
             "step":"clean",
             "actions":[
                 {"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libavcodec.pc"},

@@ -41,6 +41,9 @@ protected:
 	bool doRunCommand(const QString& szCmd, const QDir& dirWorkingDirectory);
 	bool doRunCommands(const QStringList& listCmd, const QDir& dirWorkingDirectory);
 	bool doChangeDirectoryAction(const QString& szDirectory);
+	bool doCopyFilesAction(const QStringList& listSources, const QString& szDestination);
+	bool doCopyFilesAction(const QString& szSource, const QString& szDestination);
+	bool doCopyFilesAction(const QDir& dirSource, const QString& szPattern, const QDir& dirDestination);
 
 	bool doExecuteStep(const QString& szStep, const QDir& dirWorkingDirectory);
 

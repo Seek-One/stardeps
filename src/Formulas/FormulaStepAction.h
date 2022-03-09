@@ -14,6 +14,7 @@ public:
         ActionUnknown,
         ActionCommand,
         ActionChangeDirectory,
+        ActionCopy,
     };
 
 public:
@@ -26,8 +27,14 @@ public:
     void setCommandList(const FormulaCommands& listCommand);
     const FormulaCommands& getCommandList() const;
 
-    void setDirectory(const QString& szDirectory);
+	void setDirectory(const QString& szDirectory);
 	const QString& getDirectory() const;
+
+	void setSources(const QStringList& listSources);
+	const QStringList& getSources() const;
+
+	void setDestination(const QString& szDestination);
+	const QString& getDestination() const;
 
     void setAction(const QString& szActionType, const QString& szAction);
     void setAction(const QString& szActionType, const QStringList& listAction);
@@ -40,6 +47,10 @@ private:
 
     // Action change directory
     QString m_szDirectory;
+
+    // Action copy
+    QStringList m_listSources;
+    QString m_szDestination;
 };
 
 class FormulaStepActionList : public QList<FormulaStepAction>
