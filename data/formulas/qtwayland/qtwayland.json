@@ -1,119 +1,20 @@
 {
-	"name": "QT5",
-	"homepage": "https://ffmpeg.org/",
+	"name": "QT Wayland",
+	"homepage": "https://wiki.qt.io/QtWayland",
 	"scm": {
         "type": "git",
-        "url": "https://github.com/qt/qt5.git",
+        "url": "git://code.qt.io/qt/qtwayland.git",
         "default-branch": "dev"
     },
-    "options": {
-        "debug" : {
-            "vars": [
-                {
-                    "name":"OPTIONS::DEBUG",
-                    "default-value":"-debug",
-                    "alternatives-values": [
-                        {
-                            "platforms":"darwin-clang-64",
-                            "value":"-debug -no-framework"
-                        }
-                    ]
-                }
-            ]
-        },
-        "debug-and-release" : {
-            "vars": {
-                "OPTIONS::DEBUGANDRELEASE":"-debug-and-release"
-            }
-        },
-        "shared" : {
-            "vars": {
-                "OPTIONS::SHARED":"-shared"
-            }
-        },
-        "openssl" : {
-            "dependencies": {
-                "latest": {
-                    "openssl" : {"min":"1.1"}
-                }
-            },
-            "vars": {
-                "OPTIONS::OPENSSL":"-openssl -I ${DEPENDENCY::OPENSSL::ROOTPATH}/include -L ${DEPENDENCY::OPENSSL::ROOTPATH}/lib"
-            }
-        },
-        "fontconfig" : {
-            "dependencies": {
-                "latest": {
-                    "fontconfig" : "any",
-                    "freetype2" : "any"
-                }
-            },
-            "vars": {
-                "OPTIONS::FREETYPE2":"-feature-freetype -system-freetype -I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include/freetype2 -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib",
-                "OPTIONS::FONTCONFIG":"-fontconfig -I ${DEPENDENCY::FONTCONFIG::ROOTPATH}/include -L ${DEPENDENCY::FONTCONFIG::ROOTPATH}/lib ${OPTIONS::FREETYPE2}"
-            }
-        },
-        "sqlite" : {
-            "vars": {
-                "OPTIONS::SQLITE":"-plugin-sql-sqlite"
-            }
-        },
-        "mysql" : {
-            "dependencies": {
-                "latest": {
-                    "mysql" : "any"
-                }
-            },
-            "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${DEPENDENCY::MYSQL::ROOTPATH}"
-            }
-        },
-        "mysql-custom" : {
-            "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${CUSTOM_MYSQL_PREFIX}"
-            }
-        },
-        "postgressql" : {
-            "vars": {
-                "OPTIONS::PSQL":"-plugin-sql-psql"
-            }
-        },
-        "postgressql-custom" : {
-            "vars": {
-                "OPTIONS::PSQL":"-plugin-sql-psql PSQL_PREFIX=${CUSTOM_PSQL_PREFIX}"
-            }
+    "dependencies": {
+        "latest": {
+            "qt5" : "any"
         }
-    },
-    "vars":{
-        "QT_MODULES_PLATFORM": {
-            "default-value":"",
-            "alternatives-values": [
-                {
-                    "platforms":"linux-gcc-64",
-                    "value":",qtx11extras"
-                }
-            ]
-        },
-        "QT_MODULES":"--module-subset=qtbase,qtscript,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2${QT_MODULES_PLATFORM}",
-        "QT_NOMAKE":"-nomake examples -nomake tests",
-        "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
-        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::FONTCONFIG} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
-        "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
     },
     "recipe": [
         {
-            "step":"prepare",
-            "cmd":"${PACKAGE_SRC_PATH}/init-repository -f ${QT_MODULES}"
-        },
-        {
             "step":"configure",
-            "platforms":"linux-gcc-64,darwin-clang-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
-        },
-        {
-            "step":"configure",
-            "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure -xplatform win32-g++ ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+            "cmd":"${DEPENDENCY::QT5::ROOTPATH}/bin/qmake ${PACKAGE_SRC_PATH}/qtwayland.pro"
         },
         {
             "step":"build",
