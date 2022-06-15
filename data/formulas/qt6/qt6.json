@@ -1,6 +1,6 @@
 {
 	"name": "QT5",
-	"homepage": "https://www.qt.io/",
+	"homepage": "https://ffmpeg.org/",
 	"scm": {
         "type": "git",
         "url": "https://github.com/qt/qt5.git",
@@ -94,7 +94,7 @@
                 }
             ]
         },
-        "QT_MODULES":"--module-subset=qtbase,qtscript,qtlocation,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2${QT_MODULES_PLATFORM}",
+        "QT_MODULES":"--module-subset=qtbase,qtscript,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2${QT_MODULES_PLATFORM}",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
         "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::FONTCONFIG} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
