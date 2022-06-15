@@ -1,6 +1,6 @@
 {
-	"name": "QT5",
-	"homepage": "https://ffmpeg.org/",
+	"name": "QT6",
+	"homepage": "https://www.qt.io/",
 	"scm": {
         "type": "git",
         "url": "https://github.com/qt/qt5.git",
