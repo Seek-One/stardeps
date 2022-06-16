@@ -3,7 +3,7 @@
 	"homepage": "https://curl.haxx.se/",
 	"scm": {
         "type": "git",
-        "url": "git://github.com/bagder/curl.git"
+        "url": "https://github.com/curl/curl.git"
     },
     "options": {
         "debug" : {
