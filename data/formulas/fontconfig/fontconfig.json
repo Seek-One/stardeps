@@ -22,6 +22,13 @@
             "vars": {
                 "OPTIONS::SHARED":"--enable-shared"
             }
+        },
+        "expat" : {
+            "dependencies": {
+                "latest": {
+                    "expat" : "any"
+                }
+            }
         }
     },
     "vars":{
@@ -32,18 +39,14 @@
     "recipe": [
         {
             "step":"configure",
-            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh"
-        },
-        {
-            "step":"configure",
             "platforms":"linux-gcc-64,darwin-clang-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+            "cmd":"${PACKAGE_SRC_PATH}/autogen.sh ${CONFIGURE_OPTIONS}"
         },
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
             "cmd":[
-                "${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+                "${PACKAGE_SRC_PATH}/autogen.sh ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
             ]
         },
         {
