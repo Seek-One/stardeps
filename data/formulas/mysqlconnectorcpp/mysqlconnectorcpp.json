@@ -50,7 +50,7 @@
                 {"chdir":"${PACKAGE_BUILD_PATH}/target-build"},
                 {"cmd":[
                     "cmake -G\"Unix Makefiles\" -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=AMD64 ${CMAKE_OPTIONS} ${CMAKE_CROSS_OPTIONS} ${PACKAGE_SRC_PATH}",
-                    "ln -s ${PACKAGE_BUILD_PATH}/host-build/save_linker_opts save_linker_opts",
+                    "ln -s ${PACKAGE_BUILD_PATH}/host-build/libutils/save_linker_opts libutils/save_linker_opts",
                     "ln -s ${PACKAGE_BUILD_PATH}/host-build/cdk/protobuf/protoc cdk/protobuf/protoc",
                     "sed -i 's/protoc.exe/protoc/g' cdk/protocol/mysqlx/CMakeFiles/cdk_proto_mysqlx.dir/build.make"
                     ]
