@@ -1,0 +1,52 @@
+{
+	"name": "libpng",
+	"homepage": "https://libexpat.github.io/",
+	"scm": {
+		"type": "git",
+		"url": "https://github.com/libexpat/libexpat.git"
+	},
+	"options": {
+		"shared" : {
+			"vars": {
+				"OPTIONS::SHARED":"--enable-shared"
+			}
+		},
+		"static" : {
+			"vars": {
+				"OPTIONS::STATIC":"--enable-static"
+			}
+		}
+	},
+	"vars":{
+		"CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::STATIC} --prefix=${PACKAGE_PREFIX_PATH} --without-docbook",
+		"CONFIGURE_CROSS_DEPS":"-DCMAKE_FIND_ROOT_PATH=/usr/${CROSS_COMPIL_PREFIX}",
+		"CONFIGURE_CROSS_OPTIONS":"--host=${CROSS_COMPIL_PREFIX}"
+	},
+	"recipe": [
+		{
+			"step":"configure",
+			"platforms":"linux-mingw-gcc-64",
+			"actions":[
+				{"chdir":"${PACKAGE_SRC_PATH}/expat"},
+				{"cmd": "./buildconf.sh -f"},
+				{"chdir":"${PACKAGE_BUILD_PATH}"},
+				{"cmd":"${PACKAGE_SRC_PATH}/expat/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"}
+			]
+		},
+		{
+			"step":"build",
+			"cmd":"${MAKE}"
+		},
+		{
+			"step":"install",
+			"actions":[
+				{"cmd":"${MAKE} install"},
+				{"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/expat.pc ${PKG_CONFIG_LIBDIR}/"}
+			]
+		},
+		{
+			"step":"clean",
+			"cmd":"rm -f ${PKG_CONFIG_LIBDIR}/expat.pc"
+		}
+	]
+}
