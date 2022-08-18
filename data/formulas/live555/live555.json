@@ -66,6 +66,9 @@
                 "bash -c \"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> config.mingw\"",
                 "sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.mingw",
                 "sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.mingw",
+                "sed -i 's/^COMPILE_OPTS =/COMPILE_OPTS = -DNO_GETIFADDRS -D_WIN32_WINNT=0x0601/g' config.mingw",
+                "sed -i 's/^  inet_ntop(AF_INET,/  inet_ntop(AF_INET, (PVOID)/g' groupsock/NetAddress.cpp",
+                "sed -i 's/^  inet_ntop(AF_INET6,/  inet_ntop(AF_INET6, (PVOID)/g' groupsock/NetAddress.cpp",
                 "${PACKAGE_BUILD_PATH}/genMakefiles mingw"
             ]
         },
