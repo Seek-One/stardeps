@@ -45,13 +45,31 @@
                     }
                 }
             ]
+        },
+        "allow-unsupported-compiler" : {
+            "default-state":"disabled",
+            "rules": [
+                {
+                    "state":"enabled",
+                    "vars": {
+                        "OPTIONS::ALLOWUNSUPPORTEDCOMPILER":"-DFORCE_UNSUPPORTED_COMPILER=TRUE"
+                    }
+                },
+                {
+                    "state":"disabled",
+                    "vars": {
+                        "OPTIONS::ALLOWUNSUPPORTEDCOMPILER":""
+                    }
+                }
+            ]
+
         }
     },
     "vars":{
         "DEPS_BOOST":"-DDOWNLOAD_BOOST=1 -DWITH_BOOST=./boost",
         "DEPS_LIBEVENT":"-DWITH_LIBEVENT=system -DLIBEVENT_INCLUDE_PATH=${DEPENDENCY::LIBEVENT::ROOTPATH}/include -DLIBEVENT_LIB_PATHS=${DEPENDENCY::LIBEVENT::ROOTPATH}/lib",
         "DEPS_LIBEVENT_CROSS":"-DTEST_RUN_RESULT=2.1.0 -DTEST_RUN_RESULT__TRYRUN_OUTPUT=2.1.0",
-        "CMAKE_OPTIONS":"${OPTIONS::BUILDTYPE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH} -DWITH_SSL=${DEPENDENCY::OPENSSL::ROOTPATH} -DDOWNLOAD_BOOST=1 -DWITH_BOOST=./boost ${OPTIONS::NOSERVER} ",
+        "CMAKE_OPTIONS":"${OPTIONS::BUILDTYPE} -DCMAKE_INSTALL_PREFIX=${PACKAGE_PREFIX_PATH} -DWITH_SSL=${DEPENDENCY::OPENSSL::ROOTPATH} -DDOWNLOAD_BOOST=1 -DWITH_BOOST=./boost ${OPTIONS::NOSERVER} ${OPTIONS::ALLOWUNSUPPORTEDCOMPILER} ",
         "CMAKE_CROSS_OPTIONS":"-DCMAKE_C_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-gcc-posix -DCMAKE_CXX_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-g++-posix -DCMAKE_RC_COMPILER=/usr/bin/${CROSS_COMPIL_PREFIX}-windres"
     },
     "recipe": [
