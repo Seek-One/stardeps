@@ -62,10 +62,10 @@ void VariableList::print() const
 	}
 }
 
-void VariableList::addVariable(const QString& szKey, const QString& szValue)
+void VariableList::addVariable(const QString& szName, const QString& szValue)
 {
-	//qDebug("%s=%s", qPrintable(szKey), qPrintable(szValue));
-	append(Variable(szKey, szValue));
+	//qDebug("%s=%s", qPrintable(szName), qPrintable(szValue));
+	append(Variable(szName, szValue));
 }
 
 void VariableList::addVariableList(const VariableList& listVars)
@@ -107,7 +107,8 @@ void VariableList::setValue(const QString& szName, const QString& szValue)
 		Variable& var = (*iter);
 		if(iter->getName() == szName){
 			var.setValue(iter->getValue());
+			return;
 		}
 	}
-
+	addVariable(szName, szValue);
 }
