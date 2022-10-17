@@ -19,7 +19,10 @@ public:
 	virtual ~Variable();
 
 	const QString& getName() const;
+	void setName(const QString& szName);
+
 	const QString& getValue() const;
+	void setValue(const QString& szValue);
 
 private:
 	QString m_szName;
@@ -38,7 +41,10 @@ public:
 	void addVariable(const QString& szName, const QString& szValue);
 	void addVariableList(const VariableList& listVars);
 
+	void setValues(const VariableList& listVars);
+
 	const QString& getValue(const QString& szName, const QString& szDefaultValue) const;
+	void setValue(const QString& szName, const QString& szValue);
 };
 
 #endif /* SRC_VARIABLE_VARIABLELIST_H_ */

@@ -369,7 +369,9 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 		FormulaVariableList::const_iterator iter_var;
 		for (iter_var = listGlobalVars.constBegin(); iter_var != listGlobalVars.constEnd(); ++iter_var) {
 			QString szNewValue;
-			doReplaceVariable(iter_var->getValue(), dictVars, szNewValue);
+			VariableList dictVarsTmp = listGlobalVars;
+			dictVarsTmp.setValues(dictVars);
+			doReplaceVariable(iter_var->getValue(), dictVarsTmp, szNewValue);
 			dictVars.addVariable(iter_var->getName(), szNewValue);
 		}
 	}

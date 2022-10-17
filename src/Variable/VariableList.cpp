@@ -28,9 +28,19 @@ const QString& Variable::getName() const
 	return m_szName;
 }
 
+void Variable::setName(const QString& szName)
+{
+	m_szName = szName;
+}
+
 const QString& Variable::getValue() const
 {
 	return m_szValue;
+}
+
+void Variable::setValue(const QString& szValue)
+{
+	m_szValue = szValue;
 }
 
 VariableList::VariableList()
@@ -67,6 +77,16 @@ void VariableList::addVariableList(const VariableList& listVars)
 	}
 }
 
+void VariableList::setValues(const VariableList& listVars)
+{
+	VariableList::const_iterator iter;
+	for(iter = listVars.constBegin(); iter != listVars.constEnd(); ++iter)
+	{
+		const Variable& var = *iter;
+		setValue(var.getName(), var.getValue());
+	}
+}
+
 const QString& VariableList::getValue(const QString& szName, const QString& szDefaultValue) const
 {
 	VariableList::const_iterator iter;
@@ -77,4 +97,17 @@ const QString& VariableList::getValue(const QString& szName, const QString& szDe
 		}
 	}
 	return szDefaultValue;
+}
+
+void VariableList::setValue(const QString& szName, const QString& szValue)
+{
+	VariableList::iterator iter;
+	for(iter = begin(); iter != end(); ++iter)
+	{
+		Variable& var = (*iter);
+		if(iter->getName() == szName){
+			var.setValue(iter->getValue());
+		}
+	}
+
 }
