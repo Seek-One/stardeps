@@ -112,3 +112,23 @@ bool VersionHelper::checkVersion(const QString& szVersion, const QString& szVers
 
 	return bRes;
 }
+
+bool VersionHelper::checkVersion(const QString& szVersion, const QString& szCheckVersion)
+{
+	if(szCheckVersion.startsWith(">=")){
+		return isGreaterThanOrEqual(szVersion, szCheckVersion.mid(2));
+	}
+	if(szCheckVersion.startsWith(">")){
+		return isGreaterThan(szVersion, szCheckVersion.mid(1));
+	}
+	if(szCheckVersion.startsWith("=")){
+		return (szVersion == szCheckVersion.mid(1));
+	}
+	if(szCheckVersion.startsWith("<=")){
+		return isLessThanOrEqual(szVersion, szCheckVersion.mid(2));
+	}
+	if(szCheckVersion.startsWith("<")){
+		return isLessThan(szVersion, szCheckVersion.mid(1));
+	}
+	return (szVersion == szCheckVersion);
+}

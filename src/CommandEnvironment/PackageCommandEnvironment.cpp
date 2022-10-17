@@ -179,6 +179,7 @@ bool PackageCommandEnvironment::loadFormula(const QString& szPackageName, QShare
         qDebug("[load-env] Loading formula from file %s", qPrintable(szFilePath));
 
         FormulaParser parser(getEnv().getPlatformTypeName());
+        parser.setPackageVersion(getPackageVersion());
         bRes = parser.parse(szFilePath);
         if (bRes) {
             pFormula = parser.getFormula();

@@ -90,14 +90,23 @@
         },
         "wayland" : {
             "vars": {
-                "OPTIONS::QT_MODULE_WAYLAND":",qwayland"
+                "OPTIONS::QT_MODULE_WAYLAND":",qtwayland"
             }
         }
     },
     "vars":{
         "QT_MODULES":"--module-subset=qtbase,qtscript,qtlocation,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols,qtquickcontrols2${OPTIONS::QT_MODULE_X11}${OPTIONS::QT_MODULE_WAYLAND}",
         "QT_NOMAKE":"-nomake examples -nomake tests",
-        "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
+        "QT_SKIP_5.15":{
+            "default-value":"",
+            "alternatives-values": [
+                {
+                    "version":">=5.15",
+                    "value":"-skip qtquick3d"
+                }
+            ]
+        },
+        "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript ${QT_SKIP_5.15}",
         "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::FONTCONFIG} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
     },

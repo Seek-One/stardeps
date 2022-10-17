@@ -10,6 +10,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include "Version/VersionHelper.h"
+
 #include "Formula.h"
 
 #include "FormulaParser.h"
@@ -23,6 +25,11 @@ FormulaParser::FormulaParser(const QString& szPlatformName)
 FormulaParser::~FormulaParser()
 {
 
+}
+
+void FormulaParser::setPackageVersion(const QString& szVersion)
+{
+	m_szPackageVersion = szVersion;
 }
 
 const QSharedPointer<Formula>& FormulaParser::getFormula() const
@@ -498,11 +505,21 @@ bool FormulaParser::parseVar(const QString& szName, const QJsonObject& object, F
 		for(; iter_altValue != arrayAltValues.constEnd(); ++iter_altValue){
 			altValue = iter_altValue->toObject();
 
+			// Check plateform
 			if(altValue.contains("platforms")){
-				if(altValue.value("platforms").toString() == m_szPlatformName){
-					szValue = altValue.value("value").toString();
+				if(altValue.value("platforms").toString() != m_szPlatformName){
+					continue;
 				}
 			}
+
+			// Check version
+			if(altValue.contains("version") && !m_szPackageVersion.isEmpty()){
+				if(!VersionHelper::checkVersion(m_szPackageVersion, altValue.value("version").toString())){
+					continue;
+				}
+			}
+
+			szValue = altValue.value("value").toString();
 		}
 	}
 

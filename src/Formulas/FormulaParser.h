@@ -26,6 +26,8 @@ public:
 	FormulaParser(const QString& szPlatformName);
 	virtual ~FormulaParser();
 
+	void setPackageVersion(const QString& szVersion);
+
 	const QSharedPointer<Formula>& getFormula() const;
 
 	bool parse(const QString& szFilePath);
@@ -48,6 +50,7 @@ private:
 private:
 	QSharedPointer<Formula> m_pFormula;
     QString m_szPlatformName;
+	QString m_szPackageVersion;
 };
 
 #endif /* SRC_FORMULAS_FORMULAPARSER_H_ */

@@ -22,6 +22,7 @@ public:
 	static int compare(const QString& szVersion1, const QString& szVersion2);
 
 	static bool checkVersion(const QString& szVersion, const QString& szVersionMin, const QString& szVersionMax);
+	static bool checkVersion(const QString& szVersion, const QString& szCheckVersion);
 };
 
 #endif /* SRC_GLOBAL_VERSIONHELPER_H_ */
