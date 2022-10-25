@@ -88,6 +88,11 @@
                 "OPTIONS::QT_MODULE_X11":",qtx11extras"
             }
         },
+        "bundled-xcb-xinput" : {
+            "vars": {
+                "OPTIONS::XCB_XINPUT":"-bundled-xcb-xinput"
+            }
+        },
         "wayland" : {
             "vars": {
                 "OPTIONS::QT_MODULE_WAYLAND":",qtwayland"
@@ -107,7 +112,7 @@
             ]
         },
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript ${QT_SKIP_5.15}",
-        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::FONTCONFIG} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} -prefix ${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::FONTCONFIG} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} ${OPTIONS::XCB_XINPUT} -prefix ${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
     },
     "recipe": [
