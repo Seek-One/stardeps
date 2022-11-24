@@ -17,13 +17,13 @@
                 {
                     "state":"enabled",
                     "vars": {
-                        "OPTIONS::DEBUG":"--enable-maintainer-mode"
+                        "OPTIONS::DEBUG":"-DCMAKE_BUILD_TYPE=Debug -DPNG_HARDWARE_OPTIMIZATIONS=OFF"
                     }
                 },
                 {
                     "state":"disabled",
                     "vars": {
-                        "OPTIONS::DEBUG":"--enable-hardware-optimizations"
+                        "OPTIONS::DEBUG":"-DPNG_HARDWARE_OPTIMIZATIONS=ON"
                     }
                 }
             ]
@@ -34,13 +34,13 @@
                 {
                     "state":"enabled",
                     "vars": {
-                        "OPTIONS::SHARED":"--enable-shared=yes"
+                        "OPTIONS::SHARED":"-DPNG_SHARED=ON"
                     }
                 },
                 {
                     "state":"disabled",
                     "vars": {
-                        "OPTIONS::SHARED":"--enable-shared=no"
+                        "OPTIONS::SHARED":"-DPNG_SHARED=OFF"
                     }
                 }
             ]
@@ -51,13 +51,13 @@
                 {
                     "state":"enabled",
                     "vars": {
-                        "OPTIONS::SHARED":"--enable-static=yes"
+                        "OPTIONS::SHARED":"-DPNG_STATIC=ON"
                     }
                 },
                 {
                     "state":"disabled",
                     "vars": {
-                        "OPTIONS::SHARED":"--enable-static=no"
+                        "OPTIONS::SHARED":"-DPNG_STATIC=OFF"
                     }
                 }
             ]
