@@ -69,10 +69,16 @@ void Environment::setEnvVar(const QString& szName, const QString& szValue)
 	m_listVars.addVariable(szName, szValue);
 }
 
-
 QString Environment::getEnvVar(const QString& szName, const QString& szDefaultValue) const
 {
 	return m_listVars.getValue(szName, szDefaultValue);
+}
+
+void Environment::removeEnvVar(const QString& szName)
+{
+	if(m_listVars.hasVariable(szName)){
+		m_listVars.removeVariable(szName);
+	}
 }
 
 const EnvironmentVars& Environment::getVars() const

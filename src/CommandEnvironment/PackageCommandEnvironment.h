@@ -41,6 +41,7 @@ public:
 
 protected:
 	virtual bool doProcessArgument(int i, const QString& szArg);
+	virtual bool doFinalizeEnv(Environment& env);
 	virtual bool doLoad();
 
 private:
@@ -60,6 +61,8 @@ private:
 	QStringList m_listPackageOptions;
 
 	QSharedPointer<Formula> m_pFormula;
+
+	QString m_szPkgConfigMode;
 };
 
 #endif /* SRC_COMMANDENVIRONMENT_PACKAGECOMMANDENVIRONMENT_H_ */

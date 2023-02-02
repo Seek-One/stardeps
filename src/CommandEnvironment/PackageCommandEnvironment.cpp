@@ -9,6 +9,8 @@
 
 #include "Version/VersionHelper.h"
 
+#include "Environment/EnvironmentDefs.h"
+
 #include "Formulas/FormulaParser.h"
 
 #include "PackageCommandEnvironment.h"
@@ -16,6 +18,7 @@
 PackageCommandEnvironment::PackageCommandEnvironment()
 {
 	setNeedEnvVars(true);
+	m_szPkgConfigMode = "default";
 }
 
 PackageCommandEnvironment::~PackageCommandEnvironment()
@@ -125,7 +128,28 @@ bool PackageCommandEnvironment::doProcessArgument(int i, const QString& szArg)
 		return true;
 	}
 
+	if(szArg.startsWith("--pkg-config-mode=")){
+		m_szPkgConfigMode = szArg.mid(18);
+		return true;
+	}
+
 	return AbstractCommandEnvironment::doProcessArgument(i, szArg);
+}
+
+bool PackageCommandEnvironment::doFinalizeEnv(Environment& env)
+{
+	// Pkg-config path
+	QDir pathPkgConfig = getVirtualEnvironmentPath().filePath(".pkgconfig-files");
+	if(pathPkgConfig.exists()){
+		env.removeEnvVar(VE_VAR_PKG_CONFIG_PATH);
+		env.removeEnvVar(VE_VAR_PKG_CONFIG_LIBDIR);
+		if(m_szPkgConfigMode == "default") {
+			env.setEnvVar(VE_VAR_PKG_CONFIG_PATH, pathPkgConfig.absolutePath());
+		}else if(m_szPkgConfigMode == "environment") {
+			env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, pathPkgConfig.absolutePath());
+		}
+	}
+	return true;
 }
 
 bool PackageCommandEnvironment::doLoad() {

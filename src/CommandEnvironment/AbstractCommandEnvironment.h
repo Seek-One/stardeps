@@ -43,6 +43,7 @@ public:
 
 protected:
 	virtual bool doProcessArgument(int i, const QString& szArg);
+	virtual bool doFinalizeEnv(Environment& env);
 	virtual bool doLoad();
 
 	void setNeedEnvVars(bool bNeed);

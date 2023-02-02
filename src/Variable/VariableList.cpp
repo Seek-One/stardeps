@@ -112,3 +112,30 @@ void VariableList::setValue(const QString& szName, const QString& szValue)
 	}
 	addVariable(szName, szValue);
 }
+
+bool VariableList::hasVariable(const QString& szName) const
+{
+	VariableList::const_iterator iter;
+	for(iter = constBegin(); iter != constEnd(); ++iter)
+	{
+		const Variable& var = (*iter);
+		if(var.getName() == szName){
+			return true;
+		}
+	}
+	return false;
+}
+
+void VariableList::removeVariable(const QString& szName)
+{
+	VariableList::iterator iter;
+	iter = begin();
+	while(iter != end()){
+		Variable& var = (*iter);
+		if(var.getName() == szName){
+			iter = erase(iter);
+		}else{
+			iter++;
+		}
+	}
+}

@@ -40,6 +40,7 @@ public:
 	// Env vars
 	void setEnvVar(const QString& szName, const QString& szValue);
 	QString getEnvVar(const QString& szName, const QString& szDefaultValue = QString()) const;
+	void removeEnvVar(const QString& szName);
 	const EnvironmentVars& getVars() const;
 
 	// Get some var

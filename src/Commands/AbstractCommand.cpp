@@ -80,7 +80,7 @@ bool AbstractCommand::execute()
 {
 	bool bRes;
 
-    const Environment& env = getEnv();
+	const Environment& env = getEnv();
 
 	m_shell.setEnvironmentVariableList(env.getVars());
 

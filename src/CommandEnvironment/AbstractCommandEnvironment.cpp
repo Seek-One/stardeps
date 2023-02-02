@@ -97,6 +97,11 @@ bool AbstractCommandEnvironment::doProcessArgument(int i, const QString& szArg)
 	return true;
 }
 
+bool AbstractCommandEnvironment::doFinalizeEnv(Environment& env)
+{
+	return true;
+}
+
 bool AbstractCommandEnvironment::doLoad()
 {
 	return true;
@@ -107,7 +112,12 @@ bool AbstractCommandEnvironment::doLoadEnv()
 	bool bRes = true;
 	EnvironmentLoader envLoader;
 	if(m_bNeedEnvVars){
+		// Load env from file
 		bRes = envLoader.loadEnvironmentVars(m_env);
+		if(bRes){
+			// Modify env from arguments
+			bRes = doFinalizeEnv(m_env);
+		}
 		m_env.print();
 	}
 	return bRes;

@@ -18,7 +18,7 @@
 
 CommandCreateEnv::CommandCreateEnv() : AbstractCommand("createenv")
 {
-
+	m_szPkgConfigMode = "default";
 }
 
 CommandCreateEnv::~CommandCreateEnv()
@@ -28,16 +28,19 @@ CommandCreateEnv::~CommandCreateEnv()
 
 void CommandCreateEnv::setTargetPlatform(const QString& szTargetPlatform)
 {
-    m_szTargetPlatform = szTargetPlatform;
+	m_szTargetPlatform = szTargetPlatform;
 }
-
 
 bool CommandCreateEnv::doProcessArgument(int i, const QString& szArg)
 {
-    if(i == 0){
-        setTargetPlatform(szArg);
-    }
-    return AbstractCommand::doProcessArgument(i, szArg);
+	if(i == 0){
+		setTargetPlatform(szArg);
+	}
+	if(szArg.startsWith("--pkg-config-mode=")){
+		m_szPkgConfigMode = szArg.mid(18);
+		return true;
+	}
+	return AbstractCommand::doProcessArgument(i, szArg);
 }
 
 bool CommandCreateEnv::doExecute()
@@ -84,7 +87,11 @@ bool CommandCreateEnv::doExecute()
     if(bRes && !pathPkgConfig.exists()){
         bRes = pathPkgConfig.mkpath(".");
     }
-    env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, pathPkgConfig.absolutePath());
+	if(m_szPkgConfigMode == "default") {
+		env.setEnvVar(VE_VAR_PKG_CONFIG_PATH, pathPkgConfig.absolutePath());
+	}else if(m_szPkgConfigMode == "environment") {
+		env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, pathPkgConfig.absolutePath());
+	}
 
     QString szLine;
     if(bRes){

@@ -45,6 +45,10 @@ public:
 
 	const QString& getValue(const QString& szName, const QString& szDefaultValue) const;
 	void setValue(const QString& szName, const QString& szValue);
+
+	bool hasVariable(const QString& szName) const;
+
+	void removeVariable(const QString& szName);
 };
 
 #endif /* SRC_VARIABLE_VARIABLELIST_H_ */

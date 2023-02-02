@@ -30,10 +30,11 @@ private:
 	bool findCompiler(Environment& env);
 	bool findMake(Environment& env);
 	bool findRSync(Environment& env);
-    bool findTar(Environment& env);
-    bool findWget(Environment& env);
+	bool findTar(Environment& env);
+	bool findWget(Environment& env);
 
 	QString m_szTargetPlatform;
+	QString m_szPkgConfigMode;
 };
 
 #endif /* SRC_COMMANDS_COMMANDCREATEENV_H_ */
