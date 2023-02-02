@@ -18,7 +18,7 @@
 PackageCommandEnvironment::PackageCommandEnvironment()
 {
 	setNeedEnvVars(true);
-	m_szPkgConfigMode = "default";
+	m_szPkgConfigMode = "";
 }
 
 PackageCommandEnvironment::~PackageCommandEnvironment()
@@ -138,15 +138,23 @@ bool PackageCommandEnvironment::doProcessArgument(int i, const QString& szArg)
 
 bool PackageCommandEnvironment::doFinalizeEnv(Environment& env)
 {
-	// Pkg-config path
-	QDir pathPkgConfig = getVirtualEnvironmentPath().filePath(".pkgconfig-files");
-	if(pathPkgConfig.exists()){
-		env.removeEnvVar(VE_VAR_PKG_CONFIG_PATH);
-		env.removeEnvVar(VE_VAR_PKG_CONFIG_LIBDIR);
-		if(m_szPkgConfigMode == "default") {
-			env.setEnvVar(VE_VAR_PKG_CONFIG_PATH, pathPkgConfig.absolutePath());
-		}else if(m_szPkgConfigMode == "environment") {
-			env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, pathPkgConfig.absolutePath());
+	// Handle pkg-config mode
+	if(!m_szPkgConfigMode.isEmpty())
+	{
+		QDir pathPkgConfig = getVirtualEnvironmentPath().filePath(".pkgconfig-files");
+		if(pathPkgConfig.exists()){
+			if (m_szPkgConfigMode == "default") {
+				env.removeEnvVar(VE_VAR_PKG_CONFIG_PATH);
+				env.removeEnvVar(VE_VAR_PKG_CONFIG_LIBDIR);
+				env.setEnvVar(VE_VAR_PKG_CONFIG_PATH, pathPkgConfig.absolutePath());
+			} else if (m_szPkgConfigMode == "environment") {
+				env.removeEnvVar(VE_VAR_PKG_CONFIG_PATH);
+				env.removeEnvVar(VE_VAR_PKG_CONFIG_LIBDIR);
+				env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, pathPkgConfig.absolutePath());
+			}else if(m_szPkgConfigMode == "system"){
+				env.removeEnvVar(VE_VAR_PKG_CONFIG_PATH);
+				env.removeEnvVar(VE_VAR_PKG_CONFIG_LIBDIR);
+			}
 		}
 	}
 	return true;

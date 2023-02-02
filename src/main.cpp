@@ -150,6 +150,12 @@ int main(int argc, char **argv)
 		qDebug("             define the tag version in the SCM to use.");
 		qDebug("       --scm-branch-version=VERSION");
 		qDebug("             define the branch version in the SCM to use.");
+		qDebug(" ");
+		qDebug("       --pkg-config-mode=MODE (default: default)");
+		qDebug("             set search mode policy for pkg-config. If not set use policy from environment.");
+		qDebug("                  system: search only in system (PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH will not be set)");
+		qDebug("                  environment: search only in current environment (define PKG_CONFIG_LIBDIR to the .pkgconfig-files directory path)");
+		qDebug("                  default: search in environment first then in system (define PKG_CONFIG_PATH to the .pkgconfig-files directory path)");
     }
 
 	return iRes;
