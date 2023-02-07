@@ -143,8 +143,9 @@ int main(int argc, char **argv)
 		qDebug(" ");
 		qDebug("       --pkg-version=VERSION");
 		qDebug("             define the version of the package to build.");
-		qDebug("       --pkg-option=OPTION");
+		qDebug("       --pkg-option=OPTION[:mode1[,mode2]]");
 		qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
+		qDebug("             you can also specify some mode for the option depending on formula.");
 		qDebug(" ");
 		qDebug("       --scm-tag-version=VERSION");
 		qDebug("             define the tag version in the SCM to use.");
