@@ -34,11 +34,29 @@
         "openssl" : {
             "dependencies": {
                 "latest": {
-                    "openssl" : {"min":"1.1"}
+                    "openssl" : {
+                        "min":"1.1"
+                    }
                 }
             },
+            "default-modes":"environment",
+            "rules": [
+                {
+                    "mode":"environment",
+                    "vars": {
+                        "OPTIONS::OPENSSL::MODE":"-I ${DEPENDENCY::OPENSSL::ROOTPATH}/include -L ${DEPENDENCY::OPENSSL::ROOTPATH}/lib"
+                    }
+                },
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system",
+                    "vars": {
+                        "OPTIONS::OPENSSL:MODE":"-openssl"
+                    }
+                }
+            ],
             "vars": {
-                "OPTIONS::OPENSSL":"-openssl -I ${DEPENDENCY::OPENSSL::ROOTPATH}/include -L ${DEPENDENCY::OPENSSL::ROOTPATH}/lib"
+                "OPTIONS::OPENSSL":"-openssl ${OPTIONS::OPENSSL:MODE}"
             }
         },
         "fontconfig" : {
@@ -83,6 +101,11 @@
                 "OPTIONS::PSQL":"-plugin-sql-psql PSQL_PREFIX=${CUSTOM_PSQL_PREFIX}"
             }
         },
+        "glib" : {
+            "vars": {
+                "OPTIONS::GLIB":"-glib"
+            }
+        },
         "x11" : {
             "vars": {
                 "OPTIONS::QT_MODULE_X11":",qtx11extras"
@@ -112,7 +135,10 @@
             ]
         },
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript ${QT_SKIP_5.15}",
-        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${OPTIONS::OPENSSL} ${OPTIONS::FONTCONFIG} ${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL} ${OPTIONS::XCB_XINPUT} -prefix ${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_OPTIONS_SECURITY": "${OPTIONS::OPENSSL}",
+        "CONFIGURE_OPTIONS_PLATFORM": "${OPTIONS::FONTCONFIG} ${OPTIONS::XCB_XINPUT}",
+        "CONFIGURE_OPTIONS_SQL": "${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL}",
+        "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${CONFIGURE_OPTIONS_SECURITY} ${CONFIGURE_OPTIONS_PLATFORM} ${CONFIGURE_OPTIONS_SQL} -prefix ${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
     },
     "recipe": [

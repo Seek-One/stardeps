@@ -82,7 +82,7 @@ const FormulaDependenciesList& Formula::getDependenciesList() const
 	return m_listDependencies;
 }
 
-FormulaDependenciesList Formula::getDependenciesListForOptions(const QStringList& listOptions) const
+FormulaDependenciesList Formula::getDependenciesListForOptions(const PackageOptionList& listPackageOptions) const
 {
 	FormulaDependenciesList listDependencies = m_listDependencies;
 
@@ -92,16 +92,19 @@ FormulaDependenciesList Formula::getDependenciesListForOptions(const QStringList
 	for(iter_options = m_listOptions.constBegin(); iter_options != m_listOptions.constEnd(); ++iter_options)
 	{
 		const FormulaOption& option = (*iter_options);
-		if(listOptions.contains(option.getOptionName()))
+		const QString& szOptionName = option.getOptionName();
+		if(listPackageOptions.contains(szOptionName))
 		{
 			const FormulaDependenciesList& listOptionsDependencies = option.getDependenciesList();
+			QStringList listOptionModes = listPackageOptions.getModes(szOptionName);
+			PackageSearchMode iDependenciesSearchMode = option.getDependenciesSearchMode(listOptionModes);
 			if(!listOptionsDependencies.isEmpty())
 			{
 				for(iter_deps = listOptionsDependencies.constBegin(); iter_deps != listOptionsDependencies.constEnd(); ++iter_deps)
 				{
 					QString szVersion = iter_deps.key();
-					const FormulaDependencies& deps = iter_deps.value();
-
+					FormulaDependencies deps = iter_deps.value();
+					deps.setSearchMode(iDependenciesSearchMode);
 					listDependencies.addDependencies(szVersion, deps);
 				}
 			}

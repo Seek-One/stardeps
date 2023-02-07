@@ -12,6 +12,8 @@
 #include <QMap>
 #include <QList>
 
+#include "Package/PackageOptionList.h"
+
 #include "FormulaDependencies.h"
 #include "FormulaOptions.h"
 #include "FormulaRecipe.h"
@@ -50,7 +52,7 @@ public:
 	void setDependenciesList(const FormulaDependenciesList& listDependencies);
 	const FormulaDependenciesList& getDependenciesList() const;
 
-	FormulaDependenciesList getDependenciesListForOptions(const QStringList& listOptions) const;
+	FormulaDependenciesList getDependenciesListForOptions(const PackageOptionList& listPackageOptions) const;
 
 	void addOption(const FormulaOption& option);
 	const FormulaOptionList& getOptions() const;

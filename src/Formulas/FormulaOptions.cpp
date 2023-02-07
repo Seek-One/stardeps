@@ -5,11 +5,14 @@
  *      Author: ebeuque
  */
 
+#include "Package/PackageSearchMode.h"
+
 #include "FormulaOptions.h"
 
 FormulaOptionRule::FormulaOptionRule()
 {
 	m_iState = StateAll;
+	m_iDependenciesSearchMode = PackageSearchMode::Environment;
 }
 
 FormulaOptionRule::~FormulaOptionRule()
@@ -25,6 +28,26 @@ void FormulaOptionRule::setRuleState(State iState)
 FormulaOptionRule::State FormulaOptionRule::getRuleState() const
 {
 	return m_iState;
+}
+
+void FormulaOptionRule::setRuleMode(const QString& szMode)
+{
+	m_szMode = szMode;
+}
+
+const QString& FormulaOptionRule::getRuleMode() const
+{
+	return m_szMode;
+}
+
+void FormulaOptionRule::setDependenciesSearchMode(const PackageSearchMode& iDependenciesSearchMode)
+{
+	 m_iDependenciesSearchMode = iDependenciesSearchMode;
+}
+
+const PackageSearchMode& FormulaOptionRule::getDependenciesSearchMode() const
+{
+	return m_iDependenciesSearchMode;
 }
 
 void FormulaOptionRule::setVariableList(const FormulaVariableList& listVariables)
@@ -46,6 +69,15 @@ bool FormulaOptionRule::matchState(bool bState) const
 		return !bState;
 	}
 	return true;
+}
+
+
+bool FormulaOptionRule::matchModes(const QStringList& listModes, bool bAcceptNoMode) const
+{
+	if(m_szMode.isEmpty()){
+		return bAcceptNoMode;
+	}
+	return listModes.contains(m_szMode);
 }
 
 FormulaOption::FormulaOption()
@@ -83,6 +115,16 @@ bool FormulaOption::getDefaultState() const
 	return m_bDefaultState;
 }
 
+void FormulaOption::setDefaultModes(const QString& szModes)
+{
+	m_szDefaultModes = szModes;
+}
+
+const QString& FormulaOption::getDefaultModes() const
+{
+	return m_szDefaultModes;
+}
+
 void FormulaOption::setDependenciesList(const FormulaDependenciesList& listDependencies)
 {
 	m_listDependencies = listDependencies;
@@ -93,7 +135,7 @@ const FormulaDependenciesList& FormulaOption::getDependenciesList() const
 	return m_listDependencies;
 }
 
-FormulaVariableList FormulaOption::getVariableListForState(bool bState) const
+PackageSearchMode FormulaOption::getDependenciesSearchMode(const QStringList& listOptionModes) const
 {
 	FormulaVariableList listVars;
 
@@ -102,7 +144,26 @@ FormulaVariableList FormulaOption::getVariableListForState(bool bState) const
 	for(iter = m_listRules.constBegin(); iter != m_listRules.constEnd(); ++iter)
 	{
 		const FormulaOptionRule& formulaOptionRule = (*iter);
-		if(formulaOptionRule.matchState(bState))
+		if(formulaOptionRule.matchModes(listOptionModes, false)){
+			return formulaOptionRule.getDependenciesSearchMode();
+		}
+	}
+
+	return PackageSearchMode::Environment;
+}
+
+FormulaVariableList FormulaOption::getVariableListForState(bool bState, const QStringList& listModes) const
+{
+	FormulaVariableList listVars;
+
+	FormulaOptionRuleList::const_iterator iter;
+
+	for(iter = m_listRules.constBegin(); iter != m_listRules.constEnd(); ++iter)
+	{
+		const FormulaOptionRule& formulaOptionRule = (*iter);
+		bool bAccept = formulaOptionRule.matchState(bState);
+		bAccept = bAccept && formulaOptionRule.matchModes(listModes);
+		if(bAccept)
 		{
 			listVars.addVariableList(formulaOptionRule.getVariableList());
 		}

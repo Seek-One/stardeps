@@ -24,7 +24,7 @@ public:
 
 	const QString& getPackageName() const;
 	const QString& getPackageVersion() const;
-	const QStringList& getPackageOptions() const;
+	const PackageOptionList& getPackageOptions() const;
 	QString getPackageNameVersion() const;
 
 	QDir getRootPackageDir() const;

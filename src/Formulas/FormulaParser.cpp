@@ -185,6 +185,9 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 		if(objectOptionDataList.contains("default-state")){
 			formulaOption.setDefaultState(objectOptionDataList.value("default-state").toString() == "enabled");
 		}
+		if(objectOptionDataList.contains("default-modes")){
+			formulaOption.setDefaultModes(objectOptionDataList.value("default-modes").toString());
+		}
 
 		if(objectOptionDataList.contains("dependencies")){
 			FormulaDependenciesList listDependencies;
@@ -243,6 +246,20 @@ bool FormulaParser::parseOptionRule(const QJsonObject& objectRoot, FormulaOption
 			iState = FormulaOptionRule::StateDisabled;
 		}
 		formulaOptionRule.setRuleState(iState);
+	}
+
+	if(objectRoot.contains("mode")){
+		QString szMode = objectRoot.value("mode").toString();
+		if(szMode.isEmpty()){
+			szMode = formulaOption.getDefaultModes();
+		}
+		formulaOptionRule.setRuleMode(szMode);
+	}
+
+	if(objectRoot.contains("dependencies-search-mode")){
+		QString szSearchMode = objectRoot.value("dependencies-search-mode").toString();
+		PackageSearchMode iSearchMode = PackageSearchMode::fromString(szSearchMode);
+		formulaOptionRule.setDependenciesSearchMode(iSearchMode);
 	}
 
 	if(objectRoot.contains("vars")){
@@ -400,7 +417,7 @@ bool FormulaParser::parseStep(const QJsonObject& objectRoot, FormulaStep& formul
 
     if(bRes && objectRoot.contains("platforms")){
         QStringList listPlaforms = objectRoot.value("platforms").toString().split(',');
-        formulaStep.setPlaformList(listPlaforms);
+        formulaStep.setPlatformList(listPlaforms);
     }
 
 	if(bRes && objectRoot.contains("options")){

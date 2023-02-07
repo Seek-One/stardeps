@@ -10,6 +10,7 @@
 #include "Version/VersionHelper.h"
 
 #include "Environment/EnvironmentDefs.h"
+#include "Shell/ShellExecutor.h"
 
 #include "Formulas/FormulaParser.h"
 
@@ -65,7 +66,7 @@ void PackageCommandEnvironment::addPackageOption(const QString& szOption)
 	m_listPackageOptions.append(szOption);
 }
 
-const QStringList& PackageCommandEnvironment::getPackageOptions() const
+const PackageOptionList& PackageCommandEnvironment::getPackageOptions() const
 {
 	return m_listPackageOptions;
 }
@@ -230,7 +231,7 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 	qDebug("[load-env] checking dependencies");
 
 	QString szVersion = getPackageNameVersion();
-	const QStringList& listOptions = getPackageOptions();
+	const PackageOptionList& listOptions = getPackageOptions();
 	FormulaDependenciesList listDependencies = pFormula->getDependenciesListForOptions(listOptions);
 
 	QString szDepsVersion = listDependencies.getBestDependenciesVersion(szVersion);
@@ -246,11 +247,11 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 		for(iter = depsList.constBegin(); iter != depsList.constEnd(); ++iter)
 		{
 			const PackageDependency& dependency = (*iter);
-			qWarning("[load-env] checking dependency %s", qPrintable(dependency.toString()));
+			qWarning("[load-env] checking dependency %s in mode %s", qPrintable(dependency.toString()), qPrintable(deps.getSearchMode().toString()));
 
 			QDir dirFoundPath;
 			QString szFoundVersion;
-			bRes = checkDependencyPresent(dependency, dirFoundPath, szFoundVersion);
+			bRes = checkDependencyPresent(dependency, deps.getSearchMode(), dirFoundPath, szFoundVersion);
 			if(bRes){
 				qDebug("[load-env] required dependency is found %s", qPrintable(szFoundVersion));
 				QString szBaseVar = "DEPENDENCY::" + dependency.getPackage().toUpper() + "::";
@@ -269,14 +270,18 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 	return bRes;
 }
 
-bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& dependency, QDir& pathOut, QString& szOutVersion)
+bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& dependency, const PackageSearchMode& iSearchMode, QDir& pathOut, QString& szOutVersion)
 {
     bool bRes = false;
 
     QString szDependencyPackage = dependency.getPackage();
 
     QList<QString> listVersions;
-    bRes = findPackageVersions(szDependencyPackage, FindRelease, listVersions);
+	if(iSearchMode == PackageSearchMode::Environment) {
+		bRes = findPackageVersions(szDependencyPackage, FindRelease, listVersions);
+	}else if(iSearchMode == PackageSearchMode::System){
+		bRes = findSystemPackageVersions(szDependencyPackage, listVersions);
+	}
     if(bRes) {
         bRes = false;
         QList<QString>::const_iterator iter;
@@ -322,4 +327,31 @@ bool PackageCommandEnvironment::findPackageVersions(const QString& szPackageName
     }
 
     return bRes;
+}
+
+bool PackageCommandEnvironment::findSystemPackageVersions(const QString& szPackageName, QList<QString>& listVersions)
+{
+	bool bRes = true;
+
+	QDir dirSearchPackage;
+
+	Environment& env = getEnv();
+
+	// Get version with pkg-config
+	ShellExecutor shell;
+	QByteArray shellResult;
+	shell.setEnvironmentVariableList(env.getVars());
+	shell.setOutputBuffer(&shellResult);
+	QStringList listArgs;
+	listArgs.append("--modversion");
+	listArgs.append(szPackageName);
+	bRes = shell.runCommand("pkg-config", listArgs);
+
+	if(bRes){
+		QString szCmdResult = QString::fromUtf8(shellResult);
+		szCmdResult = szCmdResult.trimmed();
+		listVersions.append(szCmdResult);
+	}
+
+	return bRes;
 }

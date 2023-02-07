@@ -24,12 +24,12 @@ const QString& FormulaStep::getStep() const
     return m_szStep;
 }
 
-void FormulaStep::setPlaformList(const QStringList& listPlatforms)
+void FormulaStep::setPlatformList(const QStringList& listPlatforms)
 {
     m_listPlatforms = listPlatforms;
 }
 
-const QStringList& FormulaStep::getPlaformList() const
+const QStringList& FormulaStep::getPlatformList() const
 {
     return m_listPlatforms;
 }
@@ -63,7 +63,7 @@ bool FormulaStep::acceptPlatform(const QString& szPlatform) const
     return bRes;
 }
 
-bool FormulaStep::acceptOptions(const QStringList& listOptions) const
+bool FormulaStep::acceptOptions(const PackageOptionList& listOptions) const
 {
 	bool bRes = true;
 

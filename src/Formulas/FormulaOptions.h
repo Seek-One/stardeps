@@ -13,6 +13,8 @@
 #include <Formulas/FormulaVariableList.h>
 #include <Formulas/FormulaDependencies.h>
 
+#include "Package/PackageOptionList.h"
+
 class FormulaOptionRule
 {
 public:
@@ -29,13 +31,23 @@ public:
 	void setRuleState(State iState);
 	State getRuleState() const;
 
+	void setRuleMode(const QString& szMode);
+	const QString& getRuleMode() const;
+
+	void setDependenciesSearchMode(const PackageSearchMode& iDependenciesSearchMode);
+	const PackageSearchMode& getDependenciesSearchMode() const;
+
 	void setVariableList(const FormulaVariableList& listVariables);
 	const FormulaVariableList& getVariableList() const;
 
 	bool matchState(bool bState) const;
 
+	bool matchModes(const QStringList& listModes, bool bAcceptNoMode = true) const;
+
 private:
 	State m_iState;
+	QString m_szMode;
+	PackageSearchMode m_iDependenciesSearchMode;
 
 	FormulaVariableList m_listVars;
 };
@@ -55,10 +67,15 @@ public:
 	void setDefaultState(bool bDefaultState);
 	bool getDefaultState() const;
 
+	void setDefaultModes(const QString& szModes);
+	const QString& getDefaultModes() const;
+
 	void setDependenciesList(const FormulaDependenciesList& listDependencies);
 	const FormulaDependenciesList& getDependenciesList() const;
 
-	FormulaVariableList getVariableListForState(bool bState) const;
+	PackageSearchMode getDependenciesSearchMode(const QStringList& listOptionModes) const;
+
+	FormulaVariableList getVariableListForState(bool bState, const QStringList& listModes) const;
 
 	void addOptionRule(const FormulaOptionRule& formulaOptionRule);
 	const FormulaOptionRuleList& getOptionRuleList() const;
@@ -67,6 +84,7 @@ private:
 	QString m_szOptionName;
 
 	bool m_bDefaultState;
+	QString m_szDefaultModes;
 
 	FormulaDependenciesList m_listDependencies;
 

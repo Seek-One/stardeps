@@ -13,7 +13,7 @@
 
 ShellExecutor::ShellExecutor()
 {
-
+	m_pBuffer = NULL;
 }
 
 ShellExecutor::~ShellExecutor()
@@ -24,6 +24,11 @@ ShellExecutor::~ShellExecutor()
 void ShellExecutor::setEnvironmentVariableList(const VariableList& listVars)
 {
     m_listEnvVars = listVars;
+}
+
+void ShellExecutor::setOutputBuffer(QByteArray* pBuffer)
+{
+	m_pBuffer = pBuffer;
 }
 
 bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& listArgs, const QDir& dirWorkingDirectory)
@@ -102,6 +107,9 @@ void ShellExecutor::readCommandAllStandardOutput()
     if (QApplicationSettings::applicationVerboseMode() == 1) {
         printCommandLines("stdout", QString::fromUtf8(buf));
     }
+	if(m_pBuffer){
+		m_pBuffer->append(buf);
+	}
 }
 
 void ShellExecutor::readCommandAllStandardError()

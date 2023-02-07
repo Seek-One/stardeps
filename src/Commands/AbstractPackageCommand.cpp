@@ -32,7 +32,7 @@ const QString& AbstractPackageCommand::getPackageVersion() const
 	return getPackageCommandEnvironment()->getPackageVersion();
 }
 
-const QStringList& AbstractPackageCommand::getPackageOptions() const
+const PackageOptionList& AbstractPackageCommand::getPackageOptions() const
 {
 	return getPackageCommandEnvironment()->getPackageOptions();
 }
@@ -341,20 +341,23 @@ bool AbstractPackageCommand::doInitDictVars(VariableList& dictVars)
 	dictVars.addVariable("PACKAGE_PREFIX_PATH", getReleasePackageDir().absolutePath());
 
 	// Formula options variable
-	const QStringList& listPackageOptions = getPackageOptions();
+	const PackageOptionList& listPackageOptions = getPackageOptions();
 	FormulaOptionList::const_iterator iter_formula_option;
 	for (iter_formula_option = listFormulaOptions.constBegin(); iter_formula_option != listFormulaOptions.constEnd(); ++iter_formula_option) {
 		const FormulaOption &formulaOption = *iter_formula_option;
 
+		// Option state
 		bool bIsOptionEnabled = false;
 		QString szOptionName = formulaOption.getOptionName();
 		bIsOptionEnabled = formulaOption.getDefaultState();
+		QStringList listOptionModes;
 		if (listPackageOptions.contains(szOptionName)) {
 			bIsOptionEnabled = true;
+			listOptionModes = listPackageOptions.getModes(szOptionName);
 		}
 
 		// Get rules
-		FormulaVariableList listOptionsVars = formulaOption.getVariableListForState(bIsOptionEnabled);
+		FormulaVariableList listOptionsVars = formulaOption.getVariableListForState(bIsOptionEnabled, listOptionModes);
 		FormulaVariableList::const_iterator iter_var;
 		for (iter_var = listOptionsVars.constBegin(); iter_var != listOptionsVars.constEnd(); ++iter_var) {
 			QString szNewValue;

@@ -13,6 +13,7 @@
 #include "AbstractCommandEnvironment.h"
 
 #include "Formulas/Formula.h"
+#include "Package/PackageOptionList.h"
 
 class PackageCommandEnvironment : public AbstractCommandEnvironment
 {
@@ -30,7 +31,7 @@ public:
 	static QString getPackageNameVersion(const QString& szPackageName, const QString& szPackageVersion);
 
 	void addPackageOption(const QString& szOption);
-	const QStringList& getPackageOptions() const;
+	const PackageOptionList& getPackageOptions() const;
 
 	const QSharedPointer<Formula>& getFormula() const;
 
@@ -47,18 +48,19 @@ protected:
 private:
 	bool loadFormula(const QString& szPackageName, QSharedPointer<Formula>& pFormula);
 	bool checkDependencies(const QSharedPointer<Formula>& pFormula);
-	bool checkDependencyPresent(const PackageDependency& dependency, QDir& pathOut, QString& szOutVersion);
+	bool checkDependencyPresent(const PackageDependency& dependency, const PackageSearchMode& iSearchMode, QDir& pathOut, QString& szOutVersion);
 
 	enum FindMode {
 	    FindSource = 1,
 	    FindRelease = 2,
 	};
 	bool findPackageVersions(const QString& szPackageName, FindMode iMode, QList<QString>& listVersions);
+	bool findSystemPackageVersions(const QString& szPackageName, QList<QString>& listVersions);
 
 private:
 	QString m_szPackageName;
 	QString m_szPackageVersion;
-	QStringList m_listPackageOptions;
+	PackageOptionList m_listPackageOptions;
 
 	QSharedPointer<Formula> m_pFormula;
 

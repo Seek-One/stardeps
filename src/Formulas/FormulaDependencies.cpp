@@ -11,7 +11,7 @@
 
 FormulaDependencies::FormulaDependencies()
 {
-
+	m_iSearchMode = PackageSearchMode::Default;
 }
 
 FormulaDependencies::~FormulaDependencies()
@@ -41,6 +41,16 @@ void FormulaDependencies::addDependencyList(const PackageDependencyList& listDep
 const PackageDependencyList& FormulaDependencies::getList() const
 {
 	return m_listDependency;
+}
+
+const PackageSearchMode& FormulaDependencies::getSearchMode() const
+{
+	return m_iSearchMode;
+}
+
+void FormulaDependencies::setSearchMode(const PackageSearchMode& iSearchMode)
+{
+	m_iSearchMode = iSearchMode;
 }
 
 FormulaDependenciesList::FormulaDependenciesList()

@@ -23,6 +23,7 @@ public:
 	virtual ~ShellExecutor();
 
 	void setEnvironmentVariableList(const VariableList& listVars);
+	void setOutputBuffer(QByteArray* pBuffer);
 
 	bool runCommand(const QString& szCommand, const QStringList& listArgs, const QDir& dirWorkingDirectory = QDir());
 	bool runCommand(const QString& szCommand, const QStringList& listArgs, const QStringList& listCmdEnvVars, const QDir& dirWorkingDirectory = QDir());
@@ -39,6 +40,7 @@ private:
 
 	QEventLoop m_eventLoop;
 	VariableList m_listEnvVars;
+	QByteArray* m_pBuffer;
 };
 
 #endif /* SRC_SHELL_SHELLEXECUTOR_H_ */

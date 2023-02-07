@@ -27,7 +27,7 @@ const FormulaStepList& FormulaRecipe::getFormulaSteps() const
     return m_listStep;
 }
 
-FormulaStepActionList FormulaRecipe::getFormulaStepActionList(const QString& szStep, const QString& szPlatform, const QStringList& listOptions) const
+FormulaStepActionList FormulaRecipe::getFormulaStepActionList(const QString& szStep, const QString& szPlatform, const PackageOptionList& listOptions) const
 {
     FormulaStepActionList listFormulaStepActionResult;
 
@@ -47,7 +47,7 @@ FormulaStepActionList FormulaRecipe::getFormulaStepActionList(const QString& szS
             bAcceptStep = formulaStep.acceptPlatform(szPlatform);
         }
 
-		// Check platforms
+		// Check options
 		if(bAcceptStep){
 			bAcceptStep = formulaStep.acceptOptions(listOptions);
 		}

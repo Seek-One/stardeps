@@ -152,6 +152,12 @@ set(APP_COMMON_SOURCES
     src/Formulas/FormulaDependencies.h
     src/Package/PackageDependency.cpp
     src/Package/PackageDependency.h
+    src/Package/PackageOption.cpp
+    src/Package/PackageOption.h
+    src/Package/PackageOptionList.cpp
+    src/Package/PackageOptionList.h
+    src/Package/PackageSearchMode.cpp
+    src/Package/PackageSearchMode.h
     src/Variable/VariableList.cpp
     src/Variable/VariableList.h
     src/Version/VersionHelper.cpp

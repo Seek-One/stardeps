@@ -7,6 +7,8 @@
 
 #include <QList>
 
+#include "Package/PackageOptionList.h"
+
 #include "FormulaStepAction.h"
 
 class FormulaStep
@@ -18,8 +20,8 @@ public:
     void setStep(const QString& szStep);
     const QString& getStep() const;
 
-    void setPlaformList(const QStringList& listPlatforms);
-    const QStringList& getPlaformList() const;
+    void setPlatformList(const QStringList& listPlatforms);
+    const QStringList& getPlatformList() const;
 
 	void setOptionsList(const QStringList& listOptions);
 	const QStringList& getOptionsList() const;
@@ -28,7 +30,7 @@ public:
     const FormulaStepActionList& getFormulaStepActionList() const;
 
     bool acceptPlatform(const QString& szPlatform) const;
-	bool acceptOptions(const QStringList& listOptions) const;
+	bool acceptOptions(const PackageOptionList& listOptions) const;
 
 private:
     QString m_szStep;
