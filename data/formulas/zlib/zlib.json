@@ -60,7 +60,7 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/share/pkgconfig/zlib.pc ${PKG_CONFIG_LIBDIR}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/share/pkgconfig/zlib.pc ${PKG_CONFIG_VE_PATH}/"}
             ]
         },
         {
@@ -80,7 +80,7 @@
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/zlib.pc"
+            "cmd":"rm -f ${PKG_CONFIG_VE_PATH}/zlib.pc"
         }
     ]
 }

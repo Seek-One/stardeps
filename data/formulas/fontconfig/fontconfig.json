@@ -57,12 +57,12 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fontconfig.pc ${PKG_CONFIG_LIBDIR}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fontconfig.pc ${PKG_CONFIG_VE_PATH}/"}
             ]
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/fontconfig.pc"
+            "cmd":"rm -f ${PKG_CONFIG_VE_PATH}/fontconfig.pc"
         }
     ]
 }

@@ -60,11 +60,11 @@
         },
         {
             "step":"install",
-            "cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/vpx.pc ${PKG_CONFIG_LIBDIR}/"
+            "cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/vpx.pc ${PKG_CONFIG_VE_PATH}/"
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/vpx.pc"
+            "cmd":"rm -f ${PKG_CONFIG_VE_PATH}/vpx.pc"
         }
     ]
 }

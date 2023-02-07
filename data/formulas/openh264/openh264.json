@@ -53,11 +53,11 @@
         },
         {
             "step":"install",
-            "cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_LIBDIR}/"
+            "cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openh264.pc ${PKG_CONFIG_VE_PATH}/"
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/openh264.pc"
+            "cmd":"rm -f ${PKG_CONFIG_VE_PATH}/openh264.pc"
         }
     ]
 }

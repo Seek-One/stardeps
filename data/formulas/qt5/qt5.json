@@ -168,7 +168,7 @@
                 }
             ],
             "vars": {
-                "OPTIONS::PSQL":"-plugin-sql-psql ${OPTIONS::MYSQL:MODE}"
+                "OPTIONS::PSQL":"-plugin-sql-psql ${OPTIONS::PSQL:MODE}"
             }
         },
         "glib" : {

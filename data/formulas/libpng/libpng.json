@@ -97,13 +97,13 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libpng.pc ${PKG_CONFIG_LIBDIR}/"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libpng16.pc ${PKG_CONFIG_LIBDIR}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libpng.pc ${PKG_CONFIG_VE_PATH}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libpng16.pc ${PKG_CONFIG_VE_PATH}/"}
             ]
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_LIBDIR}/libpng.pc ${PKG_CONFIG_LIBDIR}/libpng16.pc"
+            "cmd":"rm -f ${PKG_CONFIG_VE_PATH}/libpng.pc ${PKG_CONFIG_VE_PATH}/libpng16.pc"
         }
     ]
 }
