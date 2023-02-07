@@ -51,12 +51,12 @@
                     "mode":"system",
                     "dependencies-search-mode":"system",
                     "vars": {
-                        "OPTIONS::OPENSSL:MODE":"-openssl"
+                        "OPTIONS::OPENSSL::MODE":"-openssl"
                     }
                 }
             ],
             "vars": {
-                "OPTIONS::OPENSSL":"-openssl ${OPTIONS::OPENSSL:MODE}"
+                "OPTIONS::OPENSSL":"-openssl ${OPTIONS::OPENSSL::MODE}"
             }
         },
         "freetype2" : {
@@ -70,19 +70,19 @@
                 {
                     "mode":"environment",
                     "vars": {
-                        "OPTIONS::FREETYPE2:MODE":"-I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include/freetype2 -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib"
+                        "OPTIONS::FREETYPE2::MODE":"-I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include/freetype2 -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib"
                     }
                 },
                 {
                     "mode":"system",
                     "dependencies-search-mode":"system",
                     "vars": {
-                        "OPTIONS::FREETYPE2:MODE":"-system-freetype"
+                        "OPTIONS::FREETYPE2::MODE":"-system-freetype"
                     }
                 }
             ],
             "vars": {
-                "OPTIONS::FREETYPE2":"-feature-freetype ${OPTIONS::FREETYPE2:MODE}"
+                "OPTIONS::FREETYPE2":"-feature-freetype ${OPTIONS::FREETYPE2::MODE}"
             }
         },
         "fontconfig" : {
@@ -103,7 +103,7 @@
                     "mode":"system",
                     "dependencies-search-mode":"system",
                     "vars": {
-                        "OPTIONS::FONTCONFIG:MODE":""
+                        "OPTIONS::FONTCONFIG::MODE":""
                     }
                 }
             ],
@@ -141,12 +141,12 @@
                     "mode":"custom",
                     "dependencies-search-mode":"custom",
                     "vars": {
-                        "OPTIONS::MYSQL:MODE":"MYSQL_PREFIX=${CUSTOM_MYSQL_PREFIX}"
+                        "OPTIONS::MYSQL::MODE":"MYSQL_PREFIX=${CUSTOM_MYSQL_PREFIX}"
                     }
                 }
             ],
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql ${OPTIONS::MYSQL:MODE}"
+                "OPTIONS::MYSQL":"-plugin-sql-mysql ${OPTIONS::MYSQL::MODE}"
             }
         },
         "postgressql" : {
@@ -163,12 +163,12 @@
                     "mode":"custom",
                     "dependencies-search-mode":"custom",
                     "vars": {
-                        "OPTIONS::PSQL:MODE":"PSQL_PREFIX=${CUSTOM_PSQL_PREFIX}"
+                        "OPTIONS::PSQL::MODE":"PSQL_PREFIX=${CUSTOM_PSQL_PREFIX}"
                     }
                 }
             ],
             "vars": {
-                "OPTIONS::PSQL":"-plugin-sql-psql ${OPTIONS::PSQL:MODE}"
+                "OPTIONS::PSQL":"-plugin-sql-psql ${OPTIONS::PSQL::MODE}"
             }
         },
         "glib" : {

@@ -89,14 +89,15 @@ PackageSearchMode FormulaOption::getDependenciesSearchMode(const QStringList& li
 FormulaVariableList FormulaOption::getVariableListForState(bool bState, const QStringList& listModes) const
 {
 	FormulaVariableList listVars;
-
 	FormulaOptionRuleList::const_iterator iter;
+
+	QStringList listModesUsed = (listModes.isEmpty() ? m_listDefaultModes : listModes);
 
 	for(iter = m_listRules.constBegin(); iter != m_listRules.constEnd(); ++iter)
 	{
 		const FormulaOptionRules& formulaOptionRule = (*iter);
 		bool bAccept = formulaOptionRule.matchState(bState);
-		bAccept = bAccept && formulaOptionRule.matchModes(listModes);
+		bAccept = bAccept && formulaOptionRule.matchModes(listModesUsed);
 		if(bAccept)
 		{
 			listVars.addVariableList(formulaOptionRule.getVariableList());

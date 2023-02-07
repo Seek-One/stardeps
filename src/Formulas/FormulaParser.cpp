@@ -198,6 +198,18 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 			}
 		}
 
+		if(objectOptionDataList.contains("rules")){
+			QJsonArray objectArray = objectOptionDataList.value("rules").toArray();
+			QJsonArray::const_iterator iter_rule;
+			for(iter_rule = objectArray.constBegin(); iter_rule != objectArray.constEnd(); ++iter_rule)
+			{
+				bRes = parseOptionRule((*iter_rule).toObject(), formulaOption);
+				if(!bRes){
+					break;
+				}
+			}
+		}
+
 		if(objectOptionDataList.contains("vars")){
 			FormulaVariableList listVars;
 			if(objectOptionDataList.value("vars").isArray()){
@@ -210,18 +222,6 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 				formulaOptionRule.setRuleState(FormulaOptionRules::StateEnabled);
 				formulaOptionRule.setVariableList(listVars);
 				formulaOption.addOptionRule(formulaOptionRule);
-			}
-		}
-
-		if(objectOptionDataList.contains("rules")){
-			QJsonArray objectArray = objectOptionDataList.value("rules").toArray();
-			QJsonArray::const_iterator iter_rule;
-			for(iter_rule = objectArray.constBegin(); iter_rule != objectArray.constEnd(); ++iter_rule)
-			{
-				bRes = parseOptionRule((*iter_rule).toObject(), formulaOption);
-				if(!bRes){
-					break;
-				}
 			}
 		}
 
