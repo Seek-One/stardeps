@@ -11,7 +11,7 @@
 
 FormulaDependencies::FormulaDependencies()
 {
-	m_iSearchMode = PackageSearchMode::Default;
+
 }
 
 FormulaDependencies::~FormulaDependencies()
@@ -43,14 +43,23 @@ const PackageDependencyList& FormulaDependencies::getList() const
 	return m_listDependency;
 }
 
-const PackageSearchMode& FormulaDependencies::getSearchMode() const
+void FormulaDependencies::updateSearchMode(const PackageSearchMode& iSearchMode)
 {
-	return m_iSearchMode;
+	PackageDependencyList::iterator iter;
+	for(iter = m_listDependency.begin(); iter != m_listDependency.end(); ++iter)
+	{
+		(*iter).setSearchMode(iSearchMode);
+	}
 }
 
-void FormulaDependencies::setSearchMode(const PackageSearchMode& iSearchMode)
+void FormulaDependencies::print() const
 {
-	m_iSearchMode = iSearchMode;
+	PackageDependencyList::const_iterator iter;
+	qDebug("   %d package dependencies", m_listDependency.count());
+	for(iter = m_listDependency.constBegin(); iter != m_listDependency.constEnd(); ++iter)
+	{
+		qDebug("     %s", qPrintable((*iter).toString()));
+	}
 }
 
 FormulaDependenciesList::FormulaDependenciesList()
@@ -144,4 +153,14 @@ QString FormulaDependenciesList::getBestDependenciesVersion(const QString& szVer
 		return szAfterVersion;
 	}
 	return szBeforeVersion;
+}
+
+void FormulaDependenciesList::print() const
+{
+	FormulaDependenciesList::const_iterator iter;
+	qDebug("-- %d formula dependencies", count());
+	for(iter = constBegin(); iter != constEnd(); ++iter)
+	{
+		(*iter).print();
+	}
 }

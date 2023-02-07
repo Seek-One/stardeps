@@ -14,7 +14,6 @@
 #include <QMap>
 
 #include "Package/PackageDependency.h"
-#include "Package/PackageSearchMode.h"
 
 #include "FormulaCommands.h"
 
@@ -29,12 +28,12 @@ public:
 
 	const PackageDependencyList& getList() const;
 
-	const PackageSearchMode& getSearchMode() const;
-	void setSearchMode(const PackageSearchMode& iSearchMode);
+	void updateSearchMode(const PackageSearchMode& iSearchMode);
+
+	void print() const;
 
 private:
 	PackageDependencyList m_listDependency;
-	PackageSearchMode m_iSearchMode;
 };
 
 class FormulaDependenciesList : public QMap<QString, FormulaDependencies>
@@ -46,10 +45,11 @@ public:
 	void setDependencies(const QString& szVersion, const FormulaDependencies& deps);
 	void addDependencies(const QString& szVersion, const FormulaDependencies& deps);
 
-
 	void addDependency(const QString& szVersion, const PackageDependency& dependency);
 
 	QString getBestDependenciesVersion(const QString& szVersion) const;
+
+	void print() const;
 };
 
 #endif /* SRC_FORMULAS_FORMULADEPENDENCIES_H_ */

@@ -10,10 +10,12 @@
 class PackageSearchMode {
 public:
 	enum SearchMode {
-		All = 0,
-		Environment = 1,
-		System = 2,
-		Custom = 3,
+		Unknown = 0x00,
+		Environment = 0x01,
+		System = 0x02,
+		Custom = 0x04,
+		All = 0xFF,
+
 		Default = Environment
 	};
 

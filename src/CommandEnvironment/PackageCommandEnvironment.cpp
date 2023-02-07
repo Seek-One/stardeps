@@ -247,11 +247,11 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 		for(iter = depsList.constBegin(); iter != depsList.constEnd(); ++iter)
 		{
 			const PackageDependency& dependency = (*iter);
-			qWarning("[load-env] checking dependency %s in mode %s", qPrintable(dependency.toString()), qPrintable(deps.getSearchMode().toString()));
+			qWarning("[load-env] checking dependency %s", qPrintable(dependency.toString()));
 
 			QDir dirFoundPath;
 			QString szFoundVersion;
-			bRes = checkDependencyPresent(dependency, deps.getSearchMode(), dirFoundPath, szFoundVersion);
+			bRes = checkDependencyPresent(dependency, dependency.getSearchMode(), dirFoundPath, szFoundVersion);
 			if(bRes){
 				qDebug("[load-env] required dependency is found %s", qPrintable(szFoundVersion));
 				QString szBaseVar = "DEPENDENCY::" + dependency.getPackage().toUpper() + "::";
@@ -272,32 +272,33 @@ bool PackageCommandEnvironment::checkDependencies(const QSharedPointer<Formula>&
 
 bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& dependency, const PackageSearchMode& iSearchMode, QDir& pathOut, QString& szOutVersion)
 {
-    bool bRes = false;
+	bool bRes = false;
 
-    QString szDependencyPackage = dependency.getPackage();
+	QString szDependencyPackage = dependency.getPackage();
+	QString szDependencyPgkConfig = dependency.getPkgConfigName();
 
-    QList<QString> listVersions;
+	QList<QString> listVersions;
 	if(iSearchMode == PackageSearchMode::Environment) {
 		bRes = findPackageVersions(szDependencyPackage, FindRelease, listVersions);
 	}else if(iSearchMode == PackageSearchMode::System){
-		bRes = findSystemPackageVersions(szDependencyPackage, listVersions);
+		bRes = findSystemPackageVersions(szDependencyPgkConfig, listVersions);
 	}else if(iSearchMode == PackageSearchMode::Custom){
 		return true;
 	}
-    if(bRes) {
-        bRes = false;
-        QList<QString>::const_iterator iter;
-        for (iter = listVersions.constBegin(); iter != listVersions.constEnd(); ++iter) {
-            const QString &szVersion = (*iter);
-            if (VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())) {
-                bRes = true;
-                pathOut = getReleasePackageDir(dependency.getPackage(), szVersion);
-                szOutVersion = szVersion;
-            }
-        }
-    }
+	if(bRes) {
+		bRes = false;
+		QList<QString>::const_iterator iter;
+		for (iter = listVersions.constBegin(); iter != listVersions.constEnd(); ++iter) {
+			const QString &szVersion = (*iter);
+				if (VersionHelper::checkVersion(szVersion, dependency.getVersionMin(), dependency.getVersionMax())) {
+				bRes = true;
+				pathOut = getReleasePackageDir(dependency.getPackage(), szVersion);
+				szOutVersion = szVersion;
+			}
+		}
+	}
 
-    return bRes;
+	return bRes;
 }
 
 bool PackageCommandEnvironment::findPackageVersions(const QString& szPackageName, FindMode iMode, QList<QString>& listVersions)

@@ -104,7 +104,7 @@ FormulaDependenciesList Formula::getDependenciesListForOptions(const PackageOpti
 				{
 					QString szVersion = iter_deps.key();
 					FormulaDependencies deps = iter_deps.value();
-					deps.setSearchMode(iDependenciesSearchMode);
+					deps.updateSearchMode(iDependenciesSearchMode);
 					listDependencies.addDependencies(szVersion, deps);
 				}
 			}

@@ -9,7 +9,7 @@
 
 PackageDependency::PackageDependency()
 {
-
+	m_iSearchMode = PackageSearchMode::Unknown;
 }
 
 PackageDependency::~PackageDependency()
@@ -47,9 +47,33 @@ const QString& PackageDependency::getVersionMax() const
 	return m_szVersionMax;
 }
 
+void PackageDependency::setPkgConfigName(const QString& szPkgConfigName)
+{
+	m_szPkgConfigName = szPkgConfigName;
+}
+
+const QString& PackageDependency::getPkgConfigName() const
+{
+	return m_szPkgConfigName;
+}
+
+
+const PackageSearchMode& PackageDependency::getSearchMode() const
+{
+	return m_iSearchMode;
+}
+
+void PackageDependency::setSearchMode(const PackageSearchMode& iSearchMode)
+{
+	m_iSearchMode = iSearchMode;
+}
+
 QString PackageDependency::toString() const
 {
 	QString szTmp = m_szPackage;
+	if(!m_szPkgConfigName.isEmpty()){
+		szTmp += "[" + m_szPkgConfigName + "]";
+	}
 
 	if(!m_szVersionMin.isEmpty() || !m_szVersionMax.isEmpty()){
 		szTmp += " (";
@@ -64,6 +88,9 @@ QString PackageDependency::toString() const
 		}
 		szTmp += ")";
 	}
+
+	szTmp += ", search mode: " + m_iSearchMode.toString();
+
 	return szTmp;
 }
 

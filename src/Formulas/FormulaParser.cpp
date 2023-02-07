@@ -186,7 +186,8 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 			formulaOption.setDefaultState(objectOptionDataList.value("default-state").toString() == "enabled");
 		}
 		if(objectOptionDataList.contains("default-modes")){
-			formulaOption.setDefaultModes(objectOptionDataList.value("default-modes").toString());
+			QStringList listModes = objectOptionDataList.value("default-modes").toString().split(",");
+			formulaOption.setDefaultModes(listModes);
 		}
 
 		if(objectOptionDataList.contains("dependencies")){
@@ -205,8 +206,8 @@ bool FormulaParser::parseOptions(const QJsonObject& objectRoot)
 				bRes = parseVars(objectOptionDataList.value("vars").toObject(), listVars);
 			}
 			if(bRes){
-				FormulaOptionRule formulaOptionRule;
-				formulaOptionRule.setRuleState(FormulaOptionRule::StateEnabled);
+				FormulaOptionRules formulaOptionRule;
+				formulaOptionRule.setRuleState(FormulaOptionRules::StateEnabled);
 				formulaOptionRule.setVariableList(listVars);
 				formulaOption.addOptionRule(formulaOptionRule);
 			}
@@ -234,25 +235,22 @@ bool FormulaParser::parseOptionRule(const QJsonObject& objectRoot, FormulaOption
 {
 	bool bRes = true;
 
-	FormulaOptionRule formulaOptionRule;
+	FormulaOptionRules formulaOptionRule;
 
 	if(objectRoot.contains("state")){
-		FormulaOptionRule::State iState = FormulaOptionRule::StateAll;
+		FormulaOptionRules::State iState = FormulaOptionRules::StateAll;
 		QString szState = objectRoot.value("state").toString();
 		if(szState == "enabled"){
-			iState = FormulaOptionRule::StateEnabled;
+			iState = FormulaOptionRules::StateEnabled;
 		}
 		if(szState == "disabled"){
-			iState = FormulaOptionRule::StateDisabled;
+			iState = FormulaOptionRules::StateDisabled;
 		}
 		formulaOptionRule.setRuleState(iState);
 	}
 
 	if(objectRoot.contains("mode")){
 		QString szMode = objectRoot.value("mode").toString();
-		if(szMode.isEmpty()){
-			szMode = formulaOption.getDefaultModes();
-		}
 		formulaOptionRule.setRuleMode(szMode);
 	}
 
@@ -300,10 +298,14 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDepe
 
 		QJsonObject::const_iterator iter_deps;
 		for(iter_deps = objectDepsList.constBegin(); iter_deps != objectDepsList.constEnd(); ++iter_deps) {
+
+			PackageDependency dep;
+
 			// Package name
 			QString szPackageName = iter_deps.key();
-			QString szVersionMin;
-			QString szVersionMax;
+			dep.setPackage(szPackageName);
+
+			QString szTmp;
 
 			// Attributes
 			QJsonValue value2 = iter_deps.value();
@@ -313,15 +315,22 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDepe
 				QJsonObject objectAttrsList = value2.toObject();
 
 				if (objectAttrsList.contains("min")) {
-					szVersionMin = objectAttrsList.value("min").toString();
+					szTmp = objectAttrsList.value("min").toString();
+					dep.setVersionMin(szTmp);
 				}
-
 				if (objectAttrsList.contains("max")) {
-					szVersionMax = objectAttrsList.value("max").toString();
+					szTmp = objectAttrsList.value("max").toString();
+					dep.setVersionMax(szTmp);
 				}
+				if (objectAttrsList.contains("pkg-config-name")) {
+					szTmp = objectAttrsList.value("pkg-config-name").toString();
+				}else{
+					szTmp = szPackageName;
+				}
+				dep.setPkgConfigName(szTmp);
 			}
 
-			formulaDependencies.addDependency(szPackageName, szVersionMin, szVersionMax);
+			formulaDependencies.addDependency(dep);
 		}
 
 		listDependencies.addDependencies(szVersion, formulaDependencies);

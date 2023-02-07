@@ -11,6 +11,8 @@
 #include <QString>
 #include <QList>
 
+#include "Package/PackageSearchMode.h"
+
 class PackageDependency {
 public:
 	PackageDependency();
@@ -22,13 +24,23 @@ public:
 	const QString& getVersionMin() const;
 	void setVersionMax(const QString& szVersionMax);
 	const QString& getVersionMax() const;
+	void setPkgConfigName(const QString& szPkgConfigName);
+	const QString& getPkgConfigName() const;
+
+	const PackageSearchMode& getSearchMode() const;
+	void setSearchMode(const PackageSearchMode& iSearchMode);
 
 	QString toString() const;
+
+	void print() const;
 
 private:
 	QString m_szPackage;
 	QString m_szVersionMin;
 	QString m_szVersionMax;
+	QString m_szPkgConfigName;
+
+	PackageSearchMode m_iSearchMode;
 };
 
 class PackageDependencyList : public QList<PackageDependency>

@@ -208,6 +208,8 @@ set(APPLICATION_SOURCES
     src/Formulas/Formula.h
     src/Formulas/FormulaCommands.cpp
     src/Formulas/FormulaCommands.h
+    src/Formulas/FormulaOptionRules.cpp
+    src/Formulas/FormulaOptionRules.h
     src/Formulas/FormulaOptions.cpp
     src/Formulas/FormulaOptions.h
     src/Formulas/FormulaParser.cpp

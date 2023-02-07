@@ -172,14 +172,23 @@
             }
         },
         "glib" : {
+            "dependencies": {
+                "latest": {
+                    "glib" : {
+                        "min": "2.0",
+                        "pkg-config-name": "glib-2.0"
+                    },
+                    "gobject" : {
+                        "min": "2.0",
+                        "pkg-config-name": "gobject-2.0"
+                    }
+                }
+            },
             "default-modes":"system",
             "rules": [
                 {
                     "mode":"system",
-                    "dependencies-search-mode":"system",
-                    "vars": {
-                        "OPTIONS::PSQL::MODE":""
-                    }
+                    "dependencies-search-mode":"system"
                 }
             ],
             "vars": {

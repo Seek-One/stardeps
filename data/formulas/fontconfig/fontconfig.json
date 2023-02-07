@@ -28,7 +28,14 @@
                 "latest": {
                     "expat" : "any"
                 }
-            }
+            },
+            "default-modes":"system",
+            "rules": [
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system"
+                }
+            ]
         }
     },
     "vars":{
