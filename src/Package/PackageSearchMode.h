@@ -13,6 +13,7 @@ public:
 		All = 0,
 		Environment = 1,
 		System = 2,
+		Custom = 3,
 		Default = Environment
 	};
 

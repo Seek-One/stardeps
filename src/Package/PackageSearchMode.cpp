@@ -28,6 +28,8 @@ PackageSearchMode PackageSearchMode::fromString(const QString& szSearchMode)
 		return PackageSearchMode::Environment;
 	}else if(szSearchMode == "system"){
 		return PackageSearchMode::System;
+	}else if(szSearchMode == "custom"){
+		return PackageSearchMode::Custom;
 	}
 	return PackageSearchMode::Default;
 }
@@ -43,6 +45,7 @@ QString PackageSearchMode::toString() const
 	case PackageSearchMode::All: return "all";
 	case PackageSearchMode::Environment: return "environment";
 	case PackageSearchMode::System: return "system";
+	case PackageSearchMode::Custom: return "custom";
 	default:
 		break;
 	}

@@ -281,6 +281,8 @@ bool PackageCommandEnvironment::checkDependencyPresent(const PackageDependency& 
 		bRes = findPackageVersions(szDependencyPackage, FindRelease, listVersions);
 	}else if(iSearchMode == PackageSearchMode::System){
 		bRes = findSystemPackageVersions(szDependencyPackage, listVersions);
+	}else if(iSearchMode == PackageSearchMode::Custom){
+		return true;
 	}
     if(bRes) {
         bRes = false;

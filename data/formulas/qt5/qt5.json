@@ -59,16 +59,56 @@
                 "OPTIONS::OPENSSL":"-openssl ${OPTIONS::OPENSSL:MODE}"
             }
         },
-        "fontconfig" : {
+        "freetype2" : {
             "dependencies": {
                 "latest": {
-                    "fontconfig" : "any",
                     "freetype2" : "any"
                 }
             },
+            "default-modes":"environment",
+            "rules": [
+                {
+                    "mode":"environment",
+                    "vars": {
+                        "OPTIONS::FREETYPE2:MODE":"-I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include/freetype2 -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib"
+                    }
+                },
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system",
+                    "vars": {
+                        "OPTIONS::FREETYPE2:MODE":"-system-freetype"
+                    }
+                }
+            ],
             "vars": {
-                "OPTIONS::FREETYPE2":"-feature-freetype -system-freetype -I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include/freetype2 -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib",
-                "OPTIONS::FONTCONFIG":"-fontconfig -I ${DEPENDENCY::FONTCONFIG::ROOTPATH}/include -L ${DEPENDENCY::FONTCONFIG::ROOTPATH}/lib ${OPTIONS::FREETYPE2}"
+                "OPTIONS::FREETYPE2":"-feature-freetype ${OPTIONS::FREETYPE2:MODE}"
+            }
+        },
+        "fontconfig" : {
+            "dependencies": {
+                "latest": {
+                    "fontconfig" : "any"
+                }
+            },
+            "default-modes":"environment",
+            "rules": [
+                {
+                    "mode":"environment",
+                    "vars": {
+                        "OPTIONS::FONTCONFIG::MODE":"-I ${DEPENDENCY::FONTCONFIG::ROOTPATH}/include -L ${DEPENDENCY::FONTCONFIG::ROOTPATH}/lib"
+                    }
+                },
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system",
+                    "vars": {
+                        "OPTIONS::FONTCONFIG:MODE":""
+                    }
+                }
+            ],
+            "vars": {
+                "OPTIONS::FONTCONFIG":"-fontconfig ${OPTIONS::FONTCONFIG::MODE}"
             }
         },
         "sqlite" : {
@@ -82,26 +122,66 @@
                     "mysql" : "any"
                 }
             },
+            "default-modes":"environment",
+            "rules": [
+                {
+                    "mode":"environment",
+                    "vars": {
+                        "OPTIONS::MYSQL::MODE":"MYSQL_PREFIX=${DEPENDENCY::MYSQL::ROOTPATH}"
+                    }
+                },
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system",
+                    "vars": {
+                        "OPTIONS::MYSQL::MODE":""
+                    }
+                },
+                {
+                    "mode":"custom",
+                    "dependencies-search-mode":"custom",
+                    "vars": {
+                        "OPTIONS::MYSQL:MODE":"MYSQL_PREFIX=${CUSTOM_MYSQL_PREFIX}"
+                    }
+                }
+            ],
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${DEPENDENCY::MYSQL::ROOTPATH}"
-            }
-        },
-        "mysql-custom" : {
-            "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql MYSQL_PREFIX=${CUSTOM_MYSQL_PREFIX}"
+                "OPTIONS::MYSQL":"-plugin-sql-mysql ${OPTIONS::MYSQL:MODE}"
             }
         },
         "postgressql" : {
+            "default-modes":"system",
+            "rules": [
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system",
+                    "vars": {
+                        "OPTIONS::PSQL::MODE":""
+                    }
+                },
+                {
+                    "mode":"custom",
+                    "dependencies-search-mode":"custom",
+                    "vars": {
+                        "OPTIONS::PSQL:MODE":"PSQL_PREFIX=${CUSTOM_PSQL_PREFIX}"
+                    }
+                }
+            ],
             "vars": {
-                "OPTIONS::PSQL":"-plugin-sql-psql"
-            }
-        },
-        "postgressql-custom" : {
-            "vars": {
-                "OPTIONS::PSQL":"-plugin-sql-psql PSQL_PREFIX=${CUSTOM_PSQL_PREFIX}"
+                "OPTIONS::PSQL":"-plugin-sql-psql ${OPTIONS::MYSQL:MODE}"
             }
         },
         "glib" : {
+            "default-modes":"system",
+            "rules": [
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system",
+                    "vars": {
+                        "OPTIONS::PSQL::MODE":""
+                    }
+                }
+            ],
             "vars": {
                 "OPTIONS::GLIB":"-glib"
             }
@@ -136,7 +216,7 @@
         },
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript ${QT_SKIP_5.15}",
         "CONFIGURE_OPTIONS_SECURITY": "${OPTIONS::OPENSSL}",
-        "CONFIGURE_OPTIONS_PLATFORM": "${OPTIONS::FONTCONFIG} ${OPTIONS::XCB_XINPUT}",
+        "CONFIGURE_OPTIONS_PLATFORM": "${OPTIONS::FREETYPE2} ${OPTIONS::FONTCONFIG} ${OPTIONS::XCB_XINPUT}",
         "CONFIGURE_OPTIONS_SQL": "${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL}",
         "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${CONFIGURE_OPTIONS_SECURITY} ${CONFIGURE_OPTIONS_PLATFORM} ${CONFIGURE_OPTIONS_SQL} -prefix ${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
