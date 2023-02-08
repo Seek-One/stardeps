@@ -113,6 +113,13 @@ int main(int argc, char **argv)
 		qDebug("       --verbose=[normal,full]");
 		qDebug("             set level of verbosity.");
 		qDebug(" ");
+
+		qDebug("  CUSTOM ENVIRONMENT VARIABLE");
+		qDebug("       you can define some environment in the ve.env file.");
+		qDebug("             FORMULAS_DIR: path to the formula directory");
+		qDebug("             VE_PKG_CONFIG_PATH: path to environment the .pkgconfig-files directory path");
+
+		qDebug(" ");
 		qDebug("  LIST OF COMMANDS: ENVIRONMENT");
 		qDebug("       createenv TARGET_PLATFORM");
 		qDebug("             create an environment directory and a ve.env file with useful environment variables.");

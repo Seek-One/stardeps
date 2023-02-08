@@ -62,19 +62,63 @@ stardeps prepare PACKAGE_NAME [OPTIONS]
 
 You can use the following OPTIONS:
 
-```
-  --formulas-dir=[DIR]
-      set DIR as formula dir.
+``` 
+  LIST OF ARGUMENTS
+       --version 
+             display application version
+       --help 
+             show help
+       --verbose=[normal,full]
+             set level of verbosity.
 
-  --pkg-version=[VERSION]
-      Set the target version name. This defines the target source directory name as src/PACKAGE_NAME[-VERSION]. If no version is set it will use the current developpement version.
-  --pkg-option=[OPTION]
-      tell use the option specified in the formula of the package. You can use this option multiple times.
-
-  --scm-branch-version=[VERSION]
-      Use this version instead of the --version to checkout in SCM.
-  --scm-tag-version=[VERSION]
-      Use this version instead of the --version to checkout in SCM.
+  CUSTOM ENVIRONMENT VARIABLE
+       you can define some environment in the ve.env file.
+             FORMULAS_DIR: path to the formula directory
+             VE_PKG_CONFIG_PATH: path to environment the .pkgconfig-files directory path
+ 
+  LIST OF COMMANDS: ENVIRONMENT
+       createenv TARGET_PLATFORM
+             create an environment directory and a ve.env file with useful environment variables.
+ 
+  LIST OF ARGUMENTS FOR ENVIRONMENT COMMANDS
+       --pkg-config-mode=MODE (default: default)
+             set search mode policy for pkg-config.
+                  system: search only in system (PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH will not be set)
+                  environment: search only in current environment (define PKG_CONFIG_LIBDIR to the .pkgconfig-files directory path)
+                  default: search in environment first then in system (define PKG_CONFIG_PATH to the .pkgconfig-files directory path)
+ 
+  LIST OF COMMANDS: PACKAGE
+       prepare PACKAGE_NAME
+             get the sources of the package in the sources directory.
+       configure PACKAGE_NAME
+             configure the sources of the package in the build directory.
+       build PACKAGE_NAME
+             run the build command in the build directory.
+       install PACKAGE_NAME
+             install the generated package files in the release directory.
+ 
+  LIST OF ARGUMENTS FOR PACKAGE COMMANDS
+       --formulas-dir=DIR
+             set DIR as formula dir.
+       --previous-steps
+             execute all previous commands steps.
+ 
+       --pkg-version=VERSION
+             define the version of the package to build.
+       --pkg-option=OPTION[:mode1[,mode2]]
+             tell use the option specified in the formula of the package. You can use this option multiple times.
+             you can also specify some mode for the option depending on formula.
+ 
+       --scm-tag-version=VERSION
+             define the tag version in the SCM to use.
+       --scm-branch-version=VERSION
+             define the branch version in the SCM to use.
+ 
+       --pkg-config-mode=MODE (default: default)
+             set search mode policy for pkg-config. If not set use policy from environment.
+                  system: search only in system (PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH will not be set)
+                  environment: search only in current environment (define PKG_CONFIG_LIBDIR to the .pkgconfig-files directory path)
+                  default: search in environment first then in system (define PKG_CONFIG_PATH to the .pkgconfig-files directory path)
 ```
 
 ## Configure package sources
