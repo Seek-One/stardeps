@@ -53,12 +53,12 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${PKG_CONFIG_VE_PATH}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/freetype2.pc ${VE_PKG_CONFIG_PATH}/"}
             ]
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_VE_PATH}/freetype2.pc"
+            "cmd":"rm -f ${VE_PKG_CONFIG_PATH}/freetype2.pc"
         }
     ]
 }

@@ -47,12 +47,12 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${PKG_CONFIG_VE_PATH}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/fribidi.pc ${VE_PKG_CONFIG_PATH}/"}
             ]
         },
         {
             "step":"clean",
-            "cmd":"rm -f ${PKG_CONFIG_VE_PATH}/fribidi.pc"
+            "cmd":"rm -f ${VE_PKG_CONFIG_PATH}/fribidi.pc"
         }
     ]
 }

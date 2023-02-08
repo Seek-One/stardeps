@@ -92,7 +92,7 @@ bool CommandCreateEnv::doExecute()
 	}else if(m_szPkgConfigMode == "environment") {
 		env.setEnvVar(VE_VAR_PKG_CONFIG_LIBDIR, pathPkgConfig.absolutePath());
 	}
-	env.setEnvVar(VE_VAR_PKG_CONFIG_VE_PATH, pathPkgConfig.absolutePath());
+	env.setEnvVar(VE_VAR_VE_PKG_CONFIG_PATH, pathPkgConfig.absolutePath());
 
     QString szLine;
     if(bRes){

@@ -57,19 +57,19 @@
             "step":"install",
             "actions":[
                 {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent.pc ${PKG_CONFIG_VE_PATH}/"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_core.pc ${PKG_CONFIG_VE_PATH}/"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_extra.pc ${PKG_CONFIG_VE_PATH}/"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_openssl.pc ${PKG_CONFIG_VE_PATH}/"}
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent.pc ${VE_PKG_CONFIG_PATH}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_core.pc ${VE_PKG_CONFIG_PATH}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_extra.pc ${VE_PKG_CONFIG_PATH}/"},
+                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libevent_openssl.pc ${VE_PKG_CONFIG_PATH}/"}
             ]
         },
         {
             "step":"clean",
             "cmd":[
-                "rm -f ${PKG_CONFIG_VE_PATH}/libevent.pc",
-                "rm -f ${PKG_CONFIG_VE_PATH}/libevent_core.pc",
-                "rm -f ${PKG_CONFIG_VE_PATH}/libevent_extra.pc",
-                "rm -f ${PKG_CONFIG_VE_PATH}/libevent_openssl.pc"
+                "rm -f ${VE_PKG_CONFIG_PATH}/libevent.pc",
+                "rm -f ${VE_PKG_CONFIG_PATH}/libevent_core.pc",
+                "rm -f ${VE_PKG_CONFIG_PATH}/libevent_extra.pc",
+                "rm -f ${VE_PKG_CONFIG_PATH}/libevent_openssl.pc"
             ]
         }
     ]
