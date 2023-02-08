@@ -81,7 +81,7 @@ You can use the following OPTIONS:
              create an environment directory and a ve.env file with useful environment variables.
  
   LIST OF ARGUMENTS FOR ENVIRONMENT COMMANDS
-       --pkg-config-mode=MODE (default: default)
+       --pkg-config-mode=SEARCH_MODE (default: default)
              set search mode policy for pkg-config.
                   system: search only in system (PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH will not be set)
                   environment: search only in current environment (define PKG_CONFIG_LIBDIR to the .pkgconfig-files directory path)
@@ -105,7 +105,7 @@ You can use the following OPTIONS:
  
        --pkg-version=VERSION
              define the version of the package to build.
-       --pkg-option=OPTION[:mode1[,mode2]]
+       --pkg-option=OPTION[:OPTION_MODE1[,OPTION_MODE2]]
              tell use the option specified in the formula of the package. You can use this option multiple times.
              you can also specify some mode for the option depending on formula.
  
@@ -114,7 +114,7 @@ You can use the following OPTIONS:
        --scm-branch-version=VERSION
              define the branch version in the SCM to use.
  
-       --pkg-config-mode=MODE (default: default)
+       --pkg-config-mode=SEARCH_MODE (default: default)
              set search mode policy for pkg-config. If not set use policy from environment.
                   system: search only in system (PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH will not be set)
                   environment: search only in current environment (define PKG_CONFIG_LIBDIR to the .pkgconfig-files directory path)

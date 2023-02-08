@@ -126,7 +126,7 @@ int main(int argc, char **argv)
 		//qDebug("       listenv");
 		qDebug(" ");
 		qDebug("  LIST OF ARGUMENTS FOR ENVIRONMENT COMMANDS");
-		qDebug("       --pkg-config-mode=MODE (default: default)");
+		qDebug("       --pkg-config-mode=SEARCH_MODE (default: default)");
 		qDebug("             set search mode policy for pkg-config.");
 		qDebug("                  system: search only in system (PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH will not be set)");
 		qDebug("                  environment: search only in current environment (define PKG_CONFIG_LIBDIR to the .pkgconfig-files directory path)");
@@ -150,7 +150,7 @@ int main(int argc, char **argv)
 		qDebug(" ");
 		qDebug("       --pkg-version=VERSION");
 		qDebug("             define the version of the package to build.");
-		qDebug("       --pkg-option=OPTION[:mode1[,mode2]]");
+		qDebug("       --pkg-option=OPTION[:OPTION_MODE1[,OPTION_MODE2]]");
 		qDebug("             tell use the option specified in the formula of the package. You can use this option multiple times.");
 		qDebug("             you can also specify some mode for the option depending on formula.");
 		qDebug(" ");
@@ -159,7 +159,7 @@ int main(int argc, char **argv)
 		qDebug("       --scm-branch-version=VERSION");
 		qDebug("             define the branch version in the SCM to use.");
 		qDebug(" ");
-		qDebug("       --pkg-config-mode=MODE (default: default)");
+		qDebug("       --pkg-config-mode=SEARCH_MODE (default: default)");
 		qDebug("             set search mode policy for pkg-config. If not set use policy from environment.");
 		qDebug("                  system: search only in system (PKG_CONFIG_LIBDIR or PKG_CONFIG_PATH will not be set)");
 		qDebug("                  environment: search only in current environment (define PKG_CONFIG_LIBDIR to the .pkgconfig-files directory path)");
