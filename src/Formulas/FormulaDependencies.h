@@ -28,7 +28,7 @@ public:
 
 	const PackageDependencyList& getList() const;
 
-	void updateSearchMode(const PackageSearchMode& iSearchMode);
+	void updateSearchMode(const PackageSearchMode& iSearchMode, bool bOnlyUnknown = false);
 
 	void print() const;
 

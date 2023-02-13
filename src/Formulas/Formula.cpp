@@ -84,11 +84,21 @@ const FormulaDependenciesList& Formula::getDependenciesList() const
 
 FormulaDependenciesList Formula::getDependenciesListForOptions(const PackageOptionList& listPackageOptions) const
 {
-	FormulaDependenciesList listDependencies = m_listDependencies;
+	FormulaDependenciesList listDependencies;
 
-	FormulaOptionList::const_iterator iter_options;
 	FormulaDependenciesList::const_iterator iter_deps;
 
+	// Update mandatory dependencies
+	for(iter_deps = m_listDependencies.constBegin(); iter_deps != m_listDependencies.constEnd(); ++iter_deps)
+	{
+		QString szVersion = iter_deps.key();
+		FormulaDependencies deps = iter_deps.value();
+		deps.updateSearchMode(PackageSearchMode::Default, true);
+		listDependencies.addDependencies(szVersion, deps);
+	}
+
+	// Update dependencies from options
+	FormulaOptionList::const_iterator iter_options;
 	for(iter_options = m_listOptions.constBegin(); iter_options != m_listOptions.constEnd(); ++iter_options)
 	{
 		const FormulaOption& option = (*iter_options);

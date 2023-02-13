@@ -43,12 +43,19 @@ const PackageDependencyList& FormulaDependencies::getList() const
 	return m_listDependency;
 }
 
-void FormulaDependencies::updateSearchMode(const PackageSearchMode& iSearchMode)
+void FormulaDependencies::updateSearchMode(const PackageSearchMode& iSearchMode, bool bOnlyUnknown)
 {
 	PackageDependencyList::iterator iter;
 	for(iter = m_listDependency.begin(); iter != m_listDependency.end(); ++iter)
 	{
-		(*iter).setSearchMode(iSearchMode);
+		PackageDependency& dep = (*iter);
+		if(bOnlyUnknown){
+			if(dep.getSearchMode() == PackageSearchMode::Unknown){
+				dep.setSearchMode(iSearchMode);
+			}
+		}else {
+			dep.setSearchMode(iSearchMode);
+		}
 	}
 }
 
