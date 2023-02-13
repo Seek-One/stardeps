@@ -180,8 +180,7 @@ LIST OF ARGUMENTS FOR PACKAGE COMMANDS
 
 Package are described in a JSON file called formula.
 
-Formula can use the following tools.
-
+Formula can use the following tools :
 * GIT
 * SVN
 * MERCURIAL
