@@ -3,6 +3,8 @@ Cross platform dependencies builder
 
 StarDeps allows you to build libraries from sources.
 
+You can build all dependencies from sources or mix some of them with the system.
+
 ## Requirements
 
   * CMake
