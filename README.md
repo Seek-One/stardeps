@@ -3,6 +3,28 @@ Cross platform dependencies builder
 
 StarDeps allows you to build libraries from sources.
 
+## Requirements
+
+  * CMake
+  * Qt version 5
+
+## Compiling from source
+
+Install dependencies:
+
+```
+    apt-get install git cmake qtbase5-dev qttools5-dev qttools5-dev-tools
+```
+
+Get the code:
+
+    git clone https://github.com/Jet1oeil/stardeps.git && cd stardeps
+
+Compile:
+
+    ./build.sh regen
+    make
+
 ## Usage
 
 ```
@@ -173,6 +195,7 @@ Package are described in a JSON file called formula.
 * GIT
 * MAKE
 * RSYNC
+
 
 ## Supported package
 
