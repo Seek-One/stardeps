@@ -8,7 +8,7 @@
     "options": {
         "shared" : {
             "vars": {
-                "OPTIONS::SHARED":"-shared"
+                "OPTIONS::SHARED":"-with-shared-libraries"
             }
         },
         "openssl" : {
@@ -50,7 +50,7 @@
                 "bash -c \"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> config.linux${OPTIONS::NOOPENSSL}\"",
                 "sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.linux${OPTIONS::NOOPENSSL}",
                 "sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.linux${OPTIONS::NOOPENSSL}",
-                "${PACKAGE_BUILD_PATH}/genMakefiles linux${OPTIONS::NOOPENSSL}"
+                "${PACKAGE_BUILD_PATH}/genMakefiles linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}"
             ]
         },
         {
