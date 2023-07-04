@@ -60,15 +60,15 @@
             }
         },
         "freetype2" : {
-            "dependencies": {
-                "latest": {
-                    "freetype2" : "any"
-                }
-            },
             "default-modes":"environment",
             "rules": [
                 {
                     "mode":"environment",
+                    "dependencies": {
+                        "latest": {
+                            "freetype2" : "any"
+                        }
+                    },
                     "vars": {
                         "OPTIONS::FREETYPE2::MODE":"-I ${DEPENDENCY::FREETYPE2::ROOTPATH}/include/freetype2 -L ${DEPENDENCY::FREETYPE2::ROOTPATH}/lib"
                     }
@@ -86,15 +86,15 @@
             }
         },
         "fontconfig" : {
-            "dependencies": {
-                "latest": {
-                    "fontconfig" : "any"
-                }
-            },
             "default-modes":"environment",
             "rules": [
                 {
                     "mode":"environment",
+                    "dependencies": {
+                        "latest": {
+                            "fontconfig" : "any"
+                        }
+                    },
                     "vars": {
                         "OPTIONS::FONTCONFIG::MODE":"-I ${DEPENDENCY::FONTCONFIG::ROOTPATH}/include -L ${DEPENDENCY::FONTCONFIG::ROOTPATH}/lib"
                     }
