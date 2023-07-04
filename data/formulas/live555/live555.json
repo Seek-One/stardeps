@@ -44,12 +44,13 @@
             "step":"configure",
             "platforms":"linux-gcc-64",
             "cmd":[
-                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> config.linux${OPTIONS::NOOPENSSL}\"\"",
-                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> config.linux${OPTIONS::NOOPENSSL}\"\"",
-                "bash -c \"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> config.linux${OPTIONS::NOOPENSSL}\"",
-                "bash -c \"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> config.linux${OPTIONS::NOOPENSSL}\"",
-                "sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.linux${OPTIONS::NOOPENSSL}",
-                "sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.linux${OPTIONS::NOOPENSSL}",
+                "bash -c \"\"echo 'PREFIX = ${PACKAGE_PREFIX_PATH}' >> config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}\"\"",
+                "bash -c \"\"echo 'LIBDIR = $(PREFIX)/lib' >> config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}\"\"",
+                "bash -c \"echo 'OPENSSL_INCLUDE = ${OPTIONS::OPENSSL::INCLUDEPATH}' >> config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}\"",
+                "bash -c \"echo 'OPENSSL_LIBPATH = ${OPTIONS::OPENSSL::LIBPATH}' >> config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}\"",
+                "sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
+                "sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
+                "sed -i 's/^COMPILE_OPTS =/COMPILE_OPTS = -DNO_STD_LIB/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
                 "${PACKAGE_BUILD_PATH}/genMakefiles linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}"
             ]
         },
