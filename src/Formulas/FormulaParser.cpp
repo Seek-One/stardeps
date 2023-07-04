@@ -260,6 +260,14 @@ bool FormulaParser::parseOptionRule(const QJsonObject& objectRoot, FormulaOption
 		formulaOptionRule.setDependenciesSearchMode(iSearchMode);
 	}
 
+	if(objectRoot.contains("dependencies")){
+		FormulaDependenciesList listDependencies;
+		bRes = parseDependencies(objectRoot.value("dependencies").toObject(), listDependencies);
+		if(bRes){
+			formulaOptionRule.setDependenciesList(listDependencies);
+		}
+	}
+
 	if(objectRoot.contains("vars")){
 		FormulaVariableList listVars;
 		if(objectRoot.value("vars").isArray()){

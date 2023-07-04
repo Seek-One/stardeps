@@ -105,6 +105,7 @@ FormulaDependenciesList Formula::getDependenciesListForOptions(const PackageOpti
 		const QString& szOptionName = option.getOptionName();
 		if(listPackageOptions.contains(szOptionName))
 		{
+			// Add mandatory dependencies for option
 			const FormulaDependenciesList& listOptionsDependencies = option.getDependenciesList();
 			QStringList listOptionModes = listPackageOptions.getModes(szOptionName);
 			PackageSearchMode iDependenciesSearchMode = option.getDependenciesSearchMode(listOptionModes);
@@ -116,6 +117,23 @@ FormulaDependenciesList Formula::getDependenciesListForOptions(const PackageOpti
 					FormulaDependencies deps = iter_deps.value();
 					deps.updateSearchMode(iDependenciesSearchMode);
 					listDependencies.addDependencies(szVersion, deps);
+				}
+			}
+
+			// Add dependencies based on rule
+			const QList<FormulaOptionRules>& listOptionsRules = option.getOptionRuleList();
+			for(auto optionRule : listOptionsRules){
+				const FormulaDependenciesList& listOptionsDependencies = optionRule.getDependenciesList();
+				if(!listOptionsDependencies.isEmpty()) {
+					if(optionRule.getDependenciesSearchMode() == iDependenciesSearchMode){
+						for(iter_deps = listOptionsDependencies.constBegin(); iter_deps != listOptionsDependencies.constEnd(); ++iter_deps)
+						{
+							QString szVersion = iter_deps.key();
+							FormulaDependencies deps = iter_deps.value();
+							deps.updateSearchMode(iDependenciesSearchMode);
+							listDependencies.addDependencies(szVersion, deps);
+						}
+					}
 				}
 			}
 		}

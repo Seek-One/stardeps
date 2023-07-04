@@ -8,6 +8,7 @@
 #include <QString>
 
 #include "Formulas/FormulaVariableList.h"
+#include "Formulas/FormulaDependencies.h"
 
 #include "Package/PackageSearchMode.h"
 
@@ -33,6 +34,9 @@ public:
 	void setDependenciesSearchMode(const PackageSearchMode& iDependenciesSearchMode);
 	const PackageSearchMode& getDependenciesSearchMode() const;
 
+	void setDependenciesList(const FormulaDependenciesList& listDependencies);
+	const FormulaDependenciesList& getDependenciesList() const;
+
 	void setVariableList(const FormulaVariableList& listVariables);
 	const FormulaVariableList& getVariableList() const;
 
@@ -44,6 +48,7 @@ private:
 	State m_iState;
 	QString m_szMode;
 	PackageSearchMode m_iDependenciesSearchMode;
+	FormulaDependenciesList m_listDependencies;
 
 	FormulaVariableList m_listVars;
 };

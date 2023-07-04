@@ -45,6 +45,17 @@ const PackageSearchMode& FormulaOptionRules::getDependenciesSearchMode() const
 	return m_iDependenciesSearchMode;
 }
 
+void FormulaOptionRules::setDependenciesList(const FormulaDependenciesList& listDependencies)
+{
+	m_listDependencies = listDependencies;
+}
+
+const FormulaDependenciesList& FormulaOptionRules::getDependenciesList() const
+{
+	return m_listDependencies;
+}
+
+
 void FormulaOptionRules::setVariableList(const FormulaVariableList& listVariables)
 {
 	m_listVars = listVariables;
