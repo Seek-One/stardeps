@@ -94,15 +94,31 @@
             }
         },
         "freetype" : {
-            "dependencies": {
-                "latest": {
-                    "freetype2" : "any",
-                    "libpng" : "any",
-                    "zlib" : "any"
+            "default-modes":"environment",
+            "rules": [
+                {
+                    "mode":"environment",
+                    "dependencies": {
+                        "latest": {
+                            "freetype2" : "any",
+                            "libpng" : "any",
+                            "zlib" : "any"
+                        }
+                    },
+                    "vars": {
+                        "OPTIONS::FREETYPE::MODE":"--extra-libs=-lzlib --extra-cflags=\"-I ${DEPENDENCY::ZLIB::ROOTPATH}/include\" --extra-ldflags=\"-L ${DEPENDENCY::LIBPNG::ROOTPATH}/lib -L ${DEPENDENCY::ZLIB::ROOTPATH}/lib\""
+                    }
+                },
+                {
+                    "mode":"system",
+                    "dependencies-search-mode":"system",
+                    "vars": {
+                        "OPTIONS::FREETYPE::MODE":""
+                    }
                 }
-            },
+            ],
             "vars": {
-                "OPTIONS::FREETYPE":"--enable-libfreetype --enable-zlib --extra-libs=-lpng --extra-libs=-lzlib --extra-cflags=\"-I ${DEPENDENCY::ZLIB::ROOTPATH}/include\" --extra-ldflags=\"-L ${DEPENDENCY::LIBPNG::ROOTPATH}/lib -L ${DEPENDENCY::ZLIB::ROOTPATH}/lib\""
+                "OPTIONS::FREETYPE":"--enable-libfreetype --enable-zlib --extra-libs=-lpng ${OPTIONS::FREETYPE::MODE}"
             }
         },
         "disable-mediafoundation" : {
