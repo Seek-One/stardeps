@@ -336,6 +336,13 @@ bool FormulaParser::parseDependencies(const QJsonObject& objectRoot, FormulaDepe
 					szTmp = szPackageName;
 				}
 				dep.setPkgConfigName(szTmp);
+			}else if(value2.isString()){
+				QString szValue = value2.toString();
+				if(szValue != "any"){
+					dep.setVersionMin(szValue);
+					dep.setVersionMax(szValue);
+				}
+				dep.setPkgConfigName(szPackageName);
 			}
 
 			formulaDependencies.addDependency(dep);

@@ -68,14 +68,21 @@ PackageSearchMode FormulaOption::getDependenciesSearchMode(const QStringList& li
 
 	FormulaOptionRuleList::const_iterator iter;
 
+	// Check if a rule match with the requested mode
 	for(iter = m_listRules.constBegin(); iter != m_listRules.constEnd(); ++iter)
 	{
 		const FormulaOptionRules& formulaOptionRule = (*iter);
-		if(!listOptionModes.empty()) {
+		if(!listOptionModes.empty()){
 			if (formulaOptionRule.matchModes(listOptionModes, false)) {
 				return formulaOptionRule.getDependenciesSearchMode();
 			}
 		}
+	}
+
+	// Check if a rule match with the default modes
+	for(iter = m_listRules.constBegin(); iter != m_listRules.constEnd(); ++iter)
+	{
+		const FormulaOptionRules &formulaOptionRule = (*iter);
 		if(!m_listDefaultModes.isEmpty()){
 			if (formulaOptionRule.matchModes(m_listDefaultModes, false)) {
 				return formulaOptionRule.getDependenciesSearchMode();

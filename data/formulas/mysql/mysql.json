@@ -64,16 +64,16 @@
 
         },
         "libevent" : {
+            "dependencies": {
+                "latest": {
+                    "libevent" : {"min":"0.1"}
+                }
+            },
             "default-state":"enabled",
             "default-modes":"environment",
             "rules": [
                 {
                     "mode":"environment",
-                    "dependencies": {
-                        "latest": {
-                           "libevent" : {"min":"0.1"}
-                        }
-                    },
                     "vars": {
                         "OPTIONS::LIBEVENT::MODE":"-DWITH_LIBEVENT=system -DLIBEVENT_INCLUDE_PATH=${DEPENDENCY::LIBEVENT::ROOTPATH}/include -DLIBEVENT_LIB_PATHS=${DEPENDENCY::LIBEVENT::ROOTPATH}/lib",
                         "OPTIONS::LIBEVENT::MODE::CROSS":"-DTEST_RUN_RESULT=2.1.0 -DTEST_RUN_RESULT__TRYRUN_OUTPUT=2.1.0"
