@@ -212,16 +212,7 @@
         }
     },
     "vars":{
-        "QT_MODULES_PLATFORM": {
-            "default-value":"",
-            "alternatives-values": [
-                {
-                    "platforms":"linux-gcc-64",
-                    "value":",qtx11extras"
-                }
-            ]
-        },
-        "QT_MODULES":"--module-subset=qtbase,qt5compat,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtquickcontrols2${QT_MODULES_PLATFORM}",
+        "QT_MODULES":"--module-subset=qtbase,qt5compat,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtquick3d",
         "CONFIGURE_OPTIONS_SECURITY": "${OPTIONS::OPENSSL}",
