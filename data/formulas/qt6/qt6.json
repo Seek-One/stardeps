@@ -221,9 +221,9 @@
                 }
             ]
         },
-        "QT_MODULES":"--module-subset=qtbase,qtscript,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2${QT_MODULES_PLATFORM}",
+        "QT_MODULES":"--module-subset=qtbase,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2${QT_MODULES_PLATFORM}",
         "QT_NOMAKE":"-nomake examples -nomake tests",
-        "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtscript -skip qtquick3d",
+        "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtquick3d",
         "CONFIGURE_OPTIONS_SECURITY": "${OPTIONS::OPENSSL}",
         "CONFIGURE_OPTIONS_PLATFORM": "${OPTIONS::FREETYPE2} ${OPTIONS::FONTCONFIG} ${OPTIONS::XCB_XINPUT}",
         "CONFIGURE_OPTIONS_SQL": "${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL}",
