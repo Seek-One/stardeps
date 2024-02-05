@@ -212,7 +212,7 @@
         }
     },
     "vars":{
-        "QT_MODULES":"--module-subset=qtbase,qt5compat,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative",
+        "QT_MODULES":"--module-subset=qtbase,qt5compat,qtlocation,qtpositioning,qtsvg,qtmultimedia,qtshadertools,qttools,qttranslations,qtdeclarative",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtquick3d",
         "CONFIGURE_OPTIONS_SECURITY": "${OPTIONS::OPENSSL}",
