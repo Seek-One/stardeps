@@ -221,7 +221,7 @@
                 }
             ]
         },
-        "QT_MODULES":"--module-subset=qtbase,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtgraphicaleffects,qtquickcontrols2${QT_MODULES_PLATFORM}",
+        "QT_MODULES":"--module-subset=qtbase,qtlocation,qtpositioning,qtsvg,qtmultimedia,qttools,qttranslations,qtdeclarative,qtquickcontrols2${QT_MODULES_PLATFORM}",
         "QT_NOMAKE":"-nomake examples -nomake tests",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtquick3d",
         "CONFIGURE_OPTIONS_SECURITY": "${OPTIONS::OPENSSL}",
