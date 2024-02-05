@@ -233,6 +233,16 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/formulas
 	PATTERN ".svn" EXCLUDE
 	PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE
 )
+####################
+# RPATH
+####################
+
+if(UNIX AND NOT APPLE)
+	# Default library path for debian
+	set(CMAKE_INSTALL_RPATH "/usr/${INSTALL_PATH_LIB}")
+	# Define RPATH instead of RUNPATH
+	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--disable-new-dtags")
+endif(UNIX AND NOT APPLE)
 
 ####################
 # Create Executable
