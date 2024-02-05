@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 #if defined(WIN32) //For windows in debug mode or not
 	QString szApplicationDir = QCoreApplication::applicationDirPath();
 #else // For Linux in debug mode or not
-	QString szApplicationDir = QCoreApplication::applicationDirPath() + "/../share/" + APPLICATION_PACKAGE_NAME; // Add from the binary directory
+	QString szApplicationDir = QCoreApplication::applicationDirPath();
 	QDir dataDir = QDir(szApplicationDir);
 	if(!dataDir.exists()) { //For dev environment
 		szApplicationDir = QCoreApplication::applicationDirPath();
@@ -52,7 +52,8 @@ int main(int argc, char **argv)
 		dirApplicationData.setPath(QCoreApplication::applicationDirPath());
 #else
 		// For Linux in debug mode or not
-		dirApplicationData.setPath(QCoreApplication::applicationDirPath() + "/../share/" + APPLICATION_PACKAGE_NAME); // Add from the binary directory
+		QDir dirTmp(QCoreApplication::applicationDirPath() + "/..");
+		dirApplicationData.setPath(dirTmp.absolutePath()); // Add from the binary directory
 #endif
 	}
 	QApplicationSettings::setApplicationDataDir(dirApplicationData);
