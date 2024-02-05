@@ -337,6 +337,7 @@ target_link_libraries (${UNITTEST_EXE}
 # Build package
 #################
 
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${INSTALL_PATH_BIN})
 INCLUDE(InstallRequiredSystemLibraries)
 
 # CPack confile file
@@ -396,6 +397,16 @@ elseif(APPLE)
 
 	SET(CPACK_BUNDLE_NAME "${APPLICATION_NAME}")
 else()
+	# DEB instruction files
+	configure_file (
+		"${PROJECT_SOURCE_DIR}/platforms/debian/postinst.in"
+		"${PROJECT_BINARY_DIR}/platforms/debian/postinst"
+	)
+	configure_file (
+		"${PROJECT_SOURCE_DIR}/platforms/debian/prerm.in"
+		"${PROJECT_BINARY_DIR}/platforms/debian/prerm"
+	)
+
 	if (NOT CPACK_SYSTEM_NAME)
 		IF(${CMAKE_SYSTEM_PROCESSOR} STREQUAL "x86_64")
 			SET(CPACK_SYSTEM_NAME amd64)
@@ -409,6 +420,7 @@ else()
 	SET(CPACK_DEBIAN_PACKAGE_NAME ${APPLICATION_PACKAGE_NAME})
 	SET(CPACK_DEBIAN_PACKAGE_VERSION ${APPLICATION_VERSION})
 	SET(CPACK_DEBIAN_PACKAGE_DEPENDS ${DEBIAN_DEPS})
+	SET(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${PROJECT_BINARY_DIR}/platforms/debian/postinst;${PROJECT_BINARY_DIR}/platforms/debian/prerm;")
 	SET(CPACK_DEBIAN_PACKAGE_SECTION "misc")
 	# SET(CPACK_DEBIAN_PACKAGE_ARCHITECTURE ${DEB_ARCH})
 endif()
