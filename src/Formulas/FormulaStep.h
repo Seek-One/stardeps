@@ -23,6 +23,9 @@ public:
     void setPlatformList(const QStringList& listPlatforms);
     const QStringList& getPlatformList() const;
 
+	void setVersion(const QString& szVersion);
+	const QString& getVersion() const;
+
 	void setOptionsList(const QStringList& listOptions);
 	const QStringList& getOptionsList() const;
 
@@ -30,6 +33,7 @@ public:
     const FormulaStepActionList& getFormulaStepActionList() const;
 
     bool acceptPlatform(const QString& szPlatform) const;
+	bool acceptVersion(const QString& szVersion) const;
 	bool acceptOptions(const PackageOptionList& listOptions) const;
 
 private:
@@ -37,6 +41,9 @@ private:
 
     // Platforms filter
     QStringList m_listPlatforms;
+
+	// Version filter
+	QString m_szVersion;
 
 	// Options filter
 	QStringList m_listOptions;

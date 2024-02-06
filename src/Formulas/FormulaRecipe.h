@@ -28,7 +28,7 @@ public:
     void setFormulaSteps(const FormulaStepList& listStep);
     const FormulaStepList& getFormulaSteps() const;
 
-    FormulaStepActionList getFormulaStepActionList(const QString& szStep, const QString& szPlatform, const PackageOptionList& listOptions) const;
+    FormulaStepActionList getFormulaStepActionList(const QString& szStep, const QString& szPlatform, const QString& szPackageVersion, const PackageOptionList& listOptions) const;
 
 	void setPrepareCommands(const FormulaCommands& listCommands);
 	const FormulaCommands& getPrepareCommands() const;

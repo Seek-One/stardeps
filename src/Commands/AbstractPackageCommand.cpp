@@ -290,7 +290,7 @@ bool AbstractPackageCommand::doExecuteStep(const QString& szStep, const QDir& di
 	if(listFormulaRecipes.contains(QString())){
 		const FormulaRecipe& formulaRecipe = listFormulaRecipes.value(QString());
 		FormulaStepActionList listFormulaStepAction;
-		listFormulaStepAction = formulaRecipe.getFormulaStepActionList(szStep, szPlatform, getPackageOptions());
+		listFormulaStepAction = formulaRecipe.getFormulaStepActionList(szStep, szPlatform, getPackageNameVersion(), getPackageOptions());
 
 		FormulaStepActionList::const_iterator iter_action;
 		for(iter_action = listFormulaStepAction.constBegin(); iter_action != listFormulaStepAction.constEnd(); ++iter_action)

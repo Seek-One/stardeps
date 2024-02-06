@@ -2,6 +2,8 @@
 // Created by ebeuque on 24/06/2020.
 //
 
+#include "Version/VersionHelper.h"
+
 #include "FormulaStep.h"
 
 FormulaStep::FormulaStep()
@@ -34,6 +36,16 @@ const QStringList& FormulaStep::getPlatformList() const
     return m_listPlatforms;
 }
 
+void FormulaStep::setVersion(const QString& szVersion)
+{
+	m_szVersion = szVersion;
+}
+
+const QString& FormulaStep::getVersion() const
+{
+	return m_szVersion;
+}
+
 void FormulaStep::setOptionsList(const QStringList& listOptions)
 {
 	m_listOptions = listOptions;
@@ -61,6 +73,17 @@ bool FormulaStep::acceptPlatform(const QString& szPlatform) const
         bRes = m_listPlatforms.contains(szPlatform);
     }
     return bRes;
+}
+
+bool FormulaStep::acceptVersion(const QString& szPackageVersion) const
+{
+	bool bRes = true;
+	if(!m_szVersion.isEmpty()) {
+		if(!VersionHelper::checkVersion(szPackageVersion, m_szVersion)){
+			bRes = false;
+		}
+	}
+	return bRes;
 }
 
 bool FormulaStep::acceptOptions(const PackageOptionList& listOptions) const

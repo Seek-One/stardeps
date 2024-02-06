@@ -444,6 +444,11 @@ bool FormulaParser::parseStep(const QJsonObject& objectRoot, FormulaStep& formul
         formulaStep.setPlatformList(listPlaforms);
     }
 
+	if(bRes && objectRoot.contains("version")){
+		QString szVersion = objectRoot.value("version").toString();
+		formulaStep.setVersion(szVersion);
+	}
+
 	if(bRes && objectRoot.contains("options")){
 		QStringList listOptions = objectRoot.value("options").toString().split(',');
 		formulaStep.setOptionsList(listOptions);
