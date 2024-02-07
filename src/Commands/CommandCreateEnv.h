@@ -29,6 +29,7 @@ private:
 	bool findMercurial(Environment& env);
 	bool findCompiler(Environment& env);
 	bool findMake(Environment& env);
+	bool findCMake(Environment& env);
 	bool findRSync(Environment& env);
 	bool findTar(Environment& env);
 	bool findWget(Environment& env);

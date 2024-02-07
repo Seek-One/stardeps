@@ -64,6 +64,9 @@ bool CommandCreateEnv::doExecute()
     if(bRes){
         bRes = findMake(env);
     }
+	if(bRes){
+		bRes = findCMake(env);
+	}
     if(bRes){
         bRes = findRSync(env);
     }
@@ -197,6 +200,16 @@ bool CommandCreateEnv::findMake(Environment& env)
         env.setEnvVar(VE_VAR_MAKE, "make");
     }
     return true;
+}
+
+bool CommandCreateEnv::findCMake(Environment& env)
+{
+	if(QFile::exists("/usr/bin/cmake")){
+		env.setEnvVar(VE_VAR_CMAKE, "/usr/bin/cmake");
+	}else{
+		env.setEnvVar(VE_VAR_CMAKE, "cmake");
+	}
+	return true;
 }
 
 bool CommandCreateEnv::findRSync(Environment& env)
