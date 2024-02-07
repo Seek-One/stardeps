@@ -13,7 +13,7 @@
         }
     },
     "vars":{
-        "CONFIGURE_OPTIONS":"${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH}",
+        "CONFIGURE_OPTIONS":"${OPTIONS::SHARED} --prefix=${PACKAGE_PREFIX_PATH} --openssldir=${PACKAGE_PREFIX_PATH} --libdir=lib",
         "CONFIGURE_CROSS_OPTIONS":"--cross-compile-prefix=${CROSS_COMPIL_PREFIX}-"
     },
     "recipe": [
@@ -49,22 +49,11 @@
         },
         {
             "step":"install",
-            "version":"<3.0.0",
             "actions":[
                 {"cmd":"${MAKE} install"},
                 {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libcrypto.pc ${VE_PKG_CONFIG_PATH}/"},
                 {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/libssl.pc ${VE_PKG_CONFIG_PATH}/"},
                 {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib/pkgconfig/openssl.pc ${VE_PKG_CONFIG_PATH}/"}
-            ]
-        },
-        {
-            "step":"install",
-            "version":">=3.0.0",
-            "actions":[
-                {"cmd":"${MAKE} install"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib64/pkgconfig/libcrypto.pc ${VE_PKG_CONFIG_PATH}/"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib64/pkgconfig/libssl.pc ${VE_PKG_CONFIG_PATH}/"},
-                {"cmd":"cp ${PACKAGE_PREFIX_PATH}/lib64/pkgconfig/openssl.pc ${VE_PKG_CONFIG_PATH}/"}
             ]
         },
         {
