@@ -239,7 +239,7 @@
         },
         {
             "step":"build",
-            "cmd":"${CMAKE} --build . --parallel"
+            "cmd":"${CMAKE} --build . --parallel 4"
         },
         {
             "step":"install",
