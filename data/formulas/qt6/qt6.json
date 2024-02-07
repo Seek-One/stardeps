@@ -127,7 +127,7 @@
                 {
                     "mode":"environment",
                     "vars": {
-                        "OPTIONS::MYSQL::MODE":"MYSQL_PREFIX=${DEPENDENCY::MYSQL::ROOTPATH}"
+                        "OPTIONS_CMAKE::MYSQL::MODE":"-DCMAKE_INCLUDE_PATH=${DEPENDENCY::MYSQL::ROOTPATH}/include -DCMAKE_LIBRARY_PATH=${DEPENDENCY::MYSQL::ROOTPATH}/lib"
                     }
                 },
                 {
@@ -219,7 +219,8 @@
         "CONFIGURE_OPTIONS_PLATFORM": "${OPTIONS::FREETYPE2} ${OPTIONS::FONTCONFIG} ${OPTIONS::XCB_XINPUT}",
         "CONFIGURE_OPTIONS_SQL": "${OPTIONS::SQLITE} ${OPTIONS::MYSQL} ${OPTIONS::PSQL}",
         "CONFIGURE_OPTIONS":"-opensource -confirm-license ${OPTIONS::SHARED} ${OPTIONS::DEBUG} ${OPTIONS::DEBUGANDRELEASE} ${QT_NOMAKE} ${QT_SKIP} ${CONFIGURE_OPTIONS_SECURITY} ${CONFIGURE_OPTIONS_PLATFORM} ${CONFIGURE_OPTIONS_SQL} -prefix ${PACKAGE_PREFIX_PATH}",
-        "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop"
+        "CONFIGURE_CROSS_OPTIONS":"-device-option CROSS_COMPILE=/usr/bin/${CROSS_COMPIL_PREFIX}- -opengl desktop",
+        "CONFIGURE_OPTIONS_CMAKE":" -- ${OPTIONS_CMAKE::MYSQL::MODE}"
     },
     "recipe": [
         {
@@ -229,21 +230,21 @@
         {
             "step":"configure",
             "platforms":"linux-gcc-64,darwin-clang-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS}"
+            "cmd":"${PACKAGE_SRC_PATH}/configure ${CONFIGURE_OPTIONS} ${CONFIGURE_OPTIONS_CMAKE}"
         },
         {
             "step":"configure",
             "platforms":"linux-mingw-gcc-32,linux-mingw-gcc-64",
-            "cmd":"${PACKAGE_SRC_PATH}/configure -xplatform win32-g++ ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS}"
+            "cmd":"${PACKAGE_SRC_PATH}/configure -xplatform win32-g++ ${CONFIGURE_OPTIONS} ${CONFIGURE_CROSS_OPTIONS} ${CONFIGURE_OPTIONS_CMAKE}"
         },
         {
             "step":"build",
-            "cmd":"${MAKE}"
+            "cmd":"${CMAKE} --build . --parallel"
         },
         {
             "step":"install",
             "actions":[
-                {"cmd":"${MAKE} install"}
+                {"cmd":"${CMAKE} --install ."}
             ]
         }
     ]
