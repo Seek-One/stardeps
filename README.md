@@ -15,7 +15,7 @@ You can build all dependencies from sources or mix some of them with the system.
 Install dependencies:
 
 ```
-apt-get install git cmake qtbase5-dev qttools5-dev qttools5-dev-tools
+apt-get install git cmake g++ qtbase5-dev qttools5-dev qttools5-dev-tools
 ```
 
 Get the code:
@@ -27,7 +27,7 @@ git clone https://github.com/Jet1oeil/stardeps.git && cd stardeps
 Compile:
 
 ```
-./build.sh regen
+cmake -G "Unix Makefiles" .
 make
 ```
 
