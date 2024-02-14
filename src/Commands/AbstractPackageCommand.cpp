@@ -5,6 +5,14 @@
  *      Author: ebeuque
  */
 
+#include <QtGlobal>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#else
+#include <QRegExp>
+#endif
+
 #include "Environment/EnvironmentDefs.h"
 
 #include "CommandEnvironment/PackageCommandEnvironment.h"
@@ -396,7 +404,11 @@ bool AbstractPackageCommand::doReplaceVariable(const QString& szText, const Vari
 	}
 
 	// Last step, remove non-referenced optional values
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	szTextOut = szTextOut.remove(QRegularExpression("\\$\\{[^\\}]+\\}"));
+#else
 	szTextOut = szTextOut.remove(QRegExp("\\$\\{[^\\}]+\\}"));
+#endif
 
 	return true;
 }
@@ -422,7 +434,11 @@ bool AbstractPackageCommand::doReplaceVariable(const QString& szText, const Vari
 	}
 
 	// Last step, remove non-referenced optional values
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	szTextOut = szTextOut.remove(QRegularExpression("\\$\\{[^\\}]+\\}"));
+#else
 	szTextOut = szTextOut.remove(QRegExp("\\$\\{[^\\}]+\\}"));
+#endif
 
 	return true;
 }

@@ -62,7 +62,11 @@ void FormulaDependencies::updateSearchMode(const PackageSearchMode& iSearchMode,
 void FormulaDependencies::print() const
 {
 	PackageDependencyList::const_iterator iter;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	qDebug("   %lld package dependencies", m_listDependency.count());
+#else
 	qDebug("   %d package dependencies", m_listDependency.count());
+#endif
 	for(iter = m_listDependency.constBegin(); iter != m_listDependency.constEnd(); ++iter)
 	{
 		qDebug("     %s", qPrintable((*iter).toString()));
@@ -165,7 +169,11 @@ QString FormulaDependenciesList::getBestDependenciesVersion(const QString& szVer
 void FormulaDependenciesList::print() const
 {
 	FormulaDependenciesList::const_iterator iter;
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	qDebug("-- %lld formula dependencies", count());
+#else
 	qDebug("-- %d formula dependencies", count());
+#endif
 	for(iter = constBegin(); iter != constEnd(); ++iter)
 	{
 		(*iter).print();
