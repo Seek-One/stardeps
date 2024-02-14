@@ -6,7 +6,7 @@ endif(NOT QT4_COMPONENTS AND NOT QT5_COMPONENTS AND NOT QT6_COMPONENTS)
 # Look for correct QT version
 if(QT_USE_VERSION)
 	if(QT_USE_VERSION EQUAL 6)
-		message(STATUS "Looking for Qt major version: 5")
+		message(STATUS "Looking for Qt major version: 6")
 		find_package (Qt6 6.5.0 COMPONENTS ${QT6_COMPONENTS})
 		set(QT_COMPONENTS ${QT6_COMPONENTS})
 	elseif(QT_USE_VERSION EQUAL 5)
@@ -66,7 +66,83 @@ endif()
 if(QT_FOUND)
 	set(USE_QT 1)
 
-	if(QT_USE_VERSION LESS 5)
+	if(QT_USE_VERSION GREATER_EQUAL 6)
+		# option for Qt 6
+		if (Qt6_POSITION_INDEPENDENT_CODE)
+			set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+		endif()
+
+		if (SINGLE_UNIT_COMPILATION)
+			set(CMAKE_AUTOMOC ON)
+		endif ()
+
+		# override function to generate moc
+		function(qtx_wrap_cpp arg1)
+			if (NOT SINGLE_UNIT_COMPILATION)
+				qt6_wrap_cpp(${arg1} ${ARGN})
+				set(${arg1} ${${arg1}} PARENT_SCOPE)
+			endif ()
+		endfunction(qtx_wrap_cpp)
+
+		# override function to generate ts
+		find_package(Qt${QT_VERSION_MAJOR}LinguistTools)
+		if(Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+			function(qtx_create_translation arg1)
+				qt6_create_translation(arg1 ${ARGN})
+				set(${arg1} ${${arg1}} PARENT_SCOPE)
+			endfunction(qtx_create_translation)
+			function(qtx_add_translation arg1)
+				qt6_add_translation(arg1 ${ARGN})
+				set(${arg1} ${${arg1}} PARENT_SCOPE)
+			endfunction(qtx_add_translation)
+		else()
+			message(FATAL_ERROR "Qt${QT_VERSION_MAJOR}LinguistTools package is required")
+		endif()
+
+		# override function to generate res
+		function(qtx_add_resources arg1)
+			qt6_add_resources(${arg1} ${ARGN})
+			set(${arg1} ${${arg1}} PARENT_SCOPE)
+		endfunction(qtx_add_resources)
+	elseif(QT_USE_VERSION EQUAL 5)
+		# option for Qt 5
+		if (Qt5_POSITION_INDEPENDENT_CODE)
+			set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+		endif()
+
+		if (SINGLE_UNIT_COMPILATION)
+			set(CMAKE_AUTOMOC ON)
+		endif ()
+
+		# override function to generate moc
+		function(qtx_wrap_cpp arg1)
+			if (NOT SINGLE_UNIT_COMPILATION)
+				qt5_wrap_cpp(${arg1} ${ARGN})
+				set(${arg1} ${${arg1}} PARENT_SCOPE)
+			endif ()
+		endfunction(qtx_wrap_cpp)
+
+		# override function to generate ts
+		find_package(Qt${QT_VERSION_MAJOR}LinguistTools)
+		if(Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
+			function(qtx_create_translation arg1)
+				qt5_create_translation(arg1 ${ARGN})
+				set(${arg1} ${${arg1}} PARENT_SCOPE)
+			endfunction(qtx_create_translation)
+			function(qtx_add_translation arg1)
+				qt5_add_translation(arg1 ${ARGN})
+				set(${arg1} ${${arg1}} PARENT_SCOPE)
+			endfunction(qtx_add_translation)
+		else()
+			message(FATAL_ERROR "Qt${QT_VERSION_MAJOR}LinguistTools package is required")
+		endif()
+
+		# override function to generate res
+		function(qtx_add_resources arg1)
+			qt5_add_resources(${arg1} ${ARGN})
+			set(${arg1} ${${arg1}} PARENT_SCOPE)
+		endfunction(qtx_add_resources)
+	else()
 		include (${QT_USE_FILE})
 		add_definitions (${QT_DEFINITIONS})
 
@@ -75,73 +151,28 @@ if(QT_FOUND)
 		endif ()
 
 		# override function to generate moc
-		function(qt_wrap_cpp arg1)
+		function(qtx_wrap_cpp arg1)
 			if (NOT SINGLE_UNIT_COMPILATION)
-				QT4_WRAP_CPP(${arg1} ${ARGN})
+				qt4_wrap_cpp(${arg1} ${ARGN})
 				set(${arg1} ${${arg1}} PARENT_SCOPE)
 			endif ()
-		endfunction(qt_wrap_cpp)
+		endfunction(qtx_wrap_cpp)
 
 		# override function to generate ts
-		function(qt_create_translation arg1)
+		function(qtx_create_translation arg1)
 			qt4_create_translation(arg1 ${ARGN})
 			set(${arg1} ${${arg1}} PARENT_SCOPE)
-		endfunction(qt_create_translation)
-		function(qt_add_translation arg1)
+		endfunction(qtx_create_translation)
+		function(qtx_add_translation arg1)
 			qt4_add_translation(arg1 ${ARGN})
 			set(${arg1} ${${arg1}} PARENT_SCOPE)
-		endfunction(qt_add_translation)
+		endfunction(qtx_add_translation)
 
 		# override function to generate res
-		function(qt_add_resources arg1)
-			QT4_ADD_RESOURCES(${arg1} ${ARGN})
+		function(qtx_add_resources arg1)
+			qt4_add_resources(${arg1} ${ARGN})
 			set(${arg1} ${${arg1}} PARENT_SCOPE)
-		endfunction(qt_add_resources)
-	else()
-
-		# option for Qt 5
-		if (Qt5_POSITION_INDEPENDENT_CODE)
-		  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
-		endif()
-
-		if (SINGLE_UNIT_COMPILATION)
-			set(CMAKE_AUTOMOC ON)
-		endif ()
-
-		# override function to generate moc
-		if(QT_USE_VERSION EQUAL 5)
-			function(qt_wrap_cpp arg1)
-				if (NOT SINGLE_UNIT_COMPILATION)
-					QT5_WRAP_CPP(${arg1} ${ARGN})
-					set(${arg1} ${${arg1}} PARENT_SCOPE)
-				endif ()
-			endfunction(qt_wrap_cpp)
-		endif ()
-
-		# override function to generate ts
-		find_package(Qt${QT_VERSION_MAJOR}LinguistTools)
-		if(Qt${QT_VERSION_MAJOR}LinguistTools_FOUND)
-			if(QT_USE_VERSION EQUAL 5)
-				function(qt_create_translation arg1)
-					qt5_create_translation(arg1 ${ARGN})
-					set(${arg1} ${${arg1}} PARENT_SCOPE)
-				endfunction(qt_create_translation)
-				function(qt_add_translation arg1)
-					qt5_add_translation(arg1 ${ARGN})
-					set(${arg1} ${${arg1}} PARENT_SCOPE)
-				endfunction(qt_add_translation)
-			endif()
-		else()
-			message(FATAL_ERROR "Qt${QT_VERSION_MAJOR}LinguistTools package is required")
-		endif()
-
-		# override function to generate res
-		if(QT_USE_VERSION EQUAL 5)
-		    function(qt_add_resources arg1)
-			    QT5_ADD_RESOURCES(${arg1} ${ARGN})
-			    set(${arg1} ${${arg1}} PARENT_SCOPE)
-		    endfunction(qt_add_resources)
-		endif()
+		endfunction(qtx_add_resources)
 	endif()
 
 	# Compute path on QT5
@@ -179,18 +210,23 @@ if(QT_FOUND)
 		set(QT_QML_DIR ${QT_ROOT_DIR}/qml)
 	endif()
 	if(NOT QT_TRANSLATIONS_DIR)
-		# If Qt5+, we get QT_TRANSLATIONS_DIR from the executable path
-		get_target_property(QT${QT_VERSION_MAJOR}_QMAKE_EXECUTABLE Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
-		execute_process( COMMAND ${QT${QT_VERSION_MAJOR}_QMAKE_EXECUTABLE} -query QT_INSTALL_TRANSLATIONS
-		OUTPUT_VARIABLE qt_translations_dir OUTPUT_STRIP_TRAILING_WHITESPACE )
-		file( TO_CMAKE_PATH "${qt_translations_dir}" qt_translations_dir)
-		set(QT_TRANSLATIONS_DIR ${qt_translations_dir} CACHE PATH "The location of the Qt translations" FORCE)
+		if(QT_USE_VERSION GREATER_EQUAL 6)
+			set(QT_TRANSLATIONS_DIR "${Qt6Core_TRANSLATIONS_DIR}" CACHE PATH "The location of the Qt translations" FORCE)
+		elseif(QT_USE_VERSION EQUAL 5)
+			# If Qt5+, we get QT_TRANSLATIONS_DIR from the executable path
+			get_target_property(QT${QT_VERSION_MAJOR}_QMAKE_EXECUTABLE Qt${QT_VERSION_MAJOR}::qmake IMPORTED_LOCATION)
+			execute_process(COMMAND ${QT${QT_VERSION_MAJOR}_QMAKE_EXECUTABLE} -query QT_INSTALL_TRANSLATIONS
+				OUTPUT_VARIABLE qt_translations_dir OUTPUT_STRIP_TRAILING_WHITESPACE)
+			file(TO_CMAKE_PATH "${qt_translations_dir}" qt_translations_dir)
+			set(QT_TRANSLATIONS_DIR ${qt_translations_dir} CACHE PATH "The location of the Qt translations" FORCE)
+		endif()
 	endif()
 	message(STATUS "QT root path: ${QT_ROOT_DIR}")
 	message(STATUS "QT include path: ${QT_INCLUDE_DIR}")
 	message(STATUS "QT library path: ${QT_LIBRARY_DIR}")
 	message(STATUS "QT binary path: ${QT_BINARY_DIR}")
 	message(STATUS "QT plugins path: ${QT_PLUGINS_DIR}")
+	message(STATUS "QT translations path: ${QT_TRANSLATIONS_DIR}")
 	message(STATUS "QT qml path: ${QT_QML_DIR}")
 
 	set(QT_USE_DEBUG_DLL FALSE)

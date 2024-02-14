@@ -1,6 +1,6 @@
 # CMake file
 
-cmake_minimum_required(VERSION "2.8.9")
+cmake_minimum_required(VERSION "3.13.4")
 
 set (CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMakeModules")
 
@@ -174,7 +174,7 @@ set(APPLICATION_SOURCES
 set(APPLICATION_MOC_HEADERS
 	src/Shell/ShellExecutor.h
 )
-qt_wrap_cpp(
+qtx_wrap_cpp(
 	APPLICATION_MOC_OUTFILES
 	${APPLICATION_MOC_HEADERS}
 )
@@ -193,9 +193,9 @@ set (TS_FILES
 
 option (UPDATE_TRANSLATIONS "Update source translation ts/*.ts files (WARNING: make clean will delete the source .ts files! Danger!)" ON)
 if (UPDATE_TRANSLATIONS)
-	qt_create_translation(qm_FILES ${TS_FILES} ${I18N_FILES})
+	qtx_create_translation(qm_FILES ${TS_FILES} ${I18N_FILES})
 else (UPDATE_TRANSLATIONS)
-	qt_add_translation(qm_FILES ${TS_FILES})
+	qtx_add_translation(qm_FILES ${TS_FILES})
 endif (UPDATE_TRANSLATIONS)
 
 add_custom_target(update_ts ALL DEPENDS ${qm_FILES})
@@ -224,8 +224,8 @@ set (QRC_TS_FILES
 #set (QRC_FILES
 #	${PROJECT_BINARY_DIR}/data/app.qrc
 #)
-#QT_ADD_RESOURCES(RCS_OUTFILES ${QRC_FILES})
-QT_ADD_RESOURCES(RCS_TS_OUTFILES ${QRC_TS_FILES})
+#qtx_add_resources(RCS_OUTFILES ${QRC_FILES})
+qtx_add_resources(RCS_TS_OUTFILES ${QRC_TS_FILES})
 
 # Install formulas
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/formulas
