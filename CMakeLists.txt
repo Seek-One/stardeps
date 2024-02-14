@@ -53,6 +53,7 @@ set(WITH_PTHREAD ON CACHE BOOL "Enable build with pthread library")
 set(WITH_QT ON CACHE BOOL "Enable build with qt library")
 set(QT4_COMPONENTS QtCore QtTest)
 set(QT5_COMPONENTS Core Test)
+set(QT6_COMPONENTS Core Test)
 
 # Set packaging options
 set (PACKAGE_DEPS)
