@@ -121,6 +121,11 @@
                 "OPTIONS::FREETYPE":"--enable-libfreetype --enable-zlib --extra-libs=-lpng ${OPTIONS::FREETYPE::MODE}"
             }
         },
+        "harfbuzz" : {
+            "vars": {
+                "OPTIONS::HARFBUZZ":"--enable-libharfbuzz"
+            }
+        },
         "disable-mediafoundation" : {
             "default-state":"disabled",
             "rules": [
@@ -140,7 +145,7 @@
         }
     },
     "vars":{
-        "CONFIGURE_DEPS":"${OPTIONS::OPENH264} ${OPTIONS::X264} ${OPTIONS::X265} ${OPTIONS::VPX} ${OPTIONS::FDKAAC} ${OPTIONS::ASS} ${OPTIONS::FREETYPE} ${OPTIONS::MEDIAFOUNDATION}",
+        "CONFIGURE_DEPS":"${OPTIONS::OPENH264} ${OPTIONS::X264} ${OPTIONS::X265} ${OPTIONS::VPX} ${OPTIONS::FDKAAC} ${OPTIONS::ASS} ${OPTIONS::FREETYPE} ${OPTIONS::HARFBUZZ} ${OPTIONS::MEDIAFOUNDATION}",
         "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::COMMERCIAL} ${CONFIGURE_DEPS} --prefix=${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"--cross-prefix=${CROSS_COMPIL_PREFIX}- --pkg-config=${CROSS_COMPIL_PREFIX}-pkg-config"
     },
