@@ -35,7 +35,6 @@ set (CMAKE_VERBOSE_MAKEFILE OFF)
 # Define common project config
 include (CMakeModules/ProjectCommonConfig.cmake)
 
-
 ##################
 # Define options
 ##################
@@ -213,7 +212,7 @@ configure_file (
 
 if (WIN32)
 	set (QT_TS_FILES
-	"${QT_TRANSLATIONS_DIR}/qt_fr.qm"
+		"${QT_TRANSLATIONS_DIR}/qt_fr.qm"
 	)
 	INSTALL(FILES ${QT_TS_FILES} DESTINATION ${INSTALL_PATH_SHARE}/translations)
 endif()
@@ -234,6 +233,7 @@ install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/formulas
 	PATTERN ".svn" EXCLUDE
 	PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ GROUP_EXECUTE GROUP_READ WORLD_READ WORLD_EXECUTE
 )
+
 ####################
 # RPATH
 ####################
