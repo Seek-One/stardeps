@@ -17,7 +17,7 @@
                 {
                     "state":"enabled",
                     "vars": {
-                        "OPTIONS::SHARED":"--enable-pic --enable-shared"
+                        "OPTIONS::SHARED":"--enable-shared"
                     }
                 },
                 {
@@ -30,7 +30,7 @@
         }
     },
     "vars":{
-        "COMPILE_OPTIONS":"--size-limit=16384x16384 --enable-postproc --enable-multi-res-encoding --enable-temporal-denoising --enable-vp9-temporal-denoising --enable-vp9-postproc",
+        "COMPILE_OPTIONS":"--size-limit=16384x16384 --enable-postproc --enable-multi-res-encoding --enable-temporal-denoising --enable-vp9-temporal-denoising --enable-vp9-postproc --enable-pic",
         "CONFIGURE_OPTIONS":"${OPTIONS::DEBUG} ${OPTIONS::SHARED} ${OPTIONS::STATIC} ${COMPILE_OPTIONS} --prefix=${PACKAGE_PREFIX_PATH}",
         "CONFIGURE_CROSS_OPTIONS":"--extra-cflags=-fno-asynchronous-unwind-tables --disable-unit-tests --disable-tools --disable-examples --disable-docs"
     },
