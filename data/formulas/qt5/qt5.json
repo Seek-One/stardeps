@@ -149,7 +149,7 @@
                 "OPTIONS::MYSQL":"-plugin-sql-mysql ${OPTIONS::MYSQL::MODE}"
             }
         },
-        "postgressql" : {
+        "postgresql" : {
             "default-modes":"system",
             "rules": [
                 {
