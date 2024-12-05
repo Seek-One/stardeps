@@ -6,6 +6,11 @@
         "url": "http://www.live555.com/liveMedia/public/live555-latest.tar.gz"
     },
     "options": {
+        "debug" : {
+            "vars": {
+                "OPTIONS::DEBUG":"-g -O0"
+            }
+        },
         "shared" : {
             "vars": {
                 "OPTIONS::SHARED":"-with-shared-libraries"
@@ -51,7 +56,7 @@
                 "sed -i 's/$(INCLUDES)/$(INCLUDES) $(OPENSSL_INCLUDE)/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
                 "sed -i 's/^LINK_OPTS =/LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
                 "sed -i 's/^LIBRARY_LINK_OPTS =/LIBRARY_LINK_OPTS = $(OPENSSL_LIBPATH)/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
-                "sed -i 's/^COMPILE_OPTS =/COMPILE_OPTS = -DNO_STD_LIB/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
+                "sed -i 's/^COMPILE_OPTS =/COMPILE_OPTS = -DNO_STD_LIB ${OPTIONS::DEBUG}/g' config.linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}",
                 "${PACKAGE_BUILD_PATH}/genMakefiles linux${OPTIONS::NOOPENSSL}${OPTIONS::SHARED}"
             ]
         },
