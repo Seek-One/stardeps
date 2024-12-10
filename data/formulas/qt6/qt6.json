@@ -113,7 +113,15 @@
         },
         "sqlite" : {
             "vars": {
-                "OPTIONS::SQLITE":"-plugin-sql-sqlite"
+                "OPTIONS::SQLITE":{
+                    "default-value":"-plugin-sql-sqlite",
+                    "alternatives-values": [
+                        {
+                            "version":">=6.8",
+                            "value":""
+                        }
+                    ]
+                }
             }
         },
         "mysql" : {
@@ -146,7 +154,15 @@
                 }
             ],
             "vars": {
-                "OPTIONS::MYSQL":"-plugin-sql-mysql ${OPTIONS::MYSQL::MODE}"
+                "OPTIONS::MYSQL":{
+                    "default-value":"-plugin-sql-mysql ${OPTIONS::MYSQL::MODE}",
+                    "alternatives-values": [
+                        {
+                            "version":">=6.8",
+                            "value":"-sql-mysql ${OPTIONS::MYSQL::MODE}"
+                        }
+                    ]
+                }
             }
         },
         "postgresql" : {
@@ -168,7 +184,15 @@
                 }
             ],
             "vars": {
-                "OPTIONS::PSQL":"-plugin-sql-psql ${OPTIONS::PSQL::MODE}"
+                "OPTIONS::PSQL":{
+                    "default-value":"-plugin-sql-psql ${OPTIONS::PSQL::MODE}",
+                    "alternatives-values": [
+                        {
+                            "version":">=6.8",
+                            "value":"-sql-psql ${OPTIONS::PSQL::MODE}"
+                        }
+                    ]
+                }
             }
         },
         "glib" : {
