@@ -117,7 +117,7 @@
                     "default-value":"-plugin-sql-sqlite",
                     "alternatives-values": [
                         {
-                            "version":">=6.8",
+                            "version":">=6.7.3",
                             "value":""
                         }
                     ]
@@ -158,7 +158,7 @@
                     "default-value":"-plugin-sql-mysql ${OPTIONS::MYSQL::MODE}",
                     "alternatives-values": [
                         {
-                            "version":">=6.8",
+                            "version":">=6.7.3",
                             "value":"-sql-mysql ${OPTIONS::MYSQL::MODE}"
                         }
                     ]
@@ -188,7 +188,7 @@
                     "default-value":"-plugin-sql-psql ${OPTIONS::PSQL::MODE}",
                     "alternatives-values": [
                         {
-                            "version":">=6.8",
+                            "version":">=6.7.3",
                             "value":"-sql-psql ${OPTIONS::PSQL::MODE}"
                         }
                     ]
@@ -242,7 +242,7 @@
     },
     "vars":{
         "QT_MODULES":"--module-subset=qtbase,qt5compat,qtlocation,qtpositioning,qtsvg,qtmultimedia,qtshadertools,qttools,qttranslations,qtdeclarative${OPTIONS::QT_MODULE_WEBENGINE}",
-        "QT_NOMAKE":"-nomake examples -nomake tests",
+        "QT_NOMAKE":"",
         "QT_SKIP":"-skip qtactiveqt -skip qtcanvas3d -skip qtquick3d",
         "CONFIGURE_OPTIONS_SECURITY": "${OPTIONS::OPENSSL}",
         "CONFIGURE_OPTIONS_PLATFORM": "${OPTIONS::FREETYPE2} ${OPTIONS::FONTCONFIG} ${OPTIONS::XCB_XINPUT}",
