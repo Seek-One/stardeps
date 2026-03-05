@@ -56,7 +56,7 @@ bool ShellExecutor::runCommand(const QString& szCommand, const QStringList& list
 	QStringList::const_iterator iter_cmd_var;
 	for(iter_cmd_var = listCmdEnvVars.constBegin(); iter_cmd_var != listCmdEnvVars.constEnd(); ++iter_cmd_var){
 		const QString& szTmp = (*iter_cmd_var);
-		int iIdx = szTmp.indexOf("=");
+		auto iIdx = szTmp.indexOf("=");
 		if(iIdx != -1){
 			QString szVarName = szTmp.left(iIdx);
 			QString szVarValue = szTmp.mid(iIdx+1);
