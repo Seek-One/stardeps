@@ -234,8 +234,8 @@ qtx_add_resources(RCS_TS_OUTFILES ${QRC_TS_FILES})
 
 # Create a library for resources
 add_library(${APPLICATION_EXE_NAME}_rcs OBJECT
-#		${RCS_OUTFILES}
-		${RCS_TS_OUTFILES}
+	${RCS_OUTFILES}
+	${RCS_TS_OUTFILES}
 )
 # Xcode "new build system" requires a strict ordering when the same lupdate stamp
 # is involved in multiple targets.
