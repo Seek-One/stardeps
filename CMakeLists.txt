@@ -226,21 +226,12 @@ endif()
 set (QRC_TS_FILES
 	${PROJECT_BINARY_DIR}/ts.qrc
 )
-#set (QRC_FILES
-#	${PROJECT_BINARY_DIR}/data/app.qrc
-#)
-#qtx_add_resources(RCS_OUTFILES ${QRC_FILES})
 qtx_add_resources(RCS_TS_OUTFILES ${QRC_TS_FILES})
 
 # Create a library for resources
 add_library(${APPLICATION_EXE_NAME}_rcs OBJECT
-	${RCS_OUTFILES}
 	${RCS_TS_OUTFILES}
 )
-# Xcode "new build system" requires a strict ordering when the same lupdate stamp
-# is involved in multiple targets.
-add_dependencies(${APPLICATION_EXE_NAME}_rcs ${APPLICATION_EXE_NAME}_ts)
-
 
 # Install formulas
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/formulas
@@ -259,6 +250,14 @@ if(UNIX AND NOT APPLE)
 	# Define RPATH instead of RUNPATH
 	set(CMAKE_EXE_LINKER_FLAGS "-Wl,--disable-new-dtags")
 endif(UNIX AND NOT APPLE)
+
+####################
+# Application libs
+####################
+
+# Xcode "new build system" requires a strict ordering when the same lupdate stamp
+# is involved in multiple targets.
+add_dependencies(${APPLICATION_EXE_NAME}_rcs ${APPLICATION_EXE_NAME}_ts)
 
 ####################
 # Create Executable
