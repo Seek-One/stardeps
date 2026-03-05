@@ -84,6 +84,7 @@ include_directories (${PROJECT_BINARY_DIR})
 # Add sources
 ####################
 
+# src directory
 include_directories (${PROJECT_SOURCE_DIR}/src)
 
 set(APP_COMMON_SOURCES
@@ -193,14 +194,14 @@ set (TS_FILES
 
 option (UPDATE_TRANSLATIONS "Update source translation ts/*.ts files (WARNING: make clean will delete the source .ts files! Danger!)" ON)
 if (UPDATE_TRANSLATIONS)
-	qtx_create_translation(qm_FILES ${TS_FILES} ${I18N_FILES})
+	qtx_create_translation(qm_FILES ${TS_FILES} ${I18N_FILES} OPTIONS -locations none)
 else (UPDATE_TRANSLATIONS)
 	qtx_add_translation(qm_FILES ${TS_FILES})
 endif (UPDATE_TRANSLATIONS)
 
 # Create a library for resources
 add_library(${APPLICATION_EXE_NAME}_ts OBJECT
-		${qm_FILES}
+	${qm_FILES}
 )
 add_custom_target(update_ts ALL DEPENDS ${APPLICATION_EXE_NAME}_ts)
 
@@ -233,7 +234,7 @@ qtx_add_resources(RCS_TS_OUTFILES ${QRC_TS_FILES})
 
 # Create a library for resources
 add_library(${APPLICATION_EXE_NAME}_rcs OBJECT
-		${RCS_OUTFILES}
+#		${RCS_OUTFILES}
 		${RCS_TS_OUTFILES}
 )
 # Xcode "new build system" requires a strict ordering when the same lupdate stamp
@@ -340,7 +341,7 @@ set(UNITTEST_MOC_HEADERS
 	test/Formulas/FormulaDependenciesTestCase.h
 	test/Version/VersionHelperTestCase.h
 )
-QT_WRAP_CPP(
+QTX_WRAP_CPP(
 	UNITTEST_MOC_OUTFILES
 	${UNITTEST_MOC_HEADERS}
 )
