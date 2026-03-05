@@ -198,7 +198,11 @@ else (UPDATE_TRANSLATIONS)
 	qtx_add_translation(qm_FILES ${TS_FILES})
 endif (UPDATE_TRANSLATIONS)
 
-add_custom_target(update_ts ALL DEPENDS ${qm_FILES})
+# Create a library for resources
+add_library(${APPLICATION_EXE_NAME}_ts OBJECT
+		${qm_FILES}
+)
+add_custom_target(update_ts ALL DEPENDS ${APPLICATION_EXE_NAME}_ts)
 
 ####################
 # Resource files
@@ -227,6 +231,16 @@ set (QRC_TS_FILES
 #qtx_add_resources(RCS_OUTFILES ${QRC_FILES})
 qtx_add_resources(RCS_TS_OUTFILES ${QRC_TS_FILES})
 
+# Create a library for resources
+add_library(${APPLICATION_EXE_NAME}_rcs OBJECT
+		${RCS_OUTFILES}
+		${RCS_TS_OUTFILES}
+)
+# Xcode "new build system" requires a strict ordering when the same lupdate stamp
+# is involved in multiple targets.
+add_dependencies(${APPLICATION_EXE_NAME}_rcs ${APPLICATION_EXE_NAME}_ts)
+
+
 # Install formulas
 install(DIRECTORY ${PROJECT_SOURCE_DIR}/data/formulas
 	DESTINATION ${INSTALL_PATH_SHARE}/
@@ -254,9 +268,8 @@ add_executable (${APPLICATION_EXE_NAME}
 	${APPLICATION_SOURCES}
 	${APPLICATION_MODEL_SOURCES}
 	${APPLICATION_MOC_OUTFILES}
-	${RCS_OUTFILES}
-	${RCS_TS_OUTFILES}
-	${qm_FILES}
+	$<TARGET_OBJECTS:${APPLICATION_EXE_NAME}_rcs>
+	$<TARGET_OBJECTS:${APPLICATION_EXE_NAME}_ts>
 )
 target_link_libraries (${APPLICATION_EXE_NAME}
 	${QT_LIBRARIES}
@@ -335,7 +348,8 @@ QT_WRAP_CPP(
 set (UNITTEST_EXE ${APPLICATION_EXE_NAME}-testsuite)
 add_executable (${UNITTEST_EXE} ${UNITTEST_SRC} ${UNITTEST_MOC_OUTFILES}
 	${APP_COMMON_SOURCES}
-	${RCS_OUTFILES}
+	$<TARGET_OBJECTS:${APPLICATION_EXE_NAME}_rcs>
+	$<TARGET_OBJECTS:${APPLICATION_EXE_NAME}_ts>
 	
 )
 set_target_properties(${UNITTEST_EXE} PROPERTIES COMPILE_FLAGS -DUNITTEST)
